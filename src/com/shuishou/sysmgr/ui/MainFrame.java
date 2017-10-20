@@ -38,7 +38,7 @@ import com.shuishou.sysmgr.beans.UserData;
 import com.shuishou.sysmgr.http.HttpUtil;
 
 public class MainFrame extends JFrame implements ActionListener{
-	private final Logger logger = Logger.getLogger(MainFrame.class.getName());
+	public static final Logger logger = Logger.getLogger(MainFrame.class.getName());
 	public static int WINDOW_WIDTH;
 	public static int WINDOW_HEIGHT;
 	public static int WINDOW_LOCATIONX;
@@ -206,6 +206,13 @@ public class MainFrame extends JFrame implements ActionListener{
 	}
 
 	public static void main(String[] args){
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				MainFrame.logger.error("", e);
+			}
+		});
 		//load properties
 		Properties prop = new Properties();
 		InputStream input = null;
