@@ -46,14 +46,15 @@ public class MainFrame extends JFrame implements ActionListener{
 	public static String language;
 	public static String SERVER_URL;
 	private static final String CARDLAYOUT_MENUMGMT= "menumgmt"; 
-	private JButton btnAccountMgr = new JButton(Messages.getString("MainFrame.ToolBar.AccountMgr"));
-	private JButton btnMenuMgr = new JButton(Messages.getString("MainFrame.ToolBar.MenuMgr"));
-	private JButton btnDeskMgr = new JButton(Messages.getString("MainFrame.ToolBar.DeskMgr"));
-	private JButton btnPrinterMgr = new JButton(Messages.getString("MainFrame.ToolBar.PrinterMgr"));
-	private JButton btnConfirmCode = new JButton(Messages.getString("MainFrame.ToolBar.ConfirmCode"));
-	private JButton btnQueryLog = new JButton(Messages.getString("MainFrame.ToolBar.QueryLog"));
-	private JButton btnQueryIndent = new JButton(Messages.getString("MainFrame.ToolBar.QueryIndent"));
-	private JButton btnQuerySwiftWork = new JButton(Messages.getString("MainFrame.ToolBar.QuerySwiftWork"));
+	private JBlockedButton btnAccountMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.AccountMgr"));
+	private JBlockedButton btnMenuMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.MenuMgr"));
+	private JBlockedButton btnDeskMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.DeskMgr"));
+	private JBlockedButton btnPrinterMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.PrinterMgr"));
+	private JBlockedButton btnFlavorMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.FlavorMgr"));
+	private JBlockedButton btnConfirmCode = new JBlockedButton(Messages.getString("MainFrame.ToolBar.ConfirmCode"));
+	private JBlockedButton btnQueryLog = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryLog"));
+	private JBlockedButton btnQueryIndent = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryIndent"));
+	private JBlockedButton btnQuerySwiftWork = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QuerySwiftWork"));
 	private JPanel pContent = new JPanel(new CardLayout());
 	
 	private ArrayList<Category1> listCategory1s;
@@ -87,6 +88,8 @@ public class MainFrame extends JFrame implements ActionListener{
 		toolbar.addSeparator();
 		toolbar.add(btnMenuMgr);
 		toolbar.addSeparator();
+		toolbar.add(btnFlavorMgr);
+		toolbar.addSeparator();
 		toolbar.add(btnDeskMgr);
 		toolbar.addSeparator();
 		toolbar.add(btnPrinterMgr);
@@ -101,6 +104,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		btnAccountMgr.addActionListener(this);
 		btnMenuMgr.addActionListener(this);
 		btnDeskMgr.addActionListener(this);
+		btnFlavorMgr.addActionListener(this);
 		btnPrinterMgr.addActionListener(this);
 		btnConfirmCode.addActionListener(this);
 		btnQueryLog.addActionListener(this);
@@ -124,21 +128,19 @@ public class MainFrame extends JFrame implements ActionListener{
 		if (e.getSource() == btnAccountMgr){
 			
 		} else if (e.getSource() == btnMenuMgr){
-			//TODO: 
-//			if (pMenuMgmt == null){
-//				pMenuMgmt = new MenuMgmtPanel(this, listCategory1s);
-//				pContent.add(pMenuMgmt, CARDLAYOUT_MENUMGMT);
-//				pContent.updateUI();
-//			} else {
-//				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MENUMGMT);
-//			}
-			//TODO: load menu everytime
-			reloadListCategory1s();
-			
-			pMenuMgmt = new MenuMgmtPanel(this, listCategory1s);
-			pContent.removeAll();
-			pContent.add(pMenuMgmt, CARDLAYOUT_MENUMGMT);
-			pContent.updateUI();
+			if (pMenuMgmt == null){
+				pMenuMgmt = new MenuMgmtPanel(this, listCategory1s);
+				pContent.add(pMenuMgmt, CARDLAYOUT_MENUMGMT);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MENUMGMT);
+			}
+//			reloadListCategory1s();
+//			
+//			pMenuMgmt = new MenuMgmtPanel(this, listCategory1s);
+//			pContent.removeAll();
+//			pContent.add(pMenuMgmt, CARDLAYOUT_MENUMGMT);
+//			pContent.updateUI();
 		} else if (e.getSource() == btnDeskMgr){
 			
 		} else if (e.getSource() == btnPrinterMgr){
@@ -151,7 +153,9 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		} else if (e.getSource() == btnQuerySwiftWork){
 			
-		} 
+		} else if (e.getSource() == btnFlavorMgr){
+			
+		}
 	}
 
 	

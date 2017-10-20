@@ -14,7 +14,7 @@ public class CommonDialog extends JDialog implements ActionListener{
 	
 	private MainFrame mainFrame;
 	
-	private JButton btnSave = new JButton("save");
+	private JBlockedButton btnSave = new JBlockedButton("save");
 	private JButton btnClose = new JButton("Close");
 	private CommonDialogOperatorIFC operator;
 	private JPanel content;

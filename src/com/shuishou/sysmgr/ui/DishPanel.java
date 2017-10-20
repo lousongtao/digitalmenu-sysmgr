@@ -194,7 +194,7 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		JPanel pChooseMode = new JPanel(new BorderLayout());
 		pChooseMode.add(pChooseModeRadio, BorderLayout.NORTH);
 		pChooseMode.add(pChooseModeCards, BorderLayout.CENTER);
-		pChooseMode.setBorder(BorderFactory.createTitledBorder("Choose Mode"));
+		pChooseMode.setBorder(BorderFactory.createTitledBorder(Messages.getString("DishPanel.ChooseMode")));
 		
 		this.setLayout(new GridBagLayout());
 		add(pBaseProperty, 	new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(10,0,0,0), 0, 0));

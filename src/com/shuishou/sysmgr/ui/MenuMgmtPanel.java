@@ -39,6 +39,7 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.shuishou.sysmgr.Messages;
 import com.shuishou.sysmgr.beans.Category1;
 import com.shuishou.sysmgr.beans.Category2;
 import com.shuishou.sysmgr.beans.Dish;
@@ -53,23 +54,23 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 	private DishPanel pDish;
 	private JTree menuTree;
 	private JPopupMenu popupmenuRoot = new JPopupMenu();
-	private JMenuItem menuitemAddC1 = new JMenuItem("add Category1");
+	private JMenuItem menuitemAddC1 = new JMenuItem(Messages.getString("MenuMgmtPanel.AddCategory1"));
 	private JPopupMenu popupmenuC1 = new JPopupMenu();
-	private JMenuItem menuitemModifyC1 = new JMenuItem("Modify");
-	private JMenuItem menuitemAddC2 = new JMenuItem("add Category2");
-	private JMenuItem menuitemDeleteC1 = new JMenuItem("Delete");
+	private JMenuItem menuitemModifyC1 = new JMenuItem(Messages.getString("MenuMgmtPanel.Modify"));
+	private JMenuItem menuitemAddC2 = new JMenuItem(Messages.getString("MenuMgmtPanel.AddCategory2"));
+	private JMenuItem menuitemDeleteC1 = new JMenuItem(Messages.getString("MenuMgmtPanel.Delete"));
 	private JPopupMenu popupmenuC2 = new JPopupMenu();
-	private JMenuItem menuitemModifyC2 = new JMenuItem("Modify");
-	private JMenuItem menuitemAddDish = new JMenuItem("add Dish");
-	private JMenuItem menuitemDeleteC2 = new JMenuItem("Delete");
+	private JMenuItem menuitemModifyC2 = new JMenuItem(Messages.getString("MenuMgmtPanel.Modify"));
+	private JMenuItem menuitemAddDish = new JMenuItem(Messages.getString("MenuMgmtPanel.AddDish"));
+	private JMenuItem menuitemDeleteC2 = new JMenuItem(Messages.getString("MenuMgmtPanel.Delete"));
 	private JPopupMenu popupmenuDish = new JPopupMenu();
-	private JMenuItem menuitemModifyDish = new JMenuItem("Modify");
-	private JMenuItem menuitemDeleteDish = new JMenuItem("Delete");
-	private JMenuItem menuitemSpecial = new JMenuItem("Special");
-	private JMenuItem menuitemNewDish = new JMenuItem("New");
-	private JMenuItem menuitemChangePic= new JMenuItem("Change Picture");
-	private JMenuItem menuitemChangePrice = new JMenuItem("Change Price");
-	private JMenuItem menuitemSoldout = new JMenuItem("Soldout");
+	private JMenuItem menuitemModifyDish = new JMenuItem(Messages.getString("MenuMgmtPanel.Modify"));
+	private JMenuItem menuitemDeleteDish = new JMenuItem(Messages.getString("MenuMgmtPanel.Delete"));
+//	private JMenuItem menuitemSpecial = new JMenuItem("Special");
+//	private JMenuItem menuitemNewDish = new JMenuItem("New");
+	private JMenuItem menuitemChangePic= new JMenuItem(Messages.getString("MenuMgmtPanel.ChangePicture"));
+//	private JMenuItem menuitemChangePrice = new JMenuItem("Change Price");
+//	private JMenuItem menuitemSoldout = new JMenuItem("Soldout");
 	
 	private ArrayList<Category1> category1s ;
 	private MainFrame mainFrame;
@@ -114,11 +115,11 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		popupmenuC2.add(menuitemAddDish);
 		popupmenuC2.add(menuitemDeleteC2);
 		popupmenuDish.add(menuitemModifyDish);
-		popupmenuDish.add(menuitemSpecial);
-		popupmenuDish.add(menuitemNewDish);
+//		popupmenuDish.add(menuitemSpecial);
+//		popupmenuDish.add(menuitemNewDish);
 		popupmenuDish.add(menuitemChangePic);
-		popupmenuDish.add(menuitemChangePrice);
-		popupmenuDish.add(menuitemSoldout);
+//		popupmenuDish.add(menuitemChangePrice);
+//		popupmenuDish.add(menuitemSoldout);
 		popupmenuDish.add(menuitemDeleteDish);
 		menuitemAddC1.addActionListener(this);
 		menuitemModifyC1.addActionListener(this);
@@ -126,11 +127,11 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		menuitemModifyC2.addActionListener(this);
 		menuitemAddDish.addActionListener(this);
 		menuitemModifyDish.addActionListener(this);
-		menuitemSpecial.addActionListener(this);
-		menuitemNewDish.addActionListener(this);
+//		menuitemSpecial.addActionListener(this);
+//		menuitemNewDish.addActionListener(this);
 		menuitemChangePic.addActionListener(this);
-		menuitemChangePrice.addActionListener(this);
-		menuitemSoldout.addActionListener(this);
+//		menuitemChangePrice.addActionListener(this);
+//		menuitemSoldout.addActionListener(this);
 		menuitemDeleteC1.addActionListener(this);
 		menuitemDeleteC2.addActionListener(this);
 		menuitemDeleteDish.addActionListener(this);
@@ -204,28 +205,28 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == menuitemAddC1){
 			Category1Panel p = new Category1Panel(this);
-			CommonDialog dlg = new CommonDialog(mainFrame, p, "Add Category1", 300, 300);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmt.AddCategory1"), 300, 300);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemModifyC1){
 			Category1Panel p = new Category1Panel(this);
 			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
 			p.setObjectValue((Category1)node.getUserObject());
-			CommonDialog dlg = new CommonDialog(mainFrame, p, "Modify Category1", 300, 300);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmt.ModifyCategory1"), 300, 300);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemAddC2){
 			Category2Panel p = new Category2Panel(this);
-			CommonDialog dlg = new CommonDialog(mainFrame, p, "Add Category2", 300, 400);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmt.AddCategory2"), 300, 400);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemModifyC2){
 			Category2Panel p = new Category2Panel(this);
 			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
 			p.setObjectValue((Category2)node.getUserObject());
-			CommonDialog dlg = new CommonDialog(mainFrame, p, "Modify Category2", 300, 400);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmt.ModifyCategory2"), 300, 400);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemAddDish){
 			DishPanel p = new DishPanel(this);
 			p.showPicturePanel(false);
-			CommonDialog dlg = new CommonDialog(mainFrame, p, "Add Dish", 1000, 420);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmt.AddDish"), 1000, 420);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemModifyDish){
 			DishPanel p = new DishPanel(this);
@@ -234,17 +235,21 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 			p.setObjectValue((Dish)node.getUserObject());
 			CommonDialog dlg = new CommonDialog(mainFrame, p, "Modify Dish", 1000, 420);
 			dlg.setVisible(true);
-		} else if (e.getSource() == menuitemSpecial){
-			
-		} else if (e.getSource() == menuitemNewDish){
-			
-		} else if (e.getSource() == menuitemChangePic){
+		} 
+//		else if (e.getSource() == menuitemSpecial){
+//			
+//		} else if (e.getSource() == menuitemNewDish){
+//			
+//		} 
+		else if (e.getSource() == menuitemChangePic){
 			updateDishPicture((MenuTreeNode) menuTree.getLastSelectedPathComponent());
-		} else if (e.getSource() == menuitemChangePrice){
-			
-		} else if (e.getSource() == menuitemSoldout){
-			
-		} else if (e.getSource() == menuitemDeleteC1){
+		} 
+//		else if (e.getSource() == menuitemChangePrice){
+//			
+//		} else if (e.getSource() == menuitemSoldout){
+//			
+//		} 
+		else if (e.getSource() == menuitemDeleteC1){
 			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
 			onDeleteC1(node);
 		} else if (e.getSource() == menuitemDeleteC2){
