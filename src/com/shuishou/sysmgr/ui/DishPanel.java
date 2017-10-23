@@ -75,6 +75,8 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 	private JRadioButton rbChooseModeSubitem = new JRadioButton(Messages.getString("DishPanel.ForceChooseSubitem"));
 	private JRadioButton rbChooseAfterPopmsg = new JRadioButton(Messages.getString("DishPanel.ChooseDishAfterMessage"));
 	private JRadioButton rbNoChooseAfterPopmsg = new JRadioButton(Messages.getString("DishPanel.NotChooseDishOnlyShowMessage"));
+	private JRadioButton rbPurchaseTypeUnit = new JRadioButton(Messages.getString("DishPanel.PurchaseTypeUnit"));
+	private JRadioButton rbPurchaseTypeWeight = new JRadioButton(Messages.getString("DishPanel.PurchaseTypeWeight"));
 	private JTextField tfPopmsg_cn= new JTextField(155);
 	private JTextField tfPopmsg_en= new JTextField(155);
 	private JTextField tfSubitemAmount = new JTextField(155);
@@ -116,7 +118,17 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		
 		cbAutoMergeWhileChoose.setSelected(true);
 		
+		ButtonGroup bgPurchaseType = new ButtonGroup();
+		bgPurchaseType.add(rbPurchaseTypeUnit);
+		bgPurchaseType.add(rbPurchaseTypeWeight);
+		JPanel pPurchaseType = new JPanel();
+		pPurchaseType.add(rbPurchaseTypeUnit);
+		pPurchaseType.add(rbPurchaseTypeWeight);
+		rbPurchaseTypeUnit.setSelected(true);
+		pPurchaseType.setBorder(BorderFactory.createTitledBorder(Messages.getString("DishPanel.PurchaseType")));
+		
 		JPanel pBaseProperty = new JPanel(new GridBagLayout());
+		pBaseProperty.setBorder(BorderFactory.createTitledBorder("Base Properties"));
 		int row = 0;
 		pBaseProperty.add(lbChineseName, new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pBaseProperty.add(tfChineseName, new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
@@ -141,8 +153,10 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		row++;
 		pBaseProperty.add(cbAutoMergeWhileChoose, 	new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		row++;
+		pBaseProperty.add(pPurchaseType, new GridBagConstraints(0, row, 2, 1,0,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));
+		row++;
 		pBaseProperty.add(new JPanel(), new GridBagConstraints(0, row, 1, 1,0,1, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10,0,0,0), 0, 0));
-		pBaseProperty.setBorder(BorderFactory.createTitledBorder("Base Properties"));
+		
 		
 		lbPicture = new JLabel();
 		Dimension dPicture = lbPicture.getPreferredSize();
@@ -277,6 +291,10 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		params.put("category2Id", ((Category2)cbCategory2.getSelectedItem()).getId()+"");
 		params.put("subitemAmount", tfSubitemAmount.getText());
 		params.put("autoMerge", cbAutoMergeWhileChoose.isSelected()+"");
+		if (this.rbPurchaseTypeUnit.isSelected())
+			params.put("purchaseType", ConstantValue.DISH_PURCHASETYPE_UNIT+"");
+		else if (this.rbPurchaseTypeWeight.isSelected())
+			params.put("purchaseType", ConstantValue.DISH_PURCHASETYPE_WEIGHT+"");
 		if (rbChooseModeCommon.isSelected()){
 			params.put("chooseMode", ConstantValue.DISH_CHOOSEMODE_DEFAULT+"");
 		} else if (rbChooseModePopmsg.isSelected()){
@@ -295,7 +313,8 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 			}
 			params.put("dishChooseSubitem", gson.toJson(subitems));
 		}
-		String url = "menu/add_dish3";
+		
+		String url = "menu/add_dish";
 		if (dish != null){
 			url = "menu/update_dish";
 			params.put("id", dish.getId() + "");
@@ -382,6 +401,8 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		tfAbbre.setText(dish.getAbbreviation());
 		cbCategory2.setSelectedItem(dish.getCategory2());
 		cbAutoMergeWhileChoose.setSelected(dish.isAutoMergeWhileChoose());
+		this.rbPurchaseTypeUnit.setSelected(dish.getPurchaseType() == ConstantValue.DISH_PURCHASETYPE_UNIT);
+		this.rbPurchaseTypeWeight.setSelected(dish.getPurchaseType() == ConstantValue.DISH_PURCHASETYPE_WEIGHT);
 		if (dish.getChooseMode() == ConstantValue.DISH_CHOOSEMODE_DEFAULT){
 			rbChooseModeCommon.setSelected(true);
 			rbChooseModeCommon.doClick();

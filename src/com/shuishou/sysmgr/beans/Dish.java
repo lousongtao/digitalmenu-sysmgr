@@ -46,6 +46,18 @@ public class Dish implements Serializable{
 	
 	private boolean autoMergeWhileChoose = true;
 
+	private int purchaseType = ConstantValue.DISH_PURCHASETYPE_UNIT;
+	
+	
+	
+	public int getPurchaseType() {
+		return purchaseType;
+	}
+
+	public void setPurchaseType(int purchaseType) {
+		this.purchaseType = purchaseType;
+	}
+
 	public boolean isAutoMergeWhileChoose() {
 		return autoMergeWhileChoose;
 	}
