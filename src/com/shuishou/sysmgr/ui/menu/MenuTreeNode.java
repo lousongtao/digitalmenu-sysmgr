@@ -1,4 +1,4 @@
-package com.shuishou.sysmgr.ui;
+package com.shuishou.sysmgr.ui.menu;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 

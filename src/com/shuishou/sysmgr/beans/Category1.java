@@ -79,7 +79,7 @@ public class Category1 implements Serializable{
     }
     @Override
     public String toString() {
-        return "Category1 [chineseName=" + chineseName + ", englishName=" + englishName + "]";
+        return chineseName + " / " + englishName;
     }
 
     @Override

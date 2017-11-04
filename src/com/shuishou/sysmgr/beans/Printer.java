@@ -5,8 +5,7 @@ public class Printer {
 	private int id;
 	private String name;
 	private String printerName;
-	private int copy;
-	private byte printStyle; //0: 连续打印, 1: 单菜打印
+	private int type;
 	
 	public Printer(){}
 	
@@ -32,21 +31,13 @@ public class Printer {
 		this.printerName = printerName;
 	}
 
-	public int getCopy() {
-		return copy;
+
+	public int getType() {
+		return type;
 	}
 
-	public void setCopy(int copy) {
-		this.copy = copy;
-	}
-
-
-	public byte getPrintStyle() {
-		return printStyle;
-	}
-
-	public void setPrintStyle(byte printStyle) {
-		this.printStyle = printStyle;
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public String getName() {
@@ -59,7 +50,7 @@ public class Printer {
 
 	@Override
 	public String toString() {
-		return "Printer [name=" + name + "]";
+		return name;
 	}
 
 	@Override

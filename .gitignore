@@ -1,5 +1,7 @@
 *.class
 dm-sysmgr.log*
+logs/
+target/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

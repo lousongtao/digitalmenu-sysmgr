@@ -1,24 +1,27 @@
 package com.shuishou.sysmgr.beans;
 
 import java.util.Date;
+import java.util.List;
 
 public class UserData {
 	private int id;
 	
-	private String name;
+	private String username;
 	
 	private Date startTime;//on duty time
+	
+	public List<UserPermission> permissions;
 	
 	public UserData(){}
 	
 	public UserData(int id, String name){
 		this.id = id;
-		this.name = name;
+		this.username = name;
 	}
 	
 	public UserData(int id, String name, Date startTime){
 		this.id = id;
-		this.name = name;
+		this.username = name;
 		this.startTime = startTime;
 	}
 	
@@ -39,23 +42,32 @@ public class UserData {
 	}
 
 	public String getName() {
-		return name;
+		return username;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.username = name;
+	}
+
+	
+	public List<UserPermission> getPermissions() {
+		return permissions;
+	}
+
+	public void setPermissions(List<UserPermission> permissions) {
+		this.permissions = permissions;
 	}
 
 	@Override
 	public String toString() {
-		return "User [name=" + name + "]";
+		return "User [name=" + username + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
 
@@ -68,10 +80,10 @@ public class UserData {
 		if (getClass() != obj.getClass())
 			return false;
 		UserData other = (UserData) obj;
-		if (name == null) {
-			if (other.name != null)
+		if (username == null) {
+			if (other.username != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!username.equals(other.username))
 			return false;
 		return true;
 	}

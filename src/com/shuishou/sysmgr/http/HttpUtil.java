@@ -42,9 +42,15 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shuishou.sysmgr.beans.Category1;
 import com.shuishou.sysmgr.beans.Category2;
+import com.shuishou.sysmgr.beans.Desk;
+import com.shuishou.sysmgr.beans.DiscountTemplate;
 import com.shuishou.sysmgr.beans.Dish;
+import com.shuishou.sysmgr.beans.Flavor;
 import com.shuishou.sysmgr.beans.HttpResult;
+import com.shuishou.sysmgr.beans.PayWay;
+import com.shuishou.sysmgr.beans.Permission;
 import com.shuishou.sysmgr.beans.Printer;
+import com.shuishou.sysmgr.beans.UserData;
 import com.shuishou.sysmgr.ui.MainFrame;
 
 public class HttpUtil {
@@ -239,7 +245,7 @@ public class HttpUtil {
 	 * this class just hold Category1 objects. if need dish object, please loop into the category1 objects
 	 */
 	public static ArrayList<Category1> loadMenu(JFrame parent, String url){
-		String response = HttpUtil.getJSONObjectByGet(url);
+		String response = getJSONObjectByGet(url);
 		if (response == null){
 			logger.error("get null from server for loading menu. URL = " + url);
 			JOptionPane.showMessageDialog(parent, "get null from server for loading menu. URL = " + url);
@@ -247,8 +253,8 @@ public class HttpUtil {
 		}
 		HttpResult<ArrayList<Category1>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<Category1>>>(){}.getType());
 		if (!result.success){
-			logger.error("return false while loading menu. URL = " + url);
-			JOptionPane.showMessageDialog(parent, "return false while loading menu. URL = " + url);
+			logger.error("return false while loading menu. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading menu. URL = " + url + ", response = "+response);
 			return null;
 		}
 		//repoint category2 and dishes to their parent
@@ -264,8 +270,104 @@ public class HttpUtil {
 		return result.data;
 	}
 	
+	public static ArrayList<UserData> loadUser(JFrame parent, String url){
+		String response = getJSONObjectByGet(url);
+		if (response == null){
+			logger.error("get null from server for loading user. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading user. URL = " + url);
+			return null;
+		}
+		HttpResult<ArrayList<UserData>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<UserData>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading user. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading user. URL = " + url + ", response = "+response);
+			return null;
+		}
+		return result.data;
+	}
+	
+	public static ArrayList<Permission> loadPermission(JFrame parent, String url){
+		String response = getJSONObjectByGet(url);
+		if (response == null){
+			logger.error("get null from server for loading Permission. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading Permission. URL = " + url);
+			return null;
+		}
+		HttpResult<ArrayList<Permission>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<Permission>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading Permission. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading Permission. URL = " + url + ", response = "+response);
+			return null;
+		}
+		return result.data;
+	}
+	
+	public static ArrayList<Desk> loadDesk(JFrame parent, String url){
+		String response = getJSONObjectByGet(url);
+		if (response == null){
+			logger.error("get null from server for loading desk. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading desk. URL = " + url);
+			return null;
+		}
+		HttpResult<ArrayList<Desk>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<Desk>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading desk. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading desk. URL = " + url + ", response = "+response);
+			return null;
+		}
+		return result.data;
+	}
+	
+	public static ArrayList<Flavor> loadFlavor(JFrame parent, String url){
+		String response = getJSONObjectByGet(url);
+		if (response == null){
+			logger.error("get null from server for loading Flavor. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading Flavor. URL = " + url);
+			return null;
+		}
+		HttpResult<ArrayList<Flavor>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<Flavor>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading Flavor. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading Flavor. URL = " + url + ", response = "+response);
+			return null;
+		}
+		return result.data;
+	}
+	
+	public static ArrayList<PayWay> loadPayWay(JFrame parent, String url){
+		String response = getJSONObjectByGet(url);
+		if (response == null){
+			logger.error("get null from server for loading pay way. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading pay way. URL = " + url);
+			return null;
+		}
+		HttpResult<ArrayList<PayWay>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<PayWay>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading pay way. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading pay way. URL = " + url + ", response = "+response);
+			return null;
+		}
+		return result.data;
+	}
+	
+	public static ArrayList<DiscountTemplate> loadDiscountTemplate(JFrame parent, String url){
+		String response = getJSONObjectByGet(url);
+		if (response == null){
+			logger.error("get null from server for loading Discount Template. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading Discount Template. URL = " + url);
+			return null;
+		}
+		HttpResult<ArrayList<DiscountTemplate>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<DiscountTemplate>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading Discount Template. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading Discount Template. URL = " + url + ", response = "+response);
+			return null;
+		}
+		return result.data;
+	}
+	
 	public static ArrayList<Printer> loadPrinter(JFrame parent, String url){
-		String response = HttpUtil.getJSONObjectByGet(url);
+		String response = getJSONObjectByGet(url);
 		if (response == null){
 			logger.error("get null from server for loading printer. URL = " + url);
 			JOptionPane.showMessageDialog(parent, "get null from server for loading printer. URL = " + url);
@@ -273,8 +375,40 @@ public class HttpUtil {
 		}
 		HttpResult<ArrayList<Printer>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<Printer>>>(){}.getType());
 		if (!result.success){
-			logger.error("return false while loading printer. URL = " + url);
-			JOptionPane.showMessageDialog(parent, "return false while loading printer. URL = " + url);
+			logger.error("return false while loading printer. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading printer. URL = " + url + ", response = "+response);
+			return null;
+		}
+		return result.data;
+	}
+	
+	public static ArrayList<String> loadLogType(JFrame parent, String url){
+		String response = getJSONObjectByGet(url);
+		if (response == null){
+			logger.error("get null from server for loading log type. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading log type. URL = " + url);
+			return null;
+		}
+		HttpResult<ArrayList<String>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<String>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading log type. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading log type. URL = " + url + ", response = "+response);
+			return null;
+		}
+		return result.data;
+	}
+	
+	public static HashMap<String, String> loadConfigMap(JFrame parent, String url){
+		String response = getJSONObjectByGet(url);
+		if (response == null){
+			logger.error("get null from server for loading configs. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading configs. URL = " + url);
+			return null;
+		}
+		HttpResult<HashMap<String, String>> result = new Gson().fromJson(response, new TypeToken<HttpResult<HashMap<String, String>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading configs. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading configs. URL = " + url + ", response = "+response);
 			return null;
 		}
 		return result.data;

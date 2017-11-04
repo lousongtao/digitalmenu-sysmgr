@@ -53,9 +53,9 @@ public class ConstantValue {
 	public static final byte INDENT_OPERATIONTYPE_PAY = 4;
 	
 	//付款方式
-	public static final byte INDENT_PAYWAY_CASH = 1;//现金
-	public static final byte INDENT_PAYWAY_CARD = 2;//刷卡
-	public static final byte INDENT_PAYWAY_MEMBER = 3;//会员
+	public static final String INDENT_PAYWAY_CASH = "cash";//现金
+	public static final String INDENT_PAYWAY_BANKCARD = "bankcard";//刷卡
+	public static final String INDENT_PAYWAY_MEMBER = "member";//会员
 	
 	public static final byte INDENTDETAIL_OPERATIONTYPE_ADD = 1;
 	public static final byte INDENTDETAIL_OPERATIONTYPE_DELETE = 2;
@@ -65,6 +65,8 @@ public class ConstantValue {
 	
 	public static final byte PRINT_TYPE_TOGETHER = 0;
 	public static final byte PRINT_TYPE_SEPARATELY = 1;
+	public static final byte PRINTER_TYPE_COUNTER = 1;
+	public static final byte PRINTER_TYPE_KITCHEN = 2;
 	
 	public static final byte SHIFTWORK_ONWORK = 0;
 	public static final byte SHIFTWORK_OFFWORK = 1;
@@ -76,4 +78,12 @@ public class ConstantValue {
 	
 	public static final byte DISH_PURCHASETYPE_UNIT = 1;
 	public static final byte DISH_PURCHASETYPE_WEIGHT = 2;
+	
+	public static final String CONFIGS_CONFIRMCODE = "CONFIRMCODE";
+	public static final String CONFIGS_OPENCASHDRAWERCODE = "OPENCASHDRAWERCODE";
+	public static final String CONFIGS_LANGUAGEAMOUNT = "LANGUAGEAMOUNT";
+	public static final String CONFIGS_FIRSTLANGUAGENAME= "FIRSTLANGUAGENAME";
+	public static final String CONFIGS_FIRSTLANGUAGEABBR = "FIRSTLANGUAGEABBR";
+	public static final String CONFIGS_SECONDLANGUAGENAME= "SECONDLANGUAGENAME";
+	public static final String CONFIGS_SECONDLANGUAGEABBR = "SECONDLANGUAGEABBR";
 }

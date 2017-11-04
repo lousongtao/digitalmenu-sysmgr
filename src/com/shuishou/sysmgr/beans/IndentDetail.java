@@ -17,6 +17,8 @@ public class IndentDetail {
 	private String dishEnglishName;
 	
 	private String additionalRequirements;
+	
+	private double weight;
 
 	public Indent getIndent() {
 		return indent;
@@ -34,6 +36,14 @@ public class IndentDetail {
 		this.id = id;
 	}
 
+
+	public double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
 
 	public int getDishId() {
 		return dishId;

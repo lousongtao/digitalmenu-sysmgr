@@ -1,4 +1,4 @@
-package com.shuishou.sysmgr.ui;
+package com.shuishou.sysmgr.ui.menu;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -52,6 +52,8 @@ import com.shuishou.sysmgr.beans.DishChoosePopinfo;
 import com.shuishou.sysmgr.beans.DishChooseSubitem;
 import com.shuishou.sysmgr.beans.HttpResult;
 import com.shuishou.sysmgr.http.HttpUtil;
+import com.shuishou.sysmgr.ui.CommonDialogOperatorIFC;
+import com.shuishou.sysmgr.ui.MainFrame;
 
 public class DishPanel extends JPanel implements CommonDialogOperatorIFC, ActionListener{
 	private final Logger logger = Logger.getLogger(DishPanel.class.getName());
@@ -280,7 +282,7 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		if (!doCheckInput())
 			return false;
 		Gson gson = new Gson();
-		Map<String, String> params = new HashMap<>();
+		HashMap<String, String> params = new HashMap<>();
 		params.put("userId", MainFrame.getLoginUser().getId()+"");
 		params.put("chineseName", tfChineseName.getText());
 		params.put("englishName", tfEnglishName.getText());
@@ -328,8 +330,8 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		
 		HttpResult<Dish> result = gson.fromJson(response, new TypeToken<HttpResult<Dish>>(){}.getType());
 		if (!result.success){
-			logger.error("return false while add/update dish. URL = " + url);
-			JOptionPane.showMessageDialog(this, "return false while add/update dish. URL = " + url);
+			logger.error("return false while add/update dish. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while add/update dish. URL = " + url + ", response = "+response);
 			return false;
 		}
 		//the category2 info is null after get from server

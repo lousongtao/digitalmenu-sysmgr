@@ -1,4 +1,4 @@
-package com.shuishou.sysmgr.ui;
+package com.shuishou.sysmgr.ui.menu;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -25,6 +25,8 @@ import com.google.gson.reflect.TypeToken;
 import com.shuishou.sysmgr.beans.Category1;
 import com.shuishou.sysmgr.beans.HttpResult;
 import com.shuishou.sysmgr.http.HttpUtil;
+import com.shuishou.sysmgr.ui.CommonDialogOperatorIFC;
+import com.shuishou.sysmgr.ui.MainFrame;
 
 public class Category1Panel extends JPanel implements CommonDialogOperatorIFC{
 	private final Logger logger = Logger.getLogger(Category1Panel.class.getName());
@@ -93,8 +95,8 @@ public class Category1Panel extends JPanel implements CommonDialogOperatorIFC{
 		Gson gson = new Gson();
 		HttpResult<Category1> result = gson.fromJson(response, new TypeToken<HttpResult<Category1>>(){}.getType());
 		if (!result.success){
-			logger.error("return false while add/update category1. URL = " + url);
-			JOptionPane.showMessageDialog(this, "return false while add/update category1. URL = " + url);
+			logger.error("return false while add/update category1. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while add/update category1. URL = " + url + ", response = "+response);
 			return false;
 		}
 		//update parent menu tree

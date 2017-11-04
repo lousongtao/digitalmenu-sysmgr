@@ -1,4 +1,4 @@
-package com.shuishou.sysmgr.ui;
+package com.shuishou.sysmgr.ui.menu;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -45,6 +45,8 @@ import com.shuishou.sysmgr.beans.Category2;
 import com.shuishou.sysmgr.beans.Dish;
 import com.shuishou.sysmgr.beans.HttpResult;
 import com.shuishou.sysmgr.http.HttpUtil;
+import com.shuishou.sysmgr.ui.CommonDialog;
+import com.shuishou.sysmgr.ui.MainFrame;
 
 public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, ActionListener{
 	private final Logger logger = Logger.getLogger(MenuMgmtPanel.class.getName());
@@ -205,28 +207,28 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == menuitemAddC1){
 			Category1Panel p = new Category1Panel(this);
-			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmt.AddCategory1"), 300, 300);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.AddCategory1"), 300, 300);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemModifyC1){
 			Category1Panel p = new Category1Panel(this);
 			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
 			p.setObjectValue((Category1)node.getUserObject());
-			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmt.ModifyCategory1"), 300, 300);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.ModifyCategory1"), 300, 300);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemAddC2){
 			Category2Panel p = new Category2Panel(this);
-			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmt.AddCategory2"), 300, 400);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.AddCategory2"), 300, 400);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemModifyC2){
 			Category2Panel p = new Category2Panel(this);
 			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
 			p.setObjectValue((Category2)node.getUserObject());
-			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmt.ModifyCategory2"), 300, 400);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.ModifyCategory2"), 300, 400);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemAddDish){
 			DishPanel p = new DishPanel(this);
 			p.showPicturePanel(false);
-			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmt.AddDish"), 1000, 420);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.AddDish"), 1000, 420);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemModifyDish){
 			DishPanel p = new DishPanel(this);
@@ -288,8 +290,8 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		Gson gson = new Gson();
 		HttpResult<Dish> result = gson.fromJson(response, new TypeToken<HttpResult<Dish>>(){}.getType());
 		if (!result.success){
-			logger.error("return false while change dish picture. URL = " + url);
-			JOptionPane.showMessageDialog(this, "return false while change dish picture. URL = " + url);
+			logger.error("return false while change dish picture. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while change dish picture. URL = " + url + ", response = "+response);
 			return;
 		}
 		result.data.setCategory2(dish.getCategory2());
@@ -543,8 +545,8 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		Gson gson = new Gson();
 		HttpResult<HashMap<String, String>> result = gson.fromJson(response, new TypeToken<HttpResult<HashMap<String, String>>>(){}.getType());
 		if (!result.success){
-			logger.error("return false while delete category1. URL = " + url);
-			JOptionPane.showMessageDialog(this, "return false while delete category1. URL = " + url);
+			logger.error("return false while delete category1. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while delete category1. URL = " + url + ", response = "+response);
 			return;
 		}
 		((DefaultTreeModel)menuTree.getModel()).removeNodeFromParent(node);
@@ -576,8 +578,8 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		Gson gson = new Gson();
 		HttpResult<HashMap<String, String>> result = gson.fromJson(response, new TypeToken<HttpResult<HashMap<String, String>>>(){}.getType());
 		if (!result.success){
-			logger.error("return false while delete category2. URL = " + url);
-			JOptionPane.showMessageDialog(this, "return false while delete category2. URL = " + url);
+			logger.error("return false while delete category2. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while delete category2. URL = " + url + ", response = "+response);
 			return;
 		}
 		((DefaultTreeModel)menuTree.getModel()).removeNodeFromParent(node);
@@ -605,8 +607,8 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		Gson gson = new Gson();
 		HttpResult<HashMap<String, String>> result = gson.fromJson(response, new TypeToken<HttpResult<HashMap<String, String>>>(){}.getType());
 		if (!result.success){
-			logger.error("return false while delete dish. URL = " + url);
-			JOptionPane.showMessageDialog(this, "return false while delete dish. URL = " + url);
+			logger.error("return false while delete dish. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while delete dish. URL = " + url + ", response = "+response);
 			return;
 		}
 		((DefaultTreeModel)menuTree.getModel()).removeNodeFromParent(node);

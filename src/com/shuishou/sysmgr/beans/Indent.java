@@ -25,7 +25,7 @@ public class Indent {
 	
 	private double paidPrice;//ʵ�ʸ�����
 	
-	private byte payWay;//���ʽ
+	private String payWay;//���ʽ
 	
 	private byte status = ConstantValue.INDENT_STATUS_OPEN;
 
@@ -48,11 +48,11 @@ public class Indent {
 		this.customerAmount = customerAmount;
 	}
 
-	public byte getPayWay() {
+	public String getPayWay() {
 		return payWay;
 	}
 
-	public void setPayWay(byte payWay) {
+	public void setPayWay(String payWay) {
 		this.payWay = payWay;
 	}
 

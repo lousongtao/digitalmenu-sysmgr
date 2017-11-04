@@ -1,4 +1,4 @@
-package com.shuishou.sysmgr.ui;
+package com.shuishou.sysmgr.ui.menu;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -28,6 +28,8 @@ import com.shuishou.sysmgr.beans.Category2;
 import com.shuishou.sysmgr.beans.HttpResult;
 import com.shuishou.sysmgr.beans.Printer;
 import com.shuishou.sysmgr.http.HttpUtil;
+import com.shuishou.sysmgr.ui.CommonDialogOperatorIFC;
+import com.shuishou.sysmgr.ui.MainFrame;
 
 public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 	private final Logger logger = Logger.getLogger(Category2Panel.class.getName());
@@ -35,8 +37,8 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 	private JTextField tfChineseName= new JTextField(155);
 	private JTextField tfEnglishName= new JTextField(155);
 	private JTextField tfDisplaySeq= new JTextField(155);
-	private JComboBox cbCategory1 = new JComboBox();
-	private JComboBox cbPrinter = new JComboBox();
+	private JComboBox<Category1> cbCategory1 = new JComboBox();
+	private JComboBox<Printer> cbPrinter = new JComboBox();
 	
 	private Category2 c2;
 	public Category2Panel(MenuMgmtPanel parent){
@@ -74,8 +76,8 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 		cbCategory1.setMinimumSize(new Dimension(180,25));
 		cbPrinter.setMinimumSize(new Dimension(180,25));
 		
-		cbCategory1.setRenderer(new Category1ListRender());
-		cbPrinter.setRenderer(new PrinterListRender());
+//		cbCategory1.setRenderer(new Category1ListRender());
+//		cbPrinter.setRenderer(new PrinterListRender());
 		
 		tfDisplaySeq.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
@@ -101,6 +103,7 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 		for(Category1 c1 : listCategory1){
 			cbCategory1.addItem(c1);
 		}
+		cbPrinter.setSelectedIndex(-1);
 	}
 	
 	@Override
@@ -129,8 +132,8 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 		Gson gson = new Gson();
 		HttpResult<Category2> result = gson.fromJson(response, new TypeToken<HttpResult<Category2>>(){}.getType());
 		if (!result.success){
-			logger.error("return false while add/update category2. URL = " + url);
-			JOptionPane.showMessageDialog(this, "return false while add/update category2. URL = " + url);
+			logger.error("return false while add/update category2. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while add/update category2. URL = " + url + ", response = "+response);
 			return false;
 		}
 		result.data.setCategory1((Category1)cbCategory1.getSelectedItem());
@@ -174,6 +177,8 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 		cbCategory1.setSelectedItem(c2.getCategory1());
 		if (c2.getPrinter() != null){
 			cbPrinter.setSelectedItem(c2.getPrinter());
+		} else {
+			cbPrinter.setSelectedIndex(-1);
 		}
 	}
 	
@@ -193,6 +198,7 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 				cbPrinter.addItem(p);
 			}
 		}
+		cbPrinter.setSelectedIndex(-1);
 	}
 
 	class PrinterListRender extends JLabel implements ListCellRenderer{
@@ -202,7 +208,8 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
-			setText(((Printer)value).getName());
+			if (value != null)
+				setText(((Printer)value).getName());
 			return this;
 		}
 		

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -31,11 +32,27 @@ import com.shuishou.sysmgr.ConstantValue;
 import com.shuishou.sysmgr.Messages;
 import com.shuishou.sysmgr.beans.Category1;
 import com.shuishou.sysmgr.beans.Category2;
+import com.shuishou.sysmgr.beans.Desk;
+import com.shuishou.sysmgr.beans.DiscountTemplate;
 import com.shuishou.sysmgr.beans.Dish;
+import com.shuishou.sysmgr.beans.Flavor;
 import com.shuishou.sysmgr.beans.HttpResult;
+import com.shuishou.sysmgr.beans.PayWay;
+import com.shuishou.sysmgr.beans.Permission;
 import com.shuishou.sysmgr.beans.Printer;
 import com.shuishou.sysmgr.beans.UserData;
 import com.shuishou.sysmgr.http.HttpUtil;
+import com.shuishou.sysmgr.ui.account.AccountMgmtPanel;
+import com.shuishou.sysmgr.ui.config.ConfigsDialog;
+import com.shuishou.sysmgr.ui.desk.DeskMgmtPanel;
+import com.shuishou.sysmgr.ui.discounttemplate.DiscountTemplateMgmtPanel;
+import com.shuishou.sysmgr.ui.flavor.FlavorMgmtPanel;
+import com.shuishou.sysmgr.ui.menu.MenuMgmtPanel;
+import com.shuishou.sysmgr.ui.payway.PayWayMgmtPanel;
+import com.shuishou.sysmgr.ui.printer.PrinterMgmtPanel;
+import com.shuishou.sysmgr.ui.query.IndentQueryPanel;
+import com.shuishou.sysmgr.ui.query.LogQueryPanel;
+import com.shuishou.sysmgr.ui.query.ShiftworkQueryPanel;
 
 public class MainFrame extends JFrame implements ActionListener{
 	public static final Logger logger = Logger.getLogger(MainFrame.class.getName());
@@ -46,12 +63,23 @@ public class MainFrame extends JFrame implements ActionListener{
 	public static String language;
 	public static String SERVER_URL;
 	private static final String CARDLAYOUT_MENUMGMT= "menumgmt"; 
+	private static final String CARDLAYOUT_ACCOUNTMGMT= "accountmgmt"; 
+	private static final String CARDLAYOUT_DESKMGMT= "deskmgmt"; 
+	private static final String CARDLAYOUT_FLAVORMGMT= "flavormgmt"; 
+	private static final String CARDLAYOUT_PRINTERMGMT= "printermgmt"; 
+	private static final String CARDLAYOUT_DISCOUNTTEMPLATEMGMT= "discounttemplatemgmt"; 
+	private static final String CARDLAYOUT_PAYWAYMGMT= "paywaymgmt"; 
+	private static final String CARDLAYOUT_LOGQUERY= "logquery"; 
+	private static final String CARDLAYOUT_INDENTQUERY= "indentquery"; 
+	private static final String CARDLAYOUT_SHIFTWORKQUERY= "shiftworkquery"; 
 	private JBlockedButton btnAccountMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.AccountMgr"));
 	private JBlockedButton btnMenuMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.MenuMgr"));
 	private JBlockedButton btnDeskMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.DeskMgr"));
+	private JBlockedButton btnPayWayMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.PayWayMgr"));
+	private JBlockedButton btnDiscountTempMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.DiscountTempMgr"));
 	private JBlockedButton btnPrinterMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.PrinterMgr"));
 	private JBlockedButton btnFlavorMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.FlavorMgr"));
-	private JBlockedButton btnConfirmCode = new JBlockedButton(Messages.getString("MainFrame.ToolBar.ConfirmCode"));
+	private JBlockedButton btnConfig = new JBlockedButton(Messages.getString("MainFrame.ToolBar.Config"));
 	private JBlockedButton btnQueryLog = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryLog"));
 	private JBlockedButton btnQueryIndent = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryIndent"));
 	private JBlockedButton btnQuerySwiftWork = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QuerySwiftWork"));
@@ -60,8 +88,18 @@ public class MainFrame extends JFrame implements ActionListener{
 	private ArrayList<Category1> listCategory1s;
 	private ArrayList<Printer> listPrinters;
 	private static UserData loginUser;
+	private HashMap<String, String> configsMap;
 	
 	private MenuMgmtPanel pMenuMgmt;
+	private AccountMgmtPanel pAccount;
+	private DeskMgmtPanel pDesk;
+	private FlavorMgmtPanel pFlavor;
+	private PrinterMgmtPanel pPrinter;
+	private DiscountTemplateMgmtPanel pDiscountTemplate;
+	private PayWayMgmtPanel pPayWay;
+	private LogQueryPanel pQueryLog;
+	private IndentQueryPanel pQueryIndent;
+	private ShiftworkQueryPanel pQueryShiftwork;
 	
 	private Gson gson = new Gson();
 	
@@ -77,14 +115,16 @@ public class MainFrame extends JFrame implements ActionListener{
 	private void initData(){
 		reloadListCategory1s();
 		reloadListPrinters();
-		
+		loadConfigsMap();
 	}
 	
 	private void initUI(){
 		JToolBar toolbar = new JToolBar();
 		toolbar.setFloatable(false);
-		toolbar.setMargin(new Insets(0,0,10,0));
+		toolbar.setMargin(new Insets(0,20,20,20));
 		toolbar.add(btnAccountMgr);
+		toolbar.addSeparator();
+		toolbar.add(btnConfig);
 		toolbar.addSeparator();
 		toolbar.add(btnMenuMgr);
 		toolbar.addSeparator();
@@ -92,10 +132,13 @@ public class MainFrame extends JFrame implements ActionListener{
 		toolbar.addSeparator();
 		toolbar.add(btnDeskMgr);
 		toolbar.addSeparator();
+		toolbar.add(btnPayWayMgr);
+		toolbar.addSeparator();
+		toolbar.add(btnDiscountTempMgr);
+		toolbar.addSeparator();
 		toolbar.add(btnPrinterMgr);
 		toolbar.addSeparator();
-		toolbar.add(btnConfirmCode);
-		toolbar.addSeparator();
+		
 		toolbar.add(btnQueryLog);
 		toolbar.addSeparator();
 		toolbar.add(btnQueryIndent);
@@ -104,9 +147,11 @@ public class MainFrame extends JFrame implements ActionListener{
 		btnAccountMgr.addActionListener(this);
 		btnMenuMgr.addActionListener(this);
 		btnDeskMgr.addActionListener(this);
+		btnPayWayMgr.addActionListener(this);
+		btnDiscountTempMgr.addActionListener(this);
 		btnFlavorMgr.addActionListener(this);
 		btnPrinterMgr.addActionListener(this);
-		btnConfirmCode.addActionListener(this);
+		btnConfig.addActionListener(this);
 		btnQueryLog.addActionListener(this);
 		btnQueryIndent.addActionListener(this);
 		btnQuerySwiftWork.addActionListener(this);
@@ -126,15 +171,28 @@ public class MainFrame extends JFrame implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnAccountMgr){
+			ArrayList<UserData> userList = loadUserList();
+			ArrayList<Permission> permissionList = loadPermissionList();
+			if (pAccount == null){
+				pAccount = new AccountMgmtPanel(this, userList, permissionList);
+				pContent.add(pAccount, CARDLAYOUT_ACCOUNTMGMT);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_ACCOUNTMGMT);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_ACCOUNTMGMT);
+			}
 			
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnAccountMgr.getText());
 		} else if (e.getSource() == btnMenuMgr){
 			if (pMenuMgmt == null){
 				pMenuMgmt = new MenuMgmtPanel(this, listCategory1s);
 				pContent.add(pMenuMgmt, CARDLAYOUT_MENUMGMT);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MENUMGMT);
 				pContent.updateUI();
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MENUMGMT);
 			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnMenuMgr.getText());
 //			reloadListCategory1s();
 //			
 //			pMenuMgmt = new MenuMgmtPanel(this, listCategory1s);
@@ -142,23 +200,106 @@ public class MainFrame extends JFrame implements ActionListener{
 //			pContent.add(pMenuMgmt, CARDLAYOUT_MENUMGMT);
 //			pContent.updateUI();
 		} else if (e.getSource() == btnDeskMgr){
-			
+			ArrayList<Desk> deskList = loadDeskList();
+			if (pDesk == null){
+				pDesk = new DeskMgmtPanel(this, deskList);
+				pContent.add(pDesk, CARDLAYOUT_DESKMGMT);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_DESKMGMT);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_DESKMGMT);
+			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnDeskMgr.getText());
+		} else if (e.getSource() == btnPayWayMgr){
+			ArrayList<PayWay> paywayList = loadPayWayList();
+			if (pPayWay == null){
+				pPayWay = new PayWayMgmtPanel(this, paywayList);
+				pContent.add(pPayWay, CARDLAYOUT_PAYWAYMGMT);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_PAYWAYMGMT);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_PAYWAYMGMT);
+			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnPayWayMgr.getText());
+		} else if (e.getSource() == btnDiscountTempMgr){
+			ArrayList<DiscountTemplate> discountTempList = loadDiscountTemplateList();
+			if (pDiscountTemplate == null){
+				pDiscountTemplate = new DiscountTemplateMgmtPanel(this, discountTempList);
+				pContent.add(pDiscountTemplate, CARDLAYOUT_DISCOUNTTEMPLATEMGMT);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_DISCOUNTTEMPLATEMGMT);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_DISCOUNTTEMPLATEMGMT);
+			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnDiscountTempMgr.getText());
 		} else if (e.getSource() == btnPrinterMgr){
-			
-		} else if (e.getSource() == btnConfirmCode){
-			
-		} else if (e.getSource() == btnQueryLog){
-			
-		} else if (e.getSource() == btnQueryIndent){
-			
-		} else if (e.getSource() == btnQuerySwiftWork){
-			
+			ArrayList<Printer> printerList = loadPrinterList();
+			if (pPrinter == null){
+				pPrinter = new PrinterMgmtPanel(this, printerList);
+				pContent.add(pPrinter, CARDLAYOUT_PRINTERMGMT);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_PRINTERMGMT);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_PRINTERMGMT);
+			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnPrinterMgr.getText());
 		} else if (e.getSource() == btnFlavorMgr){
-			
-		}
+			ArrayList<Flavor> flavorList = loadFlavorList();
+			if (pFlavor == null){
+				pFlavor = new FlavorMgmtPanel(this, flavorList);
+				pContent.add(pFlavor, CARDLAYOUT_FLAVORMGMT);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_FLAVORMGMT);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_FLAVORMGMT);
+			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnFlavorMgr.getText());
+		} else if (e.getSource() == btnConfig){
+			ConfigsDialog dlg = new ConfigsDialog(this);
+			dlg.setVisible(true);
+		} else if (e.getSource() == btnQueryLog){
+			if (pQueryLog == null){
+				ArrayList<String> listLogType = loadLogType();
+				pQueryLog = new LogQueryPanel(this, listLogType);
+				pContent.add(pQueryLog, CARDLAYOUT_LOGQUERY);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_LOGQUERY);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_LOGQUERY);
+			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnQueryLog.getText());
+		} else if (e.getSource() == btnQueryIndent){
+			if (pQueryIndent == null){
+				pQueryIndent = new IndentQueryPanel(this);
+				pContent.add(pQueryIndent, CARDLAYOUT_INDENTQUERY);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_INDENTQUERY);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_INDENTQUERY);
+			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnQueryIndent.getText());
+		} else if (e.getSource() == btnQuerySwiftWork){
+			if (pQueryShiftwork == null && 1==1){
+				pQueryShiftwork = new ShiftworkQueryPanel(this);
+				pContent.add(pQueryShiftwork, CARDLAYOUT_SHIFTWORKQUERY);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_SHIFTWORKQUERY);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_SHIFTWORKQUERY);
+			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnQuerySwiftWork.getText());
+		} 
 	}
 
 	
+	public HashMap<String, String> getConfigsMap() {
+		return configsMap;
+	}
+
+	public void setConfigMap(HashMap<String, String> configsMap) {
+		this.configsMap = configsMap;
+	}
+
 	public static UserData getLoginUser() {
 		return loginUser;
 	}
@@ -167,6 +308,43 @@ public class MainFrame extends JFrame implements ActionListener{
 		this.loginUser = loginUser;
 	}
 
+	public ArrayList<UserData> loadUserList(){
+		ArrayList<UserData> userList = HttpUtil.loadUser(this, SERVER_URL + "account/accounts?userId="+loginUser.getId());
+		return userList;
+	}
+	
+	public ArrayList<Desk> loadDeskList(){
+		ArrayList<Desk> deskList = HttpUtil.loadDesk(this, SERVER_URL + "common/getdesks?userId="+loginUser.getId());
+		return deskList;
+	}
+	
+	public ArrayList<Flavor> loadFlavorList(){
+		ArrayList<Flavor> deskList = HttpUtil.loadFlavor(this, SERVER_URL + "menu/queryflavor?userId="+loginUser.getId());
+		return deskList;
+	}
+	
+	public ArrayList<PayWay> loadPayWayList(){
+		ArrayList<PayWay> payWayList = HttpUtil.loadPayWay(this, SERVER_URL + "common/getpayways");
+		return payWayList;
+	}
+	
+	public ArrayList<DiscountTemplate> loadDiscountTemplateList(){
+		ArrayList<DiscountTemplate> discountTemplateList = HttpUtil.loadDiscountTemplate(this, SERVER_URL + "common/getdiscounttemplates");
+		return discountTemplateList;
+	}
+	
+	public ArrayList<Printer> loadPrinterList(){
+		ArrayList<Printer> printerList = HttpUtil.loadPrinter(this, SERVER_URL + "common/getprinters");
+		return printerList;
+	}
+	public ArrayList<String> loadLogType(){
+		ArrayList<String> listLogType = HttpUtil.loadLogType(this, SERVER_URL + "log/log_types?userId="+loginUser.getId());
+		return listLogType;
+	}
+	private ArrayList<Permission> loadPermissionList(){
+		ArrayList<Permission> permissionList = HttpUtil.loadPermission(this, SERVER_URL + "account/querypermission");
+		return permissionList;
+	}
 	
 	public ArrayList<Category1> getListCategory1s() {
 		return listCategory1s;
@@ -204,6 +382,10 @@ public class MainFrame extends JFrame implements ActionListener{
 	public void reloadListPrinters() {
 		listPrinters = HttpUtil.loadPrinter(this, SERVER_URL + "common/getprinters");
 	}
+	
+	public void loadConfigsMap(){
+		this.configsMap = HttpUtil.loadConfigMap(this, SERVER_URL + "common/queryconfigmap");
+	}
 
 	public static void main(String[] args){
 		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
@@ -211,6 +393,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
 				MainFrame.logger.error("", e);
+				e.printStackTrace();
 			}
 		});
 		//load properties
@@ -238,14 +421,6 @@ public class MainFrame extends JFrame implements ActionListener{
 				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-//		Enumeration enums = UIManager.getDefaults().keys();
-//		while(enums.hasMoreElements()){
-//			Object key = enums.nextElement();
-//			Object value = UIManager.get(key);
-//			if (value instanceof Font){
-//				UIManager.put(key, ConstantValue.FONT_20PLAIN);
-//			}
-//		}
 		MainFrame.SERVER_URL = prop.getProperty("SERVER_URL");
 		MainFrame.WINDOW_WIDTH = Integer.parseInt(prop.getProperty("mainframe.width"));
 		MainFrame.WINDOW_HEIGHT = Integer.parseInt(prop.getProperty("mainframe.height"));
