@@ -164,8 +164,9 @@ public class MainFrame extends JFrame implements ActionListener{
 		c.add(pContent, BorderLayout.CENTER);
 	}
 	
-	public void startLogin(){
+	public void startLogin(String userName, String password){
 		LoginDialog dlg = new LoginDialog(this);
+		dlg.setValue(userName, password);
 		dlg.setVisible(true);
 	}
 	
@@ -430,6 +431,6 @@ public class MainFrame extends JFrame implements ActionListener{
 		MainFrame f = new MainFrame();
 		
 		f.setVisible(true);
-		f.startLogin();
+		f.startLogin(prop.getProperty("defaultuser.name"), prop.getProperty("defaultuser.password"));
 	}
 }
