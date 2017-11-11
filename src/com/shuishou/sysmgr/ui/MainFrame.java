@@ -159,7 +159,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		
 		Container c = this.getContentPane();
-		c.setLayout(new BorderLayout());
+		c.setLayout(new BorderLayout(0, 10));
 		c.add(toolbar, BorderLayout.NORTH);
 		c.add(pContent, BorderLayout.CENTER);
 	}

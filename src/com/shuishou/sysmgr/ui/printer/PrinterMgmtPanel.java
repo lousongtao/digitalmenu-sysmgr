@@ -38,6 +38,7 @@ public class PrinterMgmtPanel extends JPanel implements ActionListener{
 	private PrinterTableModel modelPrinter;
 	private JButton btnAdd = new JButton(Messages.getString("PrinterMgmtPanel.Add"));
 	private JButton btnDelete = new JButton(Messages.getString("PrinterMgmtPanel.Delete"));
+	private JButton btnTestConnection = new JButton(Messages.getString("PrinterMgmtPanel.TestConnection"));
 	private ArrayList<Printer> printerList;
 	public PrinterMgmtPanel(MainFrame mainFrame, ArrayList<Printer> printerList){
 		this.mainFrame = mainFrame;
@@ -63,9 +64,11 @@ public class PrinterMgmtPanel extends JPanel implements ActionListener{
 		JPanel pButtons = new JPanel();
 		pButtons.add(btnAdd);
 		pButtons.add(btnDelete);
+		pButtons.add(btnTestConnection);
 		
 		btnAdd.addActionListener(this);
 		btnDelete.addActionListener(this);
+		btnTestConnection.addActionListener(this);
 		this.setLayout(new BorderLayout());
 		add(pContent, BorderLayout.CENTER);
 		add(pButtons, BorderLayout.SOUTH);
@@ -107,7 +110,24 @@ public class PrinterMgmtPanel extends JPanel implements ActionListener{
 				return;
 			}
 			refreshData();
-		} 
+		} else if (e.getSource() == btnTestConnection){
+			String url = "common/testconnection";
+			Map<String, String> params = new HashMap<>();
+			params.put("id", modelPrinter.getObjectAt(tablePrinter.getSelectedRow()).getId()+"");
+			String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
+			if (response == null){
+				logger.error("get null from server for test connection. URL = " + url + ", param = "+ params);
+				JOptionPane.showMessageDialog(this, "get null from server for test connection. URL = " + url);
+				return;
+			}
+			Gson gson = new Gson();
+			HttpResult<String> result = gson.fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
+			if (!result.success){
+				logger.error("return false while test connection. URL = " + url + ", response = "+response);
+				JOptionPane.showMessageDialog(this, "return false while test connection. URL = " + url + ", response = "+response);
+				return;
+			}
+		}
 	}
 	
 	class PrinterTableModel extends AbstractTableModel{

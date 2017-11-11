@@ -7,10 +7,16 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -18,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
 
 import org.apache.log4j.Logger;
 
@@ -25,7 +32,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shuishou.sysmgr.beans.Category1;
 import com.shuishou.sysmgr.beans.Category2;
+import com.shuishou.sysmgr.beans.Category2Printer;
 import com.shuishou.sysmgr.beans.HttpResult;
+import com.shuishou.sysmgr.beans.Permission;
 import com.shuishou.sysmgr.beans.Printer;
 import com.shuishou.sysmgr.http.HttpUtil;
 import com.shuishou.sysmgr.ui.CommonDialogOperatorIFC;
@@ -38,9 +47,10 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 	private JTextField tfEnglishName= new JTextField(155);
 	private JTextField tfDisplaySeq= new JTextField(155);
 	private JComboBox<Category1> cbCategory1 = new JComboBox();
-	private JComboBox<Printer> cbPrinter = new JComboBox();
-	
+	private JList<PrinterChoosed> listPrinter = new JList<>();
+	private DefaultListModel<PrinterChoosed> modelPrinter = new DefaultListModel<>();
 	private Category2 c2;
+	private Gson gson = new Gson();
 	public Category2Panel(MenuMgmtPanel parent){
 		this.parent = parent;
 		initUI();
@@ -52,18 +62,31 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 		JLabel lbEnglishName = new JLabel("English Name");
 		JLabel lbDisplaySeq = new JLabel("Display Sequence");
 		JLabel lbCategory1 = new JLabel("Category1");
-		JLabel lbPrinter = new JLabel("Printer");
+		listPrinter.setBorder(BorderFactory.createTitledBorder("Printer"));
+		listPrinter.setModel(modelPrinter);
+		listPrinter.setCellRenderer(new PrinterListRenderer());
+		listPrinter.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listPrinter.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				int index = listPrinter.locationToIndex(e.getPoint());
+
+				if (index != -1) {
+					PrinterChoosed pc = listPrinter.getModel().getElementAt(index);
+					pc.isChoosed = !pc.isChoosed;
+					repaint();
+				}
+			}
+		});
 		this.setLayout(new GridBagLayout());
-		add(lbChineseName, new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(tfChineseName, new GridBagConstraints(1, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(lbEnglishName, new GridBagConstraints(0, 1, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(tfEnglishName, new GridBagConstraints(1, 1, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(lbChineseName, 	new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(tfChineseName, 	new GridBagConstraints(1, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(lbEnglishName, 	new GridBagConstraints(0, 1, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(tfEnglishName, 	new GridBagConstraints(1, 1, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		add(lbDisplaySeq, 	new GridBagConstraints(0, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		add(tfDisplaySeq, 	new GridBagConstraints(1, 2, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		add(lbCategory1, 	new GridBagConstraints(0, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		add(cbCategory1, 	new GridBagConstraints(1, 3, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(lbPrinter, 		new GridBagConstraints(0, 4, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(cbPrinter, 		new GridBagConstraints(1, 4, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(listPrinter,	new GridBagConstraints(0, 4, 2, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		add(new JPanel(), new GridBagConstraints(0, 5, 1, 1,0,1, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0, 0));
 //		tfChineseName.setEditable(false);
 //		tfEnglishName.setEditable(false);
@@ -74,8 +97,9 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 		tfChineseName.setMinimumSize(new Dimension(180,25));
 		tfEnglishName.setMinimumSize(new Dimension(180,25));
 		cbCategory1.setMinimumSize(new Dimension(180,25));
-		cbPrinter.setMinimumSize(new Dimension(180,25));
-		
+//		Dimension dListPrinter = listPrinter.getPreferredSize();
+//		dListPrinter.width = 300;
+//		listPrinter.setMinimumSize(dListPrinter);
 //		cbCategory1.setRenderer(new Category1ListRender());
 //		cbPrinter.setRenderer(new PrinterListRender());
 		
@@ -93,17 +117,16 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 	private void initData(){
 		ArrayList<Category1> listCategory1 = parent.getMainFrame().getListCategory1s();
 		ArrayList<Printer> listPrinter = parent.getMainFrame().getListPrinters();
-		cbPrinter.removeAllItems();
 		cbCategory1.removeAllItems();
-		if (listPrinter != null){
-			for(Printer p : listPrinter){
-				cbPrinter.addItem(p);
-			}
-		}
 		for(Category1 c1 : listCategory1){
 			cbCategory1.addItem(c1);
 		}
-		cbPrinter.setSelectedIndex(-1);
+		if (listPrinter != null){
+			for(Printer p : listPrinter){
+				PrinterChoosed pc = new PrinterChoosed(p, false);
+				modelPrinter.addElement(pc);
+			}
+		}
 	}
 	
 	@Override
@@ -116,8 +139,14 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 		params.put("chineseName", tfChineseName.getText());
 		params.put("englishName", tfEnglishName.getText());
 		params.put("sequence", tfDisplaySeq.getText());
-		params.put("printerId", ((Printer)cbPrinter.getSelectedItem()).getId()+"");
 		params.put("category1Id", ((Category1)cbCategory1.getSelectedItem()).getId() + "");
+		ArrayList<Integer> printerIds = new ArrayList<>();
+		for (int i = 0; i < modelPrinter.size(); i++) {
+			if (modelPrinter.getElementAt(i).isChoosed) {
+				printerIds.add(modelPrinter.get(i).printer.getId());
+			}
+		}
+		params.put("printerIds", gson.toJson(printerIds));
 		String url = "menu/add_category2";
 		if (c2 != null){
 			url = "menu/update_category2";
@@ -129,7 +158,6 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 			JOptionPane.showMessageDialog(this, "get null from server for add/update category2. URL = " + url);
 			return false;
 		}
-		Gson gson = new Gson();
 		HttpResult<Category2> result = gson.fromJson(response, new TypeToken<HttpResult<Category2>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while add/update category2. URL = " + url + ", response = "+response);
@@ -158,8 +186,15 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 			JOptionPane.showMessageDialog(this, "Please input Display Sequence");
 			return false;
 		}
-		if (cbPrinter.getSelectedIndex() == -1){
-			JOptionPane.showMessageDialog(this, "Please input Printer");
+		boolean hasPrinter = false;
+		for (int i = 0; i < modelPrinter.size(); i++) {
+			if (modelPrinter.getElementAt(i).isChoosed) {
+				hasPrinter = true;
+				break;
+			}
+		}
+		if (!hasPrinter){
+			JOptionPane.showMessageDialog(this, "Please choose Printer");
 			return false;
 		}
 		if (cbCategory1.getSelectedIndex() == -1){
@@ -175,11 +210,20 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 		tfEnglishName.setText(c2.getEnglishName());
 		tfDisplaySeq.setText(c2.getSequence()+"");
 		cbCategory1.setSelectedItem(c2.getCategory1());
-		if (c2.getPrinter() != null){
-			cbPrinter.setSelectedItem(c2.getPrinter());
-		} else {
-			cbPrinter.setSelectedIndex(-1);
+		for (int i = 0; i < modelPrinter.size(); i++) {
+			modelPrinter.getElementAt(i).isChoosed = false;
 		}
+		List<Category2Printer> cps = c2.getCategory2PrinterList();
+		if (cps != null && !cps.isEmpty()){
+			for(Category2Printer cp : cps){
+				for (int i = 0; i < modelPrinter.size(); i++) {
+					if (cp.getPrinter().getId() == modelPrinter.getElementAt(i).printer.getId()) {
+						modelPrinter.getElementAt(i).isChoosed = true;
+					}
+				}
+			}
+		}
+		listPrinter.updateUI();
 	}
 	
 	public void refreshCategory1List(){
@@ -191,30 +235,16 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 	}
 	
 	public void refreshPrinterList(){
+		modelPrinter.clear();
 		ArrayList<Printer> listPrinter = parent.getMainFrame().getListPrinters();
-		cbPrinter.removeAllItems();
 		if (listPrinter != null){
 			for(Printer p : listPrinter){
-				cbPrinter.addItem(p);
+				modelPrinter.addElement(new PrinterChoosed(p, false));
 			}
 		}
-		cbPrinter.setSelectedIndex(-1);
-	}
-
-	class PrinterListRender extends JLabel implements ListCellRenderer{
-		
-		public PrinterListRender(){}
-
-		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-			if (value != null)
-				setText(((Printer)value).getName());
-			return this;
-		}
 		
 	}
-	
+
 	class Category1ListRender extends JLabel implements ListCellRenderer{
 		
 		public Category1ListRender(){}
@@ -225,6 +255,32 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 			setText(((Category1)value).getChineseName());
 			return this;
 		}
-		
+	}
+	
+	class PrinterListRenderer extends JCheckBox implements ListCellRenderer{
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
+			if (isSelected) {
+	            setBackground(list.getSelectionBackground());
+	            setForeground(list.getSelectionForeground());
+	        } else {
+	            setBackground(list.getBackground());
+	            setForeground(list.getForeground());
+	        }
+			PrinterChoosed pc = (PrinterChoosed)value;
+			this.setText(pc.printer.getName());
+			this.setSelected(pc.isChoosed);
+			return this;
+		}
+	}
+	
+	class PrinterChoosed{
+		Printer printer;
+		boolean isChoosed = false;
+		public PrinterChoosed(Printer p, boolean c){
+			printer = p;
+			isChoosed = c;
+		}
 	}
 }

@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/12/22.
@@ -23,7 +24,7 @@ public class Category2 implements Serializable{
 
     private Category1 category1;
     
-    private Printer printer;
+    private List<Category2Printer> category2PrinterList;
 
     public Category2(){
 
@@ -97,12 +98,13 @@ public class Category2 implements Serializable{
     }
     
     
-    public Printer getPrinter() {
-		return printer;
+
+	public List<Category2Printer> getCategory2PrinterList() {
+		return category2PrinterList;
 	}
 
-	public void setPrinter(Printer printer) {
-		this.printer = printer;
+	public void setCategory2PrinterList(List<Category2Printer> category2PrinterList) {
+		this.category2PrinterList = category2PrinterList;
 	}
 
 	@Override

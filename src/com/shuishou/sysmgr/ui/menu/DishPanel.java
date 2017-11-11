@@ -437,6 +437,7 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 				lbPicture.setIcon(new ImageIcon(ImageIO.read(new URL(MainFrame.SERVER_URL + "../dishimage_big/"+dish.getPictureName()))));
 			} catch (IOException e) {
 				logger.error(e);
+				e.printStackTrace();
 			}
 		}
 	}
