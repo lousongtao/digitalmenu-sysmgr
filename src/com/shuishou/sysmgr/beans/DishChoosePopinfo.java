@@ -8,9 +8,8 @@ public class DishChoosePopinfo implements Serializable{
 
 	private int id;
 	
-	private String popInfoCN;
-	
-	private String popInfoEN;
+	private String firstLanguageName;
+	private String secondLanguageName;
 	
 	private Dish dish;
 
@@ -23,20 +22,26 @@ public class DishChoosePopinfo implements Serializable{
 	}
 
 
-	public String getPopInfoCN() {
-		return popInfoCN;
+	public String getFirstLanguageName() {
+		return firstLanguageName;
 	}
 
-	public void setPopInfoCN(String popInfoCN) {
-		this.popInfoCN = popInfoCN;
+	public void setFirstLanguageName(String firstLanguageName) {
+		this.firstLanguageName = firstLanguageName;
 	}
 
-	public String getPopInfoEN() {
-		return popInfoEN;
+	public String getSecondLanguageName() {
+		return secondLanguageName;
 	}
 
-	public void setPopInfoEN(String popInfoEN) {
-		this.popInfoEN = popInfoEN;
+	public void setSecondLanguageName(String secondLanguageName) {
+		this.secondLanguageName = secondLanguageName;
+	}
+
+	@Override
+	public String toString() {
+		return "DishChoosePopinfo [firstLanguageName=" + firstLanguageName + ", secondLanguageName="
+				+ secondLanguageName + "]";
 	}
 
 	public Dish getDish() {
@@ -47,10 +52,6 @@ public class DishChoosePopinfo implements Serializable{
 		this.dish = dish;
 	}
 
-	@Override
-	public String toString() {
-		return "DishChoosePopinfo [id=" + id + ", dish=" + dish.getChineseName() + ", popInfoCN=" + popInfoCN + "]";
-	}
 
 	@Override
 	public int hashCode() {

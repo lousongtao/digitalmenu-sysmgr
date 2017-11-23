@@ -61,14 +61,15 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 	private final static String CARDLAYOUT_POPUPMESSAGE = "POPUPMESSAGE";
 	private final static String CARDLAYOUT_CHOOSESUBITEM = "CHOOSESUBITEM";
 	private MenuMgmtPanel parent;
-	private JTextField tfChineseName= new JTextField(155);
-	private JTextField tfEnglishName= new JTextField(155);
+	private JTextField tfFirstLanguageName= new JTextField(155);
+	private JTextField tfSecondLanguageName= new JTextField(155);
 	private JTextField tfDisplaySeq= new JTextField(155);
 	private JTextField tfPrice= new JTextField(155);
 	private JTextField tfAbbre= new JTextField(155);
 	private JComboBox cbCategory2 = new JComboBox();
 	private JComboBox cbHotLevel = new JComboBox();
 	private JCheckBox cbAutoMergeWhileChoose = new JCheckBox(Messages.getString("DishPanel.AutoMergeWhileChoose"));
+	private JCheckBox cbAllowFlavor = new JCheckBox(Messages.getString("DishPanel.AllowFlavor"));
 	private JLabel lbPicture;
 	private JPanel pPicture;
 	private JPanel pChooseModeCards;
@@ -89,8 +90,16 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 	private JButton btnAddSubitem = new JButton("add");
 	private JButton btnDeleteSubitem = new JButton("delete");
 	private Dish dish;
+	private Category2 parentCategory2;
 	public DishPanel(MenuMgmtPanel parent){
 		this.parent = parent;
+		initUI();
+		initData();
+	}
+	
+	public DishPanel(MenuMgmtPanel parent, Category2 parentCategory2){
+		this.parent = parent;
+		this.parentCategory2 = parentCategory2;
 		initUI();
 		initData();
 	}
@@ -103,11 +112,14 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 				cbCategory2.addItem(c2);
 			}
 		}
+		if (parentCategory2 != null){
+			cbCategory2.setSelectedItem(parentCategory2);
+		}
 	}
 	
 	private void initUI(){
-		JLabel lbChineseName = new JLabel("Chinese Name");
-		JLabel lbEnglishName = new JLabel("English Name");
+		JLabel lbFirstLanguageName = new JLabel("First Language Name");
+		JLabel lbSecondLanguageName = new JLabel("Second Language Name");
 		JLabel lbDisplaySeq = new JLabel("Display Sequence");
 		JLabel lbCategory2 = new JLabel("Category2");
 		JLabel lbPrice = new JLabel("Price");
@@ -132,11 +144,11 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		JPanel pBaseProperty = new JPanel(new GridBagLayout());
 		pBaseProperty.setBorder(BorderFactory.createTitledBorder("Base Properties"));
 		int row = 0;
-		pBaseProperty.add(lbChineseName, new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		pBaseProperty.add(tfChineseName, new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		pBaseProperty.add(lbFirstLanguageName, new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		pBaseProperty.add(tfFirstLanguageName, new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		row++;
-		pBaseProperty.add(lbEnglishName, new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		pBaseProperty.add(tfEnglishName, new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		pBaseProperty.add(lbSecondLanguageName, new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		pBaseProperty.add(tfSecondLanguageName, new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		row++;
 		pBaseProperty.add(lbDisplaySeq,  new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pBaseProperty.add(tfDisplaySeq,  new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
@@ -153,6 +165,7 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		pBaseProperty.add(lbCategory2, 	new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pBaseProperty.add(cbCategory2, 	new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		row++;
+		pBaseProperty.add(cbAllowFlavor, 	new GridBagConstraints(0, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pBaseProperty.add(cbAutoMergeWhileChoose, 	new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		row++;
 		pBaseProperty.add(pPurchaseType, new GridBagConstraints(0, row, 2, 1,0,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));
@@ -176,18 +189,18 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		JPanel pChooseModePopmsg = new JPanel(new GridBagLayout());
 		pChooseModePopmsg.add(rbChooseAfterPopmsg,  new GridBagConstraints(1, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModePopmsg.add(rbNoChooseAfterPopmsg,new GridBagConstraints(1, 1, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		pChooseModePopmsg.add(new JLabel("Chinese"),new GridBagConstraints(0, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		pChooseModePopmsg.add(new JLabel("First Language Name"),new GridBagConstraints(0, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModePopmsg.add(tfPopmsg_cn,			new GridBagConstraints(1, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		pChooseModePopmsg.add(new JLabel("English"),new GridBagConstraints(0, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		pChooseModePopmsg.add(new JLabel("Second Language Name"),new GridBagConstraints(0, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModePopmsg.add(tfPopmsg_en,			new GridBagConstraints(1, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		
 		JPanel pChooseModeSubitem = new JPanel(new GridBagLayout());
 		pChooseModeSubitem.add(new JLabel("Amount"), 	new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModeSubitem.add(tfSubitemAmount, 		new GridBagConstraints(1, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModeSubitem.add(listSubitem, 			new GridBagConstraints(2, 0, 1, 5,1,1, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10,10,0,0), 0, 0));
-		pChooseModeSubitem.add(new JLabel("Chinese"), 	new GridBagConstraints(0, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		pChooseModeSubitem.add(new JLabel("First Language Name"), 	new GridBagConstraints(0, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModeSubitem.add(tfSubitem_cn, 			new GridBagConstraints(1, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		pChooseModeSubitem.add(new JLabel("English"), 	new GridBagConstraints(0, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		pChooseModeSubitem.add(new JLabel("Second Language Name"), 	new GridBagConstraints(0, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModeSubitem.add(tfSubitem_en, 			new GridBagConstraints(1, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModeSubitem.add(btnAddSubitem, 			new GridBagConstraints(0, 4, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModeSubitem.add(btnDeleteSubitem, 		new GridBagConstraints(1, 4, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
@@ -220,15 +233,15 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		
 
 		
-//		tfChineseName.setEditable(false);
-//		tfEnglishName.setEditable(false);
+//		tfFirstLanguageName.setEditable(false);
+//		tfSecondLanguageName.setEditable(false);
 //		tfDisplaySeq.setEditable(false);
 //		tfPrice.setEditable(false);
 //		cbHotLevel.setEditable(false);
 //		tfAbbre.setEditable(false);
 //		cbCategory2.setEditable(false);
-		tfChineseName.setMinimumSize(new Dimension(180,25));
-		tfEnglishName.setMinimumSize(new Dimension(180,25));
+		tfFirstLanguageName.setMinimumSize(new Dimension(180,25));
+		tfSecondLanguageName.setMinimumSize(new Dimension(180,25));
 		tfDisplaySeq.setMinimumSize(new Dimension(180,25));
 		tfPrice.setMinimumSize(new Dimension(180,25));
 		cbHotLevel.setMinimumSize(new Dimension(180,25));
@@ -283,32 +296,34 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 			return false;
 		Gson gson = new Gson();
 		HashMap<String, String> params = new HashMap<>();
-		params.put("userId", MainFrame.getLoginUser().getId()+"");
-		params.put("chineseName", tfChineseName.getText());
-		params.put("englishName", tfEnglishName.getText());
+		params.put("userId", String.valueOf(MainFrame.getLoginUser().getId()));
+		params.put("firstLanguageName", tfFirstLanguageName.getText());
+		if (tfSecondLanguageName.getText() != null)
+			params.put("secondLanguageName", tfSecondLanguageName.getText());
 		params.put("sequence", tfDisplaySeq.getText());
 		params.put("price", tfPrice.getText());
 		params.put("hotLevel", cbHotLevel.getSelectedItem().toString());
 		params.put("abbreviation", tfAbbre.getText()); 
-		params.put("category2Id", ((Category2)cbCategory2.getSelectedItem()).getId()+"");
+		params.put("category2Id", String.valueOf(((Category2)cbCategory2.getSelectedItem()).getId()));
 		params.put("subitemAmount", tfSubitemAmount.getText());
-		params.put("autoMerge", cbAutoMergeWhileChoose.isSelected()+"");
+		params.put("autoMerge", String.valueOf(cbAutoMergeWhileChoose.isSelected()));
+		params.put("allowFlavor", String.valueOf(cbAllowFlavor.isSelected()));
 		if (this.rbPurchaseTypeUnit.isSelected())
-			params.put("purchaseType", ConstantValue.DISH_PURCHASETYPE_UNIT+"");
+			params.put("purchaseType", String.valueOf(ConstantValue.DISH_PURCHASETYPE_UNIT));
 		else if (this.rbPurchaseTypeWeight.isSelected())
-			params.put("purchaseType", ConstantValue.DISH_PURCHASETYPE_WEIGHT+"");
+			params.put("purchaseType", String.valueOf(ConstantValue.DISH_PURCHASETYPE_WEIGHT));
 		if (rbChooseModeCommon.isSelected()){
-			params.put("chooseMode", ConstantValue.DISH_CHOOSEMODE_DEFAULT+"");
+			params.put("chooseMode", String.valueOf(ConstantValue.DISH_CHOOSEMODE_DEFAULT));
 		} else if (rbChooseModePopmsg.isSelected()){
 			if (rbChooseAfterPopmsg.isSelected()){
-				params.put("chooseMode", ConstantValue.DISH_CHOOSEMODE_POPINFOCHOOSE+"");
+				params.put("chooseMode", String.valueOf(ConstantValue.DISH_CHOOSEMODE_POPINFOCHOOSE));
 			} else if (rbNoChooseAfterPopmsg.isSelected()){
-				params.put("chooseMode", ConstantValue.DISH_CHOOSEMODE_POPINFOQUIT+"");
+				params.put("chooseMode", String.valueOf(ConstantValue.DISH_CHOOSEMODE_POPINFOQUIT));
 			}
 			params.put("dishChoosePopinfo_cn", tfPopmsg_cn.getText());
 			params.put("dishChoosePopinfo_en", tfPopmsg_en.getText());
 		} else if (rbChooseModeSubitem.isSelected()){
-			params.put("chooseMode", ConstantValue.DISH_CHOOSEMODE_SUBITEM+"");
+			params.put("chooseMode", String.valueOf(ConstantValue.DISH_CHOOSEMODE_SUBITEM));
 			ArrayList<DishChooseSubitem> subitems = new ArrayList<>();
 			for (int i = 0; i < subitemModel.getSize(); i++) {
 				subitems.add(subitemModel.get(i));
@@ -345,12 +360,12 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 	}
 	
 	private boolean doCheckInput(){
-		if (tfChineseName.getText() == null || tfChineseName.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "Please input Chinese Name");
+		if (tfFirstLanguageName.getText() == null || tfFirstLanguageName.getText().length() == 0){
+			JOptionPane.showMessageDialog(this, "Please input First Language Name Name");
 			return false;
 		}
-		if (tfEnglishName.getText() == null || tfEnglishName.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "Please input English Name");
+		if (tfSecondLanguageName.getText() == null || tfSecondLanguageName.getText().length() == 0){
+			JOptionPane.showMessageDialog(this, "Please input Second Language Name Name");
 			return false;
 		}
 		if (tfDisplaySeq.getText() == null || tfDisplaySeq.getText().length() == 0){
@@ -395,14 +410,15 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 	
 	public void setObjectValue(Dish dish){
 		this.dish = dish;
-		tfChineseName.setText(dish.getChineseName());
-		tfEnglishName.setText(dish.getEnglishName());
+		tfFirstLanguageName.setText(dish.getFirstLanguageName());
+		tfSecondLanguageName.setText(dish.getSecondLanguageName());
 		tfDisplaySeq.setText(dish.getSequence()+"");
 		tfPrice.setText(dish.getPrice()+"");
 		cbHotLevel.setSelectedIndex(dish.getHotLevel());
 		tfAbbre.setText(dish.getAbbreviation());
 		cbCategory2.setSelectedItem(dish.getCategory2());
 		cbAutoMergeWhileChoose.setSelected(dish.isAutoMergeWhileChoose());
+		cbAllowFlavor.setSelected(dish.isAllowFlavor());
 		this.rbPurchaseTypeUnit.setSelected(dish.getPurchaseType() == ConstantValue.DISH_PURCHASETYPE_UNIT);
 		this.rbPurchaseTypeWeight.setSelected(dish.getPurchaseType() == ConstantValue.DISH_PURCHASETYPE_WEIGHT);
 		if (dish.getChooseMode() == ConstantValue.DISH_CHOOSEMODE_DEFAULT){
@@ -412,14 +428,14 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 			rbChooseModePopmsg.setSelected(true);
 			rbChooseModePopmsg.doClick();
 			rbChooseAfterPopmsg.setSelected(true);
-			tfPopmsg_cn.setText(dish.getChoosePopInfo().getPopInfoCN());
-			tfPopmsg_en.setText(dish.getChoosePopInfo().getPopInfoEN());
+			tfPopmsg_cn.setText(dish.getChoosePopInfo().getFirstLanguageName());
+			tfPopmsg_en.setText(dish.getChoosePopInfo().getSecondLanguageName());
 		} else if (dish.getChooseMode() == ConstantValue.DISH_CHOOSEMODE_POPINFOQUIT){
 			rbChooseModePopmsg.setSelected(true);
 			rbChooseModePopmsg.doClick();
 			rbNoChooseAfterPopmsg.setSelected(true);
-			tfPopmsg_cn.setText(dish.getChoosePopInfo().getPopInfoCN());
-			tfPopmsg_en.setText(dish.getChoosePopInfo().getPopInfoEN());
+			tfPopmsg_cn.setText(dish.getChoosePopInfo().getFirstLanguageName());
+			tfPopmsg_en.setText(dish.getChoosePopInfo().getSecondLanguageName());
 		} else if (dish.getChooseMode() == ConstantValue.DISH_CHOOSEMODE_SUBITEM){
 			rbChooseModeSubitem.setSelected(true);
 			rbChooseModeSubitem.doClick();
@@ -476,16 +492,16 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 	
 	private void addSubitemToList(){
 		if (tfSubitem_cn.getText() == null || tfSubitem_cn.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "Please input the Chinese");
+			JOptionPane.showMessageDialog(this, "Please input the First Language Name");
 			return;
 		}
 		if (tfSubitem_en.getText() == null || tfSubitem_en.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "Please input the English");
+			JOptionPane.showMessageDialog(this, "Please input the Second Language Name");
 			return;
 		}
 		DishChooseSubitem item = new DishChooseSubitem();
-		item.setChineseName(tfSubitem_cn.getText());
-		item.setEnglishName(tfSubitem_en.getText());
+		item.setFirstLanguageName(tfSubitem_cn.getText());
+		item.setSecondLanguageName(tfSubitem_en.getText());
 		subitemModel.addElement(item);
 		tfSubitem_cn.setText("");
 		tfSubitem_en.setText("");
@@ -508,7 +524,7 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			if (value != null)
-				setText(((Category2)value).getChineseName());
+				setText(((Category2)value).getFirstLanguageName());
 			return this;
 		}
 		
@@ -533,8 +549,8 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 	            setForeground(list.getForeground());
 	        }
 			DishChooseSubitem cs = (DishChooseSubitem)value;
-			lbCN.setText(cs.getChineseName());
-			lbEN.setText(cs.getEnglishName());
+			lbCN.setText(cs.getFirstLanguageName());
+			lbEN.setText(cs.getSecondLanguageName());
 			return this;
 		}
 	}

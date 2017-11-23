@@ -14,9 +14,9 @@ public class Dish implements Serializable{
 	@SerializedName(value = "id", alternate={"objectid"})
     private int id;
 
-    private String chineseName;
+    private String firstLanguageName;
 
-    private String englishName;
+    private String secondLanguageName;
 
     private int sequence;
 
@@ -48,7 +48,7 @@ public class Dish implements Serializable{
 
 	private int purchaseType = ConstantValue.DISH_PURCHASETYPE_UNIT;
 	
-	
+	private boolean allowFlavor = true;
 	
 	public int getPurchaseType() {
 		return purchaseType;
@@ -80,10 +80,10 @@ public class Dish implements Serializable{
 	}
 	
     
-//    public Dish(int id, String chineseName, String englishName, int sequence, double price, String pictureName, Category2 category2){
+//    public Dish(int id, String firstLanguageName, String secondLanguageName, int sequence, double price, String pictureName, Category2 category2){
 //        this.id = id;
-//        this.chineseName = chineseName;
-//        this.englishName = englishName;
+//        this.firstLanguageName = firstLanguageName;
+//        this.secondLanguageName = secondLanguageName;
 //        this.sequence = sequence;
 //        this.price = price;
 //        this.pictureName = pictureName;
@@ -154,23 +154,24 @@ public class Dish implements Serializable{
         this.id = id;
     }
 
-    public String getChineseName() {
-        return chineseName;
-    }
 
-    public void setChineseName(String chineseName) {
-        this.chineseName = chineseName;
-    }
+    public String getFirstLanguageName() {
+		return firstLanguageName;
+	}
 
-    public String getEnglishName() {
-        return englishName;
-    }
+	public void setFirstLanguageName(String firstLanguageName) {
+		this.firstLanguageName = firstLanguageName;
+	}
 
-    public void setEnglishName(String englishName) {
-        this.englishName = englishName;
-    }
+	public String getSecondLanguageName() {
+		return secondLanguageName;
+	}
 
-    public int getSequence() {
+	public void setSecondLanguageName(String secondLanguageName) {
+		this.secondLanguageName = secondLanguageName;
+	}
+
+	public int getSequence() {
         return sequence;
     }
 
@@ -211,9 +212,17 @@ public class Dish implements Serializable{
 		this.chooseSubItems = chooseSubItems;
 	}
 
+	public boolean isAllowFlavor() {
+		return allowFlavor;
+	}
+
+	public void setAllowFlavor(boolean allowFlavor) {
+		this.allowFlavor = allowFlavor;
+	}
+
 	@Override
     public String toString() {
-        return "Dish [chineseName=" + chineseName + ", englishName=" + englishName + "]";
+        return "Dish [firstLanguageName=" + firstLanguageName + ", secondLanguageName=" + secondLanguageName + "]";
     }
 
     @Override

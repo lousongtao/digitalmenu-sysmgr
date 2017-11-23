@@ -57,6 +57,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 	private JTree menuTree;
 	private JPopupMenu popupmenuRoot = new JPopupMenu();
 	private JMenuItem menuitemAddC1 = new JMenuItem(Messages.getString("MenuMgmtPanel.AddCategory1"));
+	private JMenuItem menuitemRefreshTree = new JMenuItem(Messages.getString("MenuMgmtPanel.RefreshTree"));
 	private JPopupMenu popupmenuC1 = new JPopupMenu();
 	private JMenuItem menuitemModifyC1 = new JMenuItem(Messages.getString("MenuMgmtPanel.Modify"));
 	private JMenuItem menuitemAddC2 = new JMenuItem(Messages.getString("MenuMgmtPanel.AddCategory2"));
@@ -110,6 +111,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		pDish.showChooseSubitemButton(false);
 		//build popup menu
 		popupmenuRoot.add(menuitemAddC1);
+		popupmenuRoot.add(menuitemRefreshTree);
 		popupmenuC1.add(menuitemModifyC1);
 		popupmenuC1.add(menuitemAddC2);
 		popupmenuC1.add(menuitemDeleteC1);
@@ -124,6 +126,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 //		popupmenuDish.add(menuitemSoldout);
 		popupmenuDish.add(menuitemDeleteDish);
 		menuitemAddC1.addActionListener(this);
+		menuitemRefreshTree.addActionListener(this);
 		menuitemModifyC1.addActionListener(this);
 		menuitemAddC2.addActionListener(this);
 		menuitemModifyC2.addActionListener(this);
@@ -209,6 +212,13 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 			Category1Panel p = new Category1Panel(this);
 			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.AddCategory1"), 300, 300);
 			dlg.setVisible(true);
+		} else if (e.getSource() == menuitemRefreshTree){
+			mainFrame.reloadListCategory1s();
+			this.category1s = mainFrame.getListCategory1s();
+			MenuTreeNode root = (MenuTreeNode)menuTree.getModel().getRoot();
+			root.removeAllChildren();
+			buildTree(root);
+			menuTree.updateUI();
 		} else if (e.getSource() == menuitemModifyC1){
 			Category1Panel p = new Category1Panel(this);
 			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
@@ -216,7 +226,8 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.ModifyCategory1"), 300, 300);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemAddC2){
-			Category2Panel p = new Category2Panel(this);
+			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
+			Category2Panel p = new Category2Panel(this, (Category1)node.getUserObject());
 			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.AddCategory2"), 300, 400);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemModifyC2){
@@ -226,7 +237,8 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.ModifyCategory2"), 300, 400);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemAddDish){
-			DishPanel p = new DishPanel(this);
+			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
+			DishPanel p = new DishPanel(this, (Category2)node.getUserObject());
 			p.showPicturePanel(false);
 			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.AddDish"), 1000, 420);
 			dlg.setVisible(true);
@@ -528,7 +540,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 			return;
 		}
 		Category1 c1 = (Category1)node.getUserObject();
-		if (JOptionPane.showConfirmDialog(this, "Do you want to delete this node : "+ c1.getChineseName(), "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION){
+		if (JOptionPane.showConfirmDialog(this, "Do you want to delete this node : "+ c1.getFirstLanguageName(), "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION){
 			return;
 		}
 		
@@ -561,7 +573,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 			return;
 		}
 		Category2 c2 = (Category2)node.getUserObject();
-		if (JOptionPane.showConfirmDialog(this, "Do you want to delete this node : "+ c2.getChineseName(), "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION){
+		if (JOptionPane.showConfirmDialog(this, "Do you want to delete this node : "+ c2.getFirstLanguageName(), "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION){
 			return;
 		}
 		
@@ -590,7 +602,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 
 	private void onDeleteDish(MenuTreeNode node){
 		Dish dish = (Dish)node.getUserObject();
-		if (JOptionPane.showConfirmDialog(this, "Do you want to delete this node : "+ dish.getChineseName(), "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION){
+		if (JOptionPane.showConfirmDialog(this, "Do you want to delete this node : "+ dish.getFirstLanguageName(), "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION){
 			return;
 		}
 		

@@ -31,8 +31,8 @@ import com.shuishou.sysmgr.ui.MainFrame;
 public class Category1Panel extends JPanel implements CommonDialogOperatorIFC{
 	private final Logger logger = Logger.getLogger(Category1Panel.class.getName());
 	private MenuMgmtPanel parent;
-	private JTextField tfChineseName= new JTextField(155);
-	private JTextField tfEnglishName= new JTextField(155);
+	private JTextField tfFirstLanguageName= new JTextField(155);
+	private JTextField tfSecondLanguageName= new JTextField(155);
 	private JTextField tfDisplaySeq= new JTextField(155);
 	private Category1 c1;
 	public Category1Panel(MenuMgmtPanel parent){
@@ -41,22 +41,22 @@ public class Category1Panel extends JPanel implements CommonDialogOperatorIFC{
 	}
 	
 	private void initUI(){
-		JLabel lbChineseName = new JLabel("Chinese Name");
-		JLabel lbEnglishName = new JLabel("English Name");
+		JLabel lbFirstLanguageName = new JLabel("First Language Name");
+		JLabel lbSecondLanguageName = new JLabel("Second Language Name");
 		JLabel lbDisplaySeq = new JLabel("Display Sequence");
 		this.setLayout(new GridBagLayout());
-		add(lbChineseName, new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(tfChineseName, new GridBagConstraints(1, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(lbEnglishName, new GridBagConstraints(0, 1, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(tfEnglishName, new GridBagConstraints(1, 1, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(lbFirstLanguageName, new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(tfFirstLanguageName, new GridBagConstraints(1, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(lbSecondLanguageName, new GridBagConstraints(0, 1, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(tfSecondLanguageName, new GridBagConstraints(1, 1, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		add(lbDisplaySeq, new GridBagConstraints(0, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		add(tfDisplaySeq, new GridBagConstraints(1, 2, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		add(new JPanel(), new GridBagConstraints(0, 3, 1, 1,0,1, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0, 0));
-//		tfChineseName.setEditable(false);
-//		tfEnglishName.setEditable(false);
+//		tfFirstLanguageName.setEditable(false);
+//		tfSecondLanguageName.setEditable(false);
 //		tfDisplaySeq.setEditable(false);
-		tfChineseName.setMinimumSize(new Dimension(180,25));
-		tfEnglishName.setMinimumSize(new Dimension(180,25));
+		tfFirstLanguageName.setMinimumSize(new Dimension(180,25));
+		tfSecondLanguageName.setMinimumSize(new Dimension(180,25));
 		tfDisplaySeq.setMinimumSize(new Dimension(180,25));
 		tfDisplaySeq.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
@@ -78,8 +78,9 @@ public class Category1Panel extends JPanel implements CommonDialogOperatorIFC{
 		
 		Map<String, String> params = new HashMap<>();
 		params.put("userId", MainFrame.getLoginUser().getId()+"");
-		params.put("chineseName", tfChineseName.getText());
-		params.put("englishName", tfEnglishName.getText());
+		params.put("firstLanguageName", tfFirstLanguageName.getText());
+		if (tfSecondLanguageName.getText() != null)
+			params.put("secondLanguageName", tfSecondLanguageName.getText());
 		params.put("sequence", tfDisplaySeq.getText());
 		String url = "menu/add_category1";
 		if (c1 != null){
@@ -109,12 +110,12 @@ public class Category1Panel extends JPanel implements CommonDialogOperatorIFC{
 	}
 	
 	private boolean doCheckInput(){
-		if (tfChineseName.getText() == null || tfChineseName.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "Please input Chinese Name");
+		if (tfFirstLanguageName.getText() == null || tfFirstLanguageName.getText().length() == 0){
+			JOptionPane.showMessageDialog(this, "Please input First Language Name");
 			return false;
 		}
-		if (tfEnglishName.getText() == null || tfEnglishName.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "Please input English Name");
+		if (tfSecondLanguageName.getText() == null || tfSecondLanguageName.getText().length() == 0){
+			JOptionPane.showMessageDialog(this, "Please input Second Language Name");
 			return false;
 		}
 		if (tfDisplaySeq.getText() == null || tfDisplaySeq.getText().length() == 0){
@@ -126,8 +127,8 @@ public class Category1Panel extends JPanel implements CommonDialogOperatorIFC{
 	
 	public void setObjectValue(Category1 c1){
 		this.c1 = c1;
-		tfChineseName.setText(c1.getChineseName());
-		tfEnglishName.setText(c1.getEnglishName());
+		tfFirstLanguageName.setText(c1.getFirstLanguageName());
+		tfSecondLanguageName.setText(c1.getSecondLanguageName());
 		tfDisplaySeq.setText(c1.getSequence()+"");
 	}
 }

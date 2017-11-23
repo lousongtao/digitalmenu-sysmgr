@@ -83,25 +83,26 @@ public class IndentQueryPanel extends JPanel implements ActionListener{
 		tableIndent.setModel(modelIndent);
 		tableIndent.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableIndent.getColumnModel().getColumn(0).setPreferredWidth(50);
-		tableIndent.getColumnModel().getColumn(1).setPreferredWidth(50);
-		tableIndent.getColumnModel().getColumn(2).setPreferredWidth(40);
-		tableIndent.getColumnModel().getColumn(3).setPreferredWidth(30);
-		tableIndent.getColumnModel().getColumn(4).setPreferredWidth(50);
+		tableIndent.getColumnModel().getColumn(1).setPreferredWidth(80);
+		tableIndent.getColumnModel().getColumn(2).setPreferredWidth(80);
+		tableIndent.getColumnModel().getColumn(3).setPreferredWidth(60);
+		tableIndent.getColumnModel().getColumn(4).setPreferredWidth(80);
 		tableIndent.getColumnModel().getColumn(5).setPreferredWidth(80);
-		tableIndent.getColumnModel().getColumn(6).setPreferredWidth(100);
-		tableIndent.getColumnModel().getColumn(7).setPreferredWidth(100);
+		tableIndent.getColumnModel().getColumn(6).setPreferredWidth(130);
+		tableIndent.getColumnModel().getColumn(7).setPreferredWidth(130);
 		JScrollPane jspTableIndent = new JScrollPane(tableIndent, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		tableIndent.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		tableIndentDetail.setModel(modelIndentDetail);
 		tableIndentDetail.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableIndentDetail.getColumnModel().getColumn(0).setPreferredWidth(50);
-		tableIndentDetail.getColumnModel().getColumn(1).setPreferredWidth(50);
+		tableIndentDetail.getColumnModel().getColumn(0).setPreferredWidth(120);
+		tableIndentDetail.getColumnModel().getColumn(1).setPreferredWidth(140);
 		tableIndentDetail.getColumnModel().getColumn(2).setPreferredWidth(50);
 		tableIndentDetail.getColumnModel().getColumn(3).setPreferredWidth(50);
 		tableIndentDetail.getColumnModel().getColumn(4).setPreferredWidth(50);
 		tableIndentDetail.getColumnModel().getColumn(5).setPreferredWidth(200);
 		JScrollPane jspTableIndentDetail = new JScrollPane(tableIndentDetail, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		
+		tableIndentDetail.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		JPanel pPayStatus = new JPanel();
 		pPayStatus.setBorder(BorderFactory.createTitledBorder("Pay Status"));
 		pPayStatus.add(cbPayStatusOthers);
@@ -280,7 +281,7 @@ public class IndentQueryPanel extends JPanel implements ActionListener{
 
 	class IndentDetailModel extends AbstractTableModel{
 
-		private String[] header = new String[]{"Chinese Name","English Name", "Amount", "Price", "Weight", "Requirement"};
+		private String[] header = new String[]{"First Language Name","Second Language Name", "Amount", "Price", "Weight", "Requirement"};
 		private ArrayList<IndentDetail> details = new ArrayList<>();
 		public IndentDetailModel(){
 		}
@@ -300,9 +301,9 @@ public class IndentQueryPanel extends JPanel implements ActionListener{
 			IndentDetail detail = details.get(rowIndex);
 			switch(columnIndex){
 			case 0:
-				return detail.getDishChineseName();
+				return detail.getDishFirstLanguageName();
 			case 1: 
-				return detail.getDishEnglishName();
+				return detail.getDishSecondLanguageName();
 			case 2:
 				return detail.getAmount();
 			case 3:

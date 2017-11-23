@@ -85,7 +85,7 @@ public class FlavorMgmtPanel extends JPanel implements ActionListener{
 			if (table.getSelectedRow() < 0)
 				return;
 			if (JOptionPane.showConfirmDialog(this, 
-					"Do you want to delete flavor: " + model.getObjectAt(table.getSelectedRow()).getChineseName() + " ?",
+					"Do you want to delete flavor: " + model.getObjectAt(table.getSelectedRow()).getFirstLanguageName() + " ?",
 					"Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION){
 				return;
 			}
@@ -112,7 +112,7 @@ public class FlavorMgmtPanel extends JPanel implements ActionListener{
 	
 	class FlavorTableModel extends AbstractTableModel{
 
-		private String[] header = new String[]{"ID","Chinese Name","English Name"};
+		private String[] header = new String[]{"ID","First Language Name","Second LanguageName"};
 		
 		@Override
 		public int getRowCount() {
@@ -132,9 +132,9 @@ public class FlavorMgmtPanel extends JPanel implements ActionListener{
 			case 0:
 				return flavor.getId();
 			case 1: 
-				return flavor.getChineseName();
+				return flavor.getFirstLanguageName();
 			case 2:
-				return flavor.getEnglishName();
+				return flavor.getSecondLanguageName();
 			}
 			return "";
 		}

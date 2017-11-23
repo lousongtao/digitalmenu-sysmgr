@@ -14,11 +14,11 @@ public class MenuTreeNode extends DefaultMutableTreeNode {
 	public String toString(){
 		Object o = this.getUserObject();
 		if (o instanceof Category1){
-			return ((Category1)o).getChineseName();
+			return ((Category1)o).getFirstLanguageName();
 		}else if (o instanceof Category2){
-			return ((Category2)o).getChineseName();
+			return ((Category2)o).getFirstLanguageName();
 		}else if (o instanceof Dish){
-			return ((Dish)o).getChineseName();
+			return ((Dish)o).getFirstLanguageName();
 		}
 		return super.toString();
 	}

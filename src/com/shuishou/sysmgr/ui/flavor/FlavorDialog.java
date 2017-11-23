@@ -49,8 +49,8 @@ public class FlavorDialog extends JDialog implements ActionListener {
 	private MainFrame mainFrame;
 	private FlavorMgmtPanel parent;
 	private Flavor flavor;
-	private JTextField tfChineseName = new JTextField();
-	private JTextField tfEnglishName = new JTextField();
+	private JTextField tfFirstLanguageName = new JTextField();
+	private JTextField tfSecondLanguageName = new JTextField();
 	private JButton btnSave = new JButton("Save");
 	private JButton btnCancel = new JButton("Cancel");
 	public FlavorDialog(MainFrame mainFrame, FlavorMgmtPanel parent,String title, Flavor flavor){
@@ -63,16 +63,16 @@ public class FlavorDialog extends JDialog implements ActionListener {
 	}
 	
 	private void initUI(){
-		JLabel lbChineseName = new JLabel("Chinese Name");
-		JLabel lbEnglishName = new JLabel("English Name");
+		JLabel lbFirstLanguageName = new JLabel("First Language Name");
+		JLabel lbSecondLanguageName = new JLabel("Second Language Name");
 		Container c = this.getContentPane();
 		c.setLayout(new GridBagLayout());
-		c.add(lbChineseName, 	new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
-		c.add(tfChineseName, 	new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
-		c.add(lbEnglishName, 	new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
-		c.add(tfEnglishName, 	new GridBagConstraints(1, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
-		c.add(btnSave, 			new GridBagConstraints(0, 3, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
-		c.add(btnCancel, 		new GridBagConstraints(1, 3, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
+		c.add(lbFirstLanguageName, 	new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
+		c.add(tfFirstLanguageName, 	new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
+		c.add(lbSecondLanguageName, new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
+		c.add(tfSecondLanguageName, new GridBagConstraints(1, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
+		c.add(btnSave, 				new GridBagConstraints(0, 3, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
+		c.add(btnCancel, 			new GridBagConstraints(1, 3, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
 		btnSave.addActionListener(this);
 		btnCancel.addActionListener(this);
 		
@@ -83,21 +83,22 @@ public class FlavorDialog extends JDialog implements ActionListener {
 	
 	private void initData(){
 		if (flavor != null){
-			tfChineseName.setText(flavor.getChineseName());
-			tfEnglishName.setText(flavor.getEnglishName());
+			tfFirstLanguageName.setText(flavor.getFirstLanguageName());
+			tfSecondLanguageName.setText(flavor.getSecondLanguageName());
 		}
 	}
 	
 	
 	private void doSave(){
-		if (tfChineseName.getText() == null || tfChineseName.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "must input Chinese name");
+		if (tfFirstLanguageName.getText() == null || tfFirstLanguageName.getText().length() == 0){
+			JOptionPane.showMessageDialog(this, "must input First Language name");
 			return;
 		}
 		Map<String, String> params = new HashMap<>();
 		params.put("userId", MainFrame.getLoginUser().getId() + "");
-		params.put("chineseName", tfChineseName.getText());
-		params.put("englishName", tfEnglishName.getText());
+		params.put("firstLanguageName", tfFirstLanguageName.getText());
+		if (tfSecondLanguageName.getText() != null)
+			params.put("secondLanguageName", tfSecondLanguageName.getText());
 		
 		String url = null;
 		if (flavor != null) {

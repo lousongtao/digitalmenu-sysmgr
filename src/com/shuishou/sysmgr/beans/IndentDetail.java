@@ -12,9 +12,9 @@ public class IndentDetail {
 	
 	private double dishPrice;//����dish�۸�, ������amount
 	
-	private String dishChineseName;
+	private String dishFirstLanguageName;
 	
-	private String dishEnglishName;
+	private String dishSecondLanguageName;
 	
 	private String additionalRequirements;
 	
@@ -69,23 +69,23 @@ public class IndentDetail {
 		this.dishPrice = dishPrice;
 	}
 
-	public String getDishChineseName() {
-		return dishChineseName;
-	}
-
-	public void setDishChineseName(String dishChineseName) {
-		this.dishChineseName = dishChineseName;
-	}
-
-	public String getDishEnglishName() {
-		return dishEnglishName;
-	}
-
-	public void setDishEnglishName(String dishEnglishName) {
-		this.dishEnglishName = dishEnglishName;
-	}
-
 	
+	public String getDishFirstLanguageName() {
+		return dishFirstLanguageName;
+	}
+
+	public void setDishFirstLanguageName(String dishFirstLanguageName) {
+		this.dishFirstLanguageName = dishFirstLanguageName;
+	}
+
+	public String getDishSecondLanguageName() {
+		return dishSecondLanguageName;
+	}
+
+	public void setDishSecondLanguageName(String dishSecondLanguageName) {
+		this.dishSecondLanguageName = dishSecondLanguageName;
+	}
+
 	public String getAdditionalRequirements() {
 		return additionalRequirements;
 	}
@@ -118,6 +118,6 @@ public class IndentDetail {
 
 	@Override
 	public String toString() {
-		return "OrderDetail [amount=" + amount + ", dishChineseName=" + dishChineseName + "]";
+		return "OrderDetail [amount=" + amount + ", dishFirstLanguageName=" + dishFirstLanguageName + "]";
 	}
 }

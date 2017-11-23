@@ -12,9 +12,9 @@ public class Category1 implements Serializable{
 	@SerializedName(value = "id", alternate={"objectid"})
     private int id;
 
-    private String chineseName;
+    private String firstLanguageName;
 
-    private String englishName;
+    private String secondLanguageName;
 
     private int sequence;
 
@@ -25,10 +25,10 @@ public class Category1 implements Serializable{
 
     }
 
-    public Category1(int id, String chineseName, String englishName, int sequence){
+    public Category1(int id, String firstLanguageName, String secondLanguageName, int sequence){
         this.id = id;
-        this.chineseName = chineseName;
-        this.englishName = englishName;
+        this.firstLanguageName = firstLanguageName;
+        this.secondLanguageName = secondLanguageName;
         this.sequence = sequence;
     }
 
@@ -48,22 +48,6 @@ public class Category1 implements Serializable{
         this.id = id;
     }
 
-    public String getChineseName() {
-        return chineseName;
-    }
-
-    public void setChineseName(String chineseName) {
-        this.chineseName = chineseName;
-    }
-
-    public String getEnglishName() {
-        return englishName;
-    }
-
-    public void setEnglishName(String englishName) {
-        this.englishName = englishName;
-    }
-
     public int getSequence() {
         return sequence;
     }
@@ -77,9 +61,27 @@ public class Category1 implements Serializable{
             category2s = new ArrayList<Category2>();
         category2s.add(c2);
     }
-    @Override
+    
+    
+    public String getFirstLanguageName() {
+		return firstLanguageName;
+	}
+
+	public void setFirstLanguageName(String firstLanguageName) {
+		this.firstLanguageName = firstLanguageName;
+	}
+
+	public String getSecondLanguageName() {
+		return secondLanguageName;
+	}
+
+	public void setSecondLanguageName(String secondLanguageName) {
+		this.secondLanguageName = secondLanguageName;
+	}
+
+	@Override
     public String toString() {
-        return chineseName + " / " + englishName;
+        return firstLanguageName;
     }
 
     @Override
