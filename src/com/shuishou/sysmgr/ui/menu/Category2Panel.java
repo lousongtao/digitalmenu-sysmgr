@@ -191,10 +191,10 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 			JOptionPane.showMessageDialog(this, "Please input First Language Name");
 			return false;
 		}
-		if (tfSecondLanguageName.getText() == null || tfSecondLanguageName.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "Please input Second Language Name");
-			return false;
-		}
+//		if (tfSecondLanguageName.getText() == null || tfSecondLanguageName.getText().length() == 0){
+//			JOptionPane.showMessageDialog(this, "Please input Second Language Name");
+//			return false;
+//		}
 		if (tfDisplaySeq.getText() == null || tfDisplaySeq.getText().length() == 0){
 			JOptionPane.showMessageDialog(this, "Please input Display Sequence");
 			return false;

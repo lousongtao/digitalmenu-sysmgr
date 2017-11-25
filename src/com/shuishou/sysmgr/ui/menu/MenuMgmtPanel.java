@@ -240,14 +240,14 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
 			DishPanel p = new DishPanel(this, (Category2)node.getUserObject());
 			p.showPicturePanel(false);
-			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.AddDish"), 1000, 420);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.AddDish"), 1000, 480);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemModifyDish){
 			DishPanel p = new DishPanel(this);
 			p.showPicturePanel(false);
 			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
 			p.setObjectValue((Dish)node.getUserObject());
-			CommonDialog dlg = new CommonDialog(mainFrame, p, "Modify Dish", 1000, 420);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, "Modify Dish", 1000, 480);
 			dlg.setVisible(true);
 		} 
 //		else if (e.getSource() == menuitemSpecial){

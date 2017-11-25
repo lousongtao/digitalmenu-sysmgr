@@ -80,13 +80,13 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 	private JRadioButton rbNoChooseAfterPopmsg = new JRadioButton(Messages.getString("DishPanel.NotChooseDishOnlyShowMessage"));
 	private JRadioButton rbPurchaseTypeUnit = new JRadioButton(Messages.getString("DishPanel.PurchaseTypeUnit"));
 	private JRadioButton rbPurchaseTypeWeight = new JRadioButton(Messages.getString("DishPanel.PurchaseTypeWeight"));
-	private JTextField tfPopmsg_cn= new JTextField(155);
-	private JTextField tfPopmsg_en= new JTextField(155);
+	private JTextField tfPopmsg1stName= new JTextField(155);
+	private JTextField tfPopmsg2ndName= new JTextField(155);
 	private JTextField tfSubitemAmount = new JTextField(155);
 	private JList<DishChooseSubitem> listSubitem = new JList<>();
 	private DefaultListModel<DishChooseSubitem> subitemModel = new DefaultListModel<>();
-	private JTextField tfSubitem_cn= new JTextField(155);
-	private JTextField tfSubitem_en= new JTextField(155);
+	private JTextField tfSubitem1stName= new JTextField(155);
+	private JTextField tfSubitem2ndName= new JTextField(155);
 	private JButton btnAddSubitem = new JButton("add");
 	private JButton btnDeleteSubitem = new JButton("delete");
 	private Dish dish;
@@ -190,18 +190,18 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		pChooseModePopmsg.add(rbChooseAfterPopmsg,  new GridBagConstraints(1, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModePopmsg.add(rbNoChooseAfterPopmsg,new GridBagConstraints(1, 1, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModePopmsg.add(new JLabel("First Language Name"),new GridBagConstraints(0, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		pChooseModePopmsg.add(tfPopmsg_cn,			new GridBagConstraints(1, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		pChooseModePopmsg.add(tfPopmsg1stName,		new GridBagConstraints(1, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModePopmsg.add(new JLabel("Second Language Name"),new GridBagConstraints(0, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		pChooseModePopmsg.add(tfPopmsg_en,			new GridBagConstraints(1, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		pChooseModePopmsg.add(tfPopmsg2ndName,		new GridBagConstraints(1, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		
 		JPanel pChooseModeSubitem = new JPanel(new GridBagLayout());
 		pChooseModeSubitem.add(new JLabel("Amount"), 	new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModeSubitem.add(tfSubitemAmount, 		new GridBagConstraints(1, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModeSubitem.add(listSubitem, 			new GridBagConstraints(2, 0, 1, 5,1,1, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10,10,0,0), 0, 0));
 		pChooseModeSubitem.add(new JLabel("First Language Name"), 	new GridBagConstraints(0, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		pChooseModeSubitem.add(tfSubitem_cn, 			new GridBagConstraints(1, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		pChooseModeSubitem.add(tfSubitem1stName, 		new GridBagConstraints(1, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModeSubitem.add(new JLabel("Second Language Name"), 	new GridBagConstraints(0, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		pChooseModeSubitem.add(tfSubitem_en, 			new GridBagConstraints(1, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		pChooseModeSubitem.add(tfSubitem2ndName, 		new GridBagConstraints(1, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModeSubitem.add(btnAddSubitem, 			new GridBagConstraints(0, 4, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		pChooseModeSubitem.add(btnDeleteSubitem, 		new GridBagConstraints(1, 4, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 //		JPanel pChooseModeSubitem = new JPanel(new BorderLayout());
@@ -247,10 +247,10 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		cbHotLevel.setMinimumSize(new Dimension(180,25));
 		tfAbbre.setMinimumSize(new Dimension(180,25));
 		cbCategory2.setMinimumSize(new Dimension(180,25));
-		tfSubitem_cn.setMinimumSize(new Dimension(180,25));
-		tfSubitem_en.setMinimumSize(new Dimension(180,25));
-		tfPopmsg_cn.setMinimumSize(new Dimension(180,25));
-		tfPopmsg_en.setMinimumSize(new Dimension(180,25));
+		tfSubitem1stName.setMinimumSize(new Dimension(180,25));
+		tfSubitem2ndName.setMinimumSize(new Dimension(180,25));
+		tfPopmsg1stName.setMinimumSize(new Dimension(180,25));
+		tfPopmsg2ndName.setMinimumSize(new Dimension(180,25));
 		tfSubitemAmount.setMinimumSize(new Dimension(180,25));
 		
 		cbHotLevel.addItem(0);
@@ -320,8 +320,10 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 			} else if (rbNoChooseAfterPopmsg.isSelected()){
 				params.put("chooseMode", String.valueOf(ConstantValue.DISH_CHOOSEMODE_POPINFOQUIT));
 			}
-			params.put("dishChoosePopinfo_cn", tfPopmsg_cn.getText());
-			params.put("dishChoosePopinfo_en", tfPopmsg_en.getText());
+			DishChoosePopinfo info = new DishChoosePopinfo();
+			info.setFirstLanguageName(tfPopmsg1stName.getText());
+			info.setSecondLanguageName(tfPopmsg2ndName.getText());
+			params.put("sPopInfo", gson.toJson(info));
 		} else if (rbChooseModeSubitem.isSelected()){
 			params.put("chooseMode", String.valueOf(ConstantValue.DISH_CHOOSEMODE_SUBITEM));
 			ArrayList<DishChooseSubitem> subitems = new ArrayList<>();
@@ -364,10 +366,10 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 			JOptionPane.showMessageDialog(this, "Please input First Language Name Name");
 			return false;
 		}
-		if (tfSecondLanguageName.getText() == null || tfSecondLanguageName.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "Please input Second Language Name Name");
-			return false;
-		}
+//		if (tfSecondLanguageName.getText() == null || tfSecondLanguageName.getText().length() == 0){
+//			JOptionPane.showMessageDialog(this, "Please input Second Language Name Name");
+//			return false;
+//		}
 		if (tfDisplaySeq.getText() == null || tfDisplaySeq.getText().length() == 0){
 			JOptionPane.showMessageDialog(this, "Please input Display Sequence");
 			return false;
@@ -389,8 +391,7 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 			return false;
 		}
 		if (rbChooseModePopmsg.isSelected()){
-			if (tfPopmsg_cn.getText() == null || tfPopmsg_cn.getText().length() == 0
-					|| tfPopmsg_en.getText() == null || tfPopmsg_en.getText().length() == 0){
+			if (tfPopmsg1stName.getText() == null || tfPopmsg1stName.getText().length() == 0){
 				JOptionPane.showMessageDialog(this, "Please input Popup Message in Choose Mode");
 				return false;
 			}
@@ -428,14 +429,14 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 			rbChooseModePopmsg.setSelected(true);
 			rbChooseModePopmsg.doClick();
 			rbChooseAfterPopmsg.setSelected(true);
-			tfPopmsg_cn.setText(dish.getChoosePopInfo().getFirstLanguageName());
-			tfPopmsg_en.setText(dish.getChoosePopInfo().getSecondLanguageName());
+			tfPopmsg1stName.setText(dish.getChoosePopInfo().getFirstLanguageName());
+			tfPopmsg2ndName.setText(dish.getChoosePopInfo().getSecondLanguageName());
 		} else if (dish.getChooseMode() == ConstantValue.DISH_CHOOSEMODE_POPINFOQUIT){
 			rbChooseModePopmsg.setSelected(true);
 			rbChooseModePopmsg.doClick();
 			rbNoChooseAfterPopmsg.setSelected(true);
-			tfPopmsg_cn.setText(dish.getChoosePopInfo().getFirstLanguageName());
-			tfPopmsg_en.setText(dish.getChoosePopInfo().getSecondLanguageName());
+			tfPopmsg1stName.setText(dish.getChoosePopInfo().getFirstLanguageName());
+			tfPopmsg2ndName.setText(dish.getChoosePopInfo().getSecondLanguageName());
 		} else if (dish.getChooseMode() == ConstantValue.DISH_CHOOSEMODE_SUBITEM){
 			rbChooseModeSubitem.setSelected(true);
 			rbChooseModeSubitem.doClick();
@@ -491,20 +492,20 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 	}
 	
 	private void addSubitemToList(){
-		if (tfSubitem_cn.getText() == null || tfSubitem_cn.getText().length() == 0){
+		if (tfSubitem1stName.getText() == null || tfSubitem1stName.getText().length() == 0){
 			JOptionPane.showMessageDialog(this, "Please input the First Language Name");
 			return;
 		}
-		if (tfSubitem_en.getText() == null || tfSubitem_en.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "Please input the Second Language Name");
-			return;
-		}
+//		if (tfSubitem_en.getText() == null || tfSubitem_en.getText().length() == 0){
+//			JOptionPane.showMessageDialog(this, "Please input the Second Language Name");
+//			return;
+//		}
 		DishChooseSubitem item = new DishChooseSubitem();
-		item.setFirstLanguageName(tfSubitem_cn.getText());
-		item.setSecondLanguageName(tfSubitem_en.getText());
+		item.setFirstLanguageName(tfSubitem1stName.getText());
+		item.setSecondLanguageName(tfSubitem2ndName.getText());
 		subitemModel.addElement(item);
-		tfSubitem_cn.setText("");
-		tfSubitem_en.setText("");
+		tfSubitem1stName.setText("");
+		tfSubitem2ndName.setText("");
 	}
 	
 	public void showPicturePanel(boolean b){
@@ -531,12 +532,12 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 	}
 	
 	class SubitemListRenderer extends JPanel implements ListCellRenderer{
-		private JLabel lbCN = new JLabel();
-		private JLabel lbEN = new JLabel();
+		private JLabel lb1stName = new JLabel();
+		private JLabel lb2ndName = new JLabel();
 		public SubitemListRenderer(){
 			this.setLayout(new GridLayout(0,2));
-			add(lbCN);
-			add(lbEN);
+			add(lb1stName);
+			add(lb2ndName);
 		}
 		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
@@ -549,28 +550,10 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 	            setForeground(list.getForeground());
 	        }
 			DishChooseSubitem cs = (DishChooseSubitem)value;
-			lbCN.setText(cs.getFirstLanguageName());
-			lbEN.setText(cs.getSecondLanguageName());
+			lb1stName.setText(cs.getFirstLanguageName());
+			lb2ndName.setText(cs.getSecondLanguageName());
 			return this;
 		}
 	}
 	
-//	class DishPicturePanel extends JPanel{
-//		private BufferedImage img;
-//		public void showPicture(String url) {
-//			try {
-//				img = ImageIO.read(new URL(url));
-//				
-//			} catch (IOException e) {
-//				logger.error(e);
-//			}
-//	    }
-//		
-//		@Override
-//		protected void paintComponent(Graphics g) {
-//	        if (img != null){
-//	        	g.drawImage(img, 0, 0, null);
-//	        }
-//	    }
-//	}
 }
