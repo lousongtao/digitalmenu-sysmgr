@@ -271,7 +271,7 @@ public class JDatePicker extends JComponent implements DatePicker {
         datePanel.setShowYearButtons(showYearButtons);
     }
 
-    private void setTextFieldValue(JFormattedTextField textField, int year, int month, int day, boolean isSelected) {
+    public void setTextFieldValue(JFormattedTextField textField, int year, int month, int day, boolean isSelected) {
         if (!isSelected) {
             textField.setValue(null);
         } else {
@@ -280,6 +280,16 @@ public class JDatePicker extends JComponent implements DatePicker {
             calendar.set(Calendar.MILLISECOND, 0);
             textField.setValue(calendar);
         }
+    }
+    
+    public void setDateTime(int year, int month, int day, int hour, int min, int sec) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month, day, hour, min, sec);
+		formattedTextField.setValue(calendar);
+    }
+    
+    public void setDateTime(Calendar calendar) {
+		formattedTextField.setValue(calendar);
     }
 
     public void addDateSelectionConstraint(DateSelectionConstraint constraint) {

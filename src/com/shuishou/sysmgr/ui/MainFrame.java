@@ -37,6 +37,8 @@ import com.shuishou.sysmgr.beans.DiscountTemplate;
 import com.shuishou.sysmgr.beans.Dish;
 import com.shuishou.sysmgr.beans.Flavor;
 import com.shuishou.sysmgr.beans.HttpResult;
+import com.shuishou.sysmgr.beans.Material;
+import com.shuishou.sysmgr.beans.MaterialCategory;
 import com.shuishou.sysmgr.beans.PayWay;
 import com.shuishou.sysmgr.beans.Permission;
 import com.shuishou.sysmgr.beans.Printer;
@@ -47,12 +49,14 @@ import com.shuishou.sysmgr.ui.config.ConfigsDialog;
 import com.shuishou.sysmgr.ui.desk.DeskMgmtPanel;
 import com.shuishou.sysmgr.ui.discounttemplate.DiscountTemplateMgmtPanel;
 import com.shuishou.sysmgr.ui.flavor.FlavorMgmtPanel;
+import com.shuishou.sysmgr.ui.material.MaterialMgmtPanel;
 import com.shuishou.sysmgr.ui.menu.MenuMgmtPanel;
 import com.shuishou.sysmgr.ui.payway.PayWayMgmtPanel;
 import com.shuishou.sysmgr.ui.printer.PrinterMgmtPanel;
 import com.shuishou.sysmgr.ui.query.IndentQueryPanel;
 import com.shuishou.sysmgr.ui.query.LogQueryPanel;
 import com.shuishou.sysmgr.ui.query.ShiftworkQueryPanel;
+import com.shuishou.sysmgr.ui.statistics.StatisticsPanel;
 
 public class MainFrame extends JFrame implements ActionListener{
 	public static final Logger logger = Logger.getLogger(MainFrame.class.getName());
@@ -72,8 +76,11 @@ public class MainFrame extends JFrame implements ActionListener{
 	private static final String CARDLAYOUT_LOGQUERY= "logquery"; 
 	private static final String CARDLAYOUT_INDENTQUERY= "indentquery"; 
 	private static final String CARDLAYOUT_SHIFTWORKQUERY= "shiftworkquery"; 
+	private static final String CARDLAYOUT_STATISTICS= "statistics"; 
+	private static final String CARDLAYOUT_MATERIAL= "material"; 
 	private JBlockedButton btnAccountMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.AccountMgr"));
 	private JBlockedButton btnMenuMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.MenuMgr"));
+	private JBlockedButton btnMaterialMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.MaterialMgr"));
 	private JBlockedButton btnDeskMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.DeskMgr"));
 	private JBlockedButton btnPayWayMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.PayWayMgr"));
 	private JBlockedButton btnDiscountTempMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.DiscountTempMgr"));
@@ -83,14 +90,17 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JBlockedButton btnQueryLog = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryLog"));
 	private JBlockedButton btnQueryIndent = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryIndent"));
 	private JBlockedButton btnQuerySwiftWork = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QuerySwiftWork"));
+	private JBlockedButton btnStatistic = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryStatistic"));
 	private JPanel pContent = new JPanel(new CardLayout());
 	
 	private ArrayList<Category1> listCategory1s;
+	private ArrayList<MaterialCategory> listMaterialCategory;
 	private ArrayList<Printer> listPrinters;
 	private static UserData loginUser;
 	private HashMap<String, String> configsMap;
 	
 	private MenuMgmtPanel pMenuMgmt;
+	private MaterialMgmtPanel pMaterialMgmt;
 	private AccountMgmtPanel pAccount;
 	private DeskMgmtPanel pDesk;
 	private FlavorMgmtPanel pFlavor;
@@ -100,6 +110,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private LogQueryPanel pQueryLog;
 	private IndentQueryPanel pQueryIndent;
 	private ShiftworkQueryPanel pQueryShiftwork;
+	private StatisticsPanel pStatistics;
 	
 	private Gson gson = new Gson();
 	
@@ -114,6 +125,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	
 	private void initData(){
 		reloadListCategory1s();
+		reloadListMaterialCategory();
 		reloadListPrinters();
 		loadConfigsMap();
 	}
@@ -138,14 +150,18 @@ public class MainFrame extends JFrame implements ActionListener{
 		toolbar.addSeparator();
 		toolbar.add(btnPrinterMgr);
 		toolbar.addSeparator();
-		
+		toolbar.add(btnMaterialMgr);
+		toolbar.addSeparator();
 		toolbar.add(btnQueryLog);
 		toolbar.addSeparator();
 		toolbar.add(btnQueryIndent);
 		toolbar.addSeparator();
 		toolbar.add(btnQuerySwiftWork);
+		toolbar.addSeparator();
+		toolbar.add(btnStatistic);
 		btnAccountMgr.addActionListener(this);
 		btnMenuMgr.addActionListener(this);
+		btnMaterialMgr.addActionListener(this);
 		btnDeskMgr.addActionListener(this);
 		btnPayWayMgr.addActionListener(this);
 		btnDiscountTempMgr.addActionListener(this);
@@ -155,7 +171,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		btnQueryLog.addActionListener(this);
 		btnQueryIndent.addActionListener(this);
 		btnQuerySwiftWork.addActionListener(this);
-		
+		btnStatistic.addActionListener(this);
 		
 		
 		Container c = this.getContentPane();
@@ -200,6 +216,16 @@ public class MainFrame extends JFrame implements ActionListener{
 //			pContent.removeAll();
 //			pContent.add(pMenuMgmt, CARDLAYOUT_MENUMGMT);
 //			pContent.updateUI();
+		} else if (e.getSource() == btnMaterialMgr){
+			if (pMaterialMgmt == null){
+				pMaterialMgmt = new MaterialMgmtPanel(this,listMaterialCategory);
+				pContent.add(pMaterialMgmt, CARDLAYOUT_MATERIAL);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MATERIAL);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MATERIAL);
+			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnMaterialMgr.getText());
 		} else if (e.getSource() == btnDeskMgr){
 			ArrayList<Desk> deskList = loadDeskList();
 			if (pDesk == null){
@@ -280,7 +306,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			}
 			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnQueryIndent.getText());
 		} else if (e.getSource() == btnQuerySwiftWork){
-			if (pQueryShiftwork == null && 1==1){
+			if (pQueryShiftwork == null){
 				pQueryShiftwork = new ShiftworkQueryPanel(this);
 				pContent.add(pQueryShiftwork, CARDLAYOUT_SHIFTWORKQUERY);
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_SHIFTWORKQUERY);
@@ -289,7 +315,16 @@ public class MainFrame extends JFrame implements ActionListener{
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_SHIFTWORKQUERY);
 			}
 			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnQuerySwiftWork.getText());
-		} 
+		} else if (e.getSource() == btnStatistic){
+			if (pStatistics == null){
+				pStatistics = new StatisticsPanel(this);
+				pContent.add(pStatistics, CARDLAYOUT_STATISTICS);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_STATISTICS);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_STATISTICS);
+			}
+		}
 	}
 
 	
@@ -351,6 +386,11 @@ public class MainFrame extends JFrame implements ActionListener{
 		return listCategory1s;
 	}
 
+	
+	public ArrayList<MaterialCategory> getListMaterialCategory() {
+		return listMaterialCategory;
+	}
+
 	public void reloadListCategory1s() {
 		listCategory1s = HttpUtil.loadMenu(this, SERVER_URL + "menu/querymenu");
 		Comparator comp = new Comparator() {
@@ -366,14 +406,38 @@ public class MainFrame extends JFrame implements ActionListener{
 				return 0;
 			}
 		};
-			
-		Collections.sort(listCategory1s, comp);
-		for(Category1 c1 : listCategory1s){
-			Collections.sort(c1.getCategory2s(), comp);
-			for(Category2 c2 : c1.getCategory2s()){
-				Collections.sort(c2.getDishes(), comp);
+		if (listCategory1s != null && !listCategory1s.isEmpty()){
+			Collections.sort(listCategory1s, comp);
+			for (Category1 c1 : listCategory1s) {
+				Collections.sort(c1.getCategory2s(), comp);
+				for (Category2 c2 : c1.getCategory2s()) {
+					Collections.sort(c2.getDishes(), comp);
+				}
 			}
 		}
+		
+	}
+	
+	public void reloadListMaterialCategory(){
+		this.listMaterialCategory = HttpUtil.loadMaterialCategory(this, SERVER_URL + "material/querymaterialcategory");
+		Comparator comp = new Comparator() {
+
+			@Override
+			public int compare(Object o1, Object o2) {
+				if (o1 instanceof MaterialCategory && o2 instanceof MaterialCategory)
+					return ((MaterialCategory) o1).getSequence() - ((MaterialCategory) o2).getSequence();
+				else if (o1 instanceof Material && o2 instanceof Material)
+					return ((Material) o1).getSequence() - ((Material) o2).getSequence();
+				return 0;
+			}
+		};
+		if (listMaterialCategory != null && !listMaterialCategory.isEmpty()){
+			Collections.sort(listMaterialCategory, comp);
+			for (MaterialCategory mc : listMaterialCategory) {
+				Collections.sort(mc.getMaterials(), comp);
+			}
+		}
+		
 	}
 	
 	public ArrayList<Printer> getListPrinters() {

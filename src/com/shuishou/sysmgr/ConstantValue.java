@@ -86,4 +86,15 @@ public class ConstantValue {
 	public static final String CONFIGS_FIRSTLANGUAGEABBR = "FIRSTLANGUAGEABBR";
 	public static final String CONFIGS_SECONDLANGUAGENAME= "SECONDLANGUAGENAME";
 	public static final String CONFIGS_SECONDLANGUAGEABBR = "SECONDLANGUAGEABBR";
+	
+	public static final int STATISTICS_DIMENSTION_PAYWAY = 1;
+	public static final int STATISTICS_DIMENSTION_SELL = 2;
+	public static final int STATISTICS_DIMENSTION_PERIODSELL = 3;
+	
+	public static final int STATISTICS_SELLGRANULARITY_BYDISH = 1;
+	public static final int STATISTICS_SELLGRANULARITY_BYCATEGORY2 = 2;
+	public static final int STATISTICS_SELLGRANULARITY_BYCATEGORY1 = 3;
+	
+	public static final int STATISTICS_PERIODSELL_PERDAY = 1;
+	public static final int STATISTICS_PERIODSELL_PERHOUR = 2;
 }

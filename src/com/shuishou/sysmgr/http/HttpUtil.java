@@ -47,6 +47,8 @@ import com.shuishou.sysmgr.beans.DiscountTemplate;
 import com.shuishou.sysmgr.beans.Dish;
 import com.shuishou.sysmgr.beans.Flavor;
 import com.shuishou.sysmgr.beans.HttpResult;
+import com.shuishou.sysmgr.beans.Material;
+import com.shuishou.sysmgr.beans.MaterialCategory;
 import com.shuishou.sysmgr.beans.PayWay;
 import com.shuishou.sysmgr.beans.Permission;
 import com.shuishou.sysmgr.beans.Printer;
@@ -265,6 +267,28 @@ public class HttpUtil {
 				for(Dish dish : c2.getDishes()){
 					dish.setCategory2(c2);
 				}
+			}
+		}
+		return result.data;
+	}
+	
+	public static ArrayList<MaterialCategory> loadMaterialCategory(JFrame parent, String url){
+		String response = getJSONObjectByGet(url);
+		if (response == null){
+			logger.error("get null from server for loading MaterialCategory. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading MaterialCategory. URL = " + url);
+			return null;
+		}
+		HttpResult<ArrayList<MaterialCategory>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<MaterialCategory>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading MaterialCategory. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading MaterialCategory. URL = " + url + ", response = "+response);
+			return null;
+		}
+		ArrayList<MaterialCategory> mcs = result.data;
+		for(MaterialCategory mc : mcs){
+			for(Material m: mc.getMaterials()){
+				m.setMaterialCategory(mc);
 			}
 		}
 		return result.data;

@@ -259,6 +259,10 @@ public abstract class AbstractDateModel<T> implements DateModel<T> {
         firePropertyChange(PROPERTY_VALUE, oldValue, getValue());
         firePropertyChange(PROPERTY_SELECTED, oldSelectedValue, this.selected);
     }
+    
+    public void setOnlysetSelected(boolean selected){
+    	this.selected = selected;
+    }
 
     private void setToMidnight() {
         calendarValue.set(Calendar.HOUR, 0);
