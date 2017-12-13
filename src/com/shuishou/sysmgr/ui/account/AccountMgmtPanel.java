@@ -49,9 +49,11 @@ public class AccountMgmtPanel extends JPanel implements ActionListener{
 		modelAccount = new AccountTableModel();
 		tableAccount.setModel(modelAccount);
 		tableAccount.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableAccount.getColumnModel().getColumn(0).setPreferredWidth(20);
-		tableAccount.getColumnModel().getColumn(1).setPreferredWidth(20);
+		tableAccount.getColumnModel().getColumn(0).setPreferredWidth(50);
+		tableAccount.getColumnModel().getColumn(1).setPreferredWidth(50);
 		tableAccount.getColumnModel().getColumn(2).setPreferredWidth(1000);
+		tableAccount.getColumnModel().getColumn(0).setMinWidth(50);
+		tableAccount.getColumnModel().getColumn(1).setMinWidth(50);
 		JScrollPane jspTable = new JScrollPane(tableAccount, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
 		JPanel pButtons = new JPanel();

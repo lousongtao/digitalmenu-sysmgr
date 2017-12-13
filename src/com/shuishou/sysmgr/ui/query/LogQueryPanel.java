@@ -2,6 +2,10 @@ package com.shuishou.sysmgr.ui.query;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -67,9 +71,9 @@ public class LogQueryPanel extends JPanel implements ActionListener{
 		JLabel lbUser = new JLabel("User : ");
 		JLabel lbStartDate = new JLabel("Start Date : ");
 		JLabel lbEndDate = new JLabel("End Date : ");
-		tfMessage.setPreferredSize(new Dimension(150, 25));
-		tfUser.setPreferredSize(new Dimension(150, 25));
-		cbType.setPreferredSize(new Dimension(150, 25));
+		tfMessage.setPreferredSize(new Dimension(120, 25));
+		tfUser.setPreferredSize(new Dimension(120, 25));
+		cbType.setPreferredSize(new Dimension(120, 25));
 		dpStartDate.setShowYearButtons(true);
 		dpEndDate.setShowYearButtons(true);
 		
@@ -82,20 +86,24 @@ public class LogQueryPanel extends JPanel implements ActionListener{
 		table.getColumnModel().getColumn(4).setPreferredWidth(600);
 		JScrollPane jspTable = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
-		JPanel pCondition = new JPanel();
-		pCondition.add(lbMessage);
-		pCondition.add(tfMessage);
-		pCondition.add(lbType);
-		pCondition.add(cbType);
-		pCondition.add(lbUser);
-		pCondition.add(tfUser);
-		pCondition.add(lbStartDate);
-		pCondition.add(dpStartDate);
-		pCondition.add(lbEndDate);
-		pCondition.add(dpEndDate);
-		pCondition.add(btnQuery);
+		JPanel pCondition = new JPanel(new GridBagLayout());
+		pCondition.add(lbMessage, 	new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
+		pCondition.add(tfMessage, 	new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
+		pCondition.add(lbType, 		new GridBagConstraints(2, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
+		pCondition.add(cbType, 		new GridBagConstraints(3, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
+		pCondition.add(lbUser, 		new GridBagConstraints(4, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
+		pCondition.add(tfUser, 		new GridBagConstraints(5, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
+		pCondition.add(lbStartDate, new GridBagConstraints(0, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
+		pCondition.add(dpStartDate, new GridBagConstraints(1, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
+		pCondition.add(lbEndDate, 	new GridBagConstraints(2, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
+		pCondition.add(dpEndDate, 	new GridBagConstraints(3, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
+		pCondition.add(btnQuery, 	new GridBagConstraints(4, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
+//		JScrollPane jspCondition = new JScrollPane(pCondition, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		btnQuery.addActionListener(this);
 		
+//		Dimension d = jspCondition.getPreferredSize();
+//		d.height = 100;
+//		jspCondition.setMinimumSize(d);
 		setLayout(new BorderLayout());
 		add(jspTable, BorderLayout.CENTER);
 		add(pCondition, BorderLayout.NORTH);

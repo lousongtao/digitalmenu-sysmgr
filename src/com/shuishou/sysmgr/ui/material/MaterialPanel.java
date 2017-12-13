@@ -190,11 +190,11 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 		}
 	}
 
-	private BufferedImage generateQRCode() throws WriterException{
+	private BufferedImage generateQRCode(String txt) throws WriterException{
 		Hashtable hintMap = new Hashtable();
 		hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
 		QRCodeWriter qrCodeWriter = new QRCodeWriter();
-		BitMatrix byteMatrix = qrCodeWriter.encode(material.getName(),BarcodeFormat.QR_CODE, 100, 100, hintMap);
+		BitMatrix byteMatrix = qrCodeWriter.encode(txt,BarcodeFormat.QR_CODE, 100, 100, hintMap);
 		// Make the BufferedImage that are to hold the QRCode
 		int matrixWidth = byteMatrix.getWidth();
 		BufferedImage image = new BufferedImage(matrixWidth, matrixWidth,BufferedImage.TYPE_INT_RGB);
@@ -217,10 +217,10 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 	}
 	
 
-	private void printQRCode(){
+	private void printQRCode(String txt){
 		BufferedImage image = null;
 		try {
-			image = generateQRCode();
+			image = generateQRCode(txt);
 		} catch (WriterException e1) {
 			logger.error("", e1);
 		}
@@ -232,7 +232,7 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 		
 		if (pj.printDialog()) {
 			try {
-				pj.setPrintable(new QRCodePrinter(image), pf);
+				pj.setPrintable(new QRCodePrinter(image, txt), pf);
 				pj.print();
 			} catch (PrinterException e) {
 				logger.error("", e);
@@ -242,8 +242,10 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 	
 	class QRCodePrinter implements Printable {
 		private BufferedImage image;
-		public QRCodePrinter(BufferedImage image){
+		private String txt;
+		public QRCodePrinter(BufferedImage image, String txt){
 			this.image = image;
+			this.txt = txt;
 		}
 
 		@Override
@@ -251,10 +253,18 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 			if (page > 0) {
 				return NO_SUCH_PAGE;
 			}
+			Font font = new Font("Serif", Font.BOLD, 24);
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.translate(pf.getImageableX(), pf.getImageableY());
-
+			g.setFont(font);
 			g.drawImage(image, 0, 0, null);
+			//if txt is too long, it could not be printed totally, so must cut to 2 lines
+			if (txt.length() > 4){
+				g.drawString(txt.substring(0, 4), 100, 30);
+				g.drawString(txt.substring(4), 100, 70);
+			} else {
+				g.drawString(txt, 100, 10);
+			}
 			
 			return PAGE_EXISTS;
 		}
@@ -263,7 +273,8 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnPrintCode){
-			printQRCode();
+			if (material != null)
+				printQRCode(material.getName());
 		}
 	}
 	
