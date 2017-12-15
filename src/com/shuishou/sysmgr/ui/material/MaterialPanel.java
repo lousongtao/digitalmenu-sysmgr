@@ -19,6 +19,7 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -194,6 +195,13 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 		Hashtable hintMap = new Hashtable();
 		hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
 		QRCodeWriter qrCodeWriter = new QRCodeWriter();
+		try {
+			txt = new String(txt.getBytes("UTF-8"), "ISO-8859-1");
+		} catch (UnsupportedEncodingException e) {
+			JOptionPane.showMessageDialog(parent, "Cannot support the encoding ISO-8859-1");
+			logger.error("", e);
+			return null;
+		}
 		BitMatrix byteMatrix = qrCodeWriter.encode(txt,BarcodeFormat.QR_CODE, 100, 100, hintMap);
 		// Make the BufferedImage that are to hold the QRCode
 		int matrixWidth = byteMatrix.getWidth();
@@ -224,6 +232,8 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 		} catch (WriterException e1) {
 			logger.error("", e1);
 		}
+		if (image == null)
+			return;
 		PrinterJob pj = PrinterJob.getPrinterJob();
 		PageFormat pf = new PageFormat();
 		Paper paper = new Paper();

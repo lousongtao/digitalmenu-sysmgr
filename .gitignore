@@ -2,6 +2,7 @@
 dm-sysmgr.log*
 logs/
 target/
+pom.properties
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
