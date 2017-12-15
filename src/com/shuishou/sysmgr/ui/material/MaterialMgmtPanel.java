@@ -154,13 +154,13 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		} else if (e.getSource() == menuitemAddMaterial){
 			MaterialTreeNode node = (MaterialTreeNode)tree.getLastSelectedPathComponent();
 			MaterialPanel p = new MaterialPanel(this, (MaterialCategory)node.getUserObject());
-			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MaterialMgmtPanel.AddMaterial"), 300, 300);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MaterialMgmtPanel.AddMaterial"), 300, 400);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemModifyCategory){
 			MaterialCategoryPanel p = new MaterialCategoryPanel(this);
 			MaterialTreeNode node = (MaterialTreeNode)tree.getLastSelectedPathComponent();
 			p.setObjectValue((MaterialCategory)node.getUserObject());
-			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MaterialMgmtPanel.ModifyMaterialCategory"), 300, 300);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MaterialMgmtPanel.ModifyMaterialCategory"), 300, 400);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemDeleteCategory){
 			MaterialTreeNode node = (MaterialTreeNode)tree.getLastSelectedPathComponent();
@@ -169,7 +169,7 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 			MaterialPanel p = new MaterialPanel(this);
 			MaterialTreeNode node = (MaterialTreeNode)tree.getLastSelectedPathComponent();
 			p.setObjectValue((Material)node.getUserObject());
-			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MaterialMgmtPanel.ModifyMaterial"), 300, 300);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MaterialMgmtPanel.ModifyMaterial"), 300, 400);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemDeleteMaterial){
 			MaterialTreeNode node = (MaterialTreeNode)tree.getLastSelectedPathComponent();

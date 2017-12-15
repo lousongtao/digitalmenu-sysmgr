@@ -63,6 +63,7 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 	private NumberTextField tfDisplaySeq= new NumberTextField(false);
 	private NumberTextField tfLeftAmount= new NumberTextField(true);
 	private NumberTextField tfAlarmAmount= new NumberTextField(true);
+	private NumberTextField tfBarcode= new NumberTextField(false);
 	private JComboBox cbCategory = new JComboBox();
 	private JButton btnPrintCode = new JButton("Print QR Code by Name");
 	private Material material;
@@ -88,6 +89,7 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 		JLabel lbAlarmAmount = new JLabel(Messages.getString("MaterialPanel.AlarmAmount"));
 		JLabel lbDisplaySeq = new JLabel(Messages.getString("MaterialPanel.DisplaySequence"));
 		JLabel lbCategory = new JLabel(Messages.getString("MaterialPanel.Category"));
+		JLabel lbBarcode = new JLabel(Messages.getString("MaterialPanel.Barcode"));
 		cbCategory.setRenderer(new CategoryListRender());
 		this.setLayout(new GridBagLayout());
 		add(lbName, 		new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
@@ -102,13 +104,16 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 		add(tfAlarmAmount, 	new GridBagConstraints(1, 4, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		add(lbCategory, 	new GridBagConstraints(0, 5, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		add(cbCategory, 	new GridBagConstraints(1, 5, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(btnPrintCode, 	new GridBagConstraints(1, 6, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(new JPanel(), 	new GridBagConstraints(0, 7, 1, 1,0,1, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0, 0));
+		add(lbBarcode, 		new GridBagConstraints(0, 6, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(tfBarcode, 		new GridBagConstraints(1, 6, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(btnPrintCode, 	new GridBagConstraints(1, 7, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(new JPanel(), 	new GridBagConstraints(0, 8, 1, 1,0,1, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0, 0));
 		tfName.setMinimumSize(new Dimension(180,25));
 		tfUnit.setMinimumSize(new Dimension(180,25));
 		tfLeftAmount.setMinimumSize(new Dimension(180,25));
 		tfAlarmAmount.setMinimumSize(new Dimension(180,25));
 		tfDisplaySeq.setMinimumSize(new Dimension(180,25));
+		tfBarcode.setMinimumSize(new Dimension(180, 25));
 		cbCategory.setMinimumSize(new Dimension(180, 25));
 		btnPrintCode.addActionListener(this);
 	}
@@ -126,6 +131,9 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 		params.put("alarmAmount", tfAlarmAmount.getText());
 		params.put("unit", tfUnit.getText());
 		params.put("categoryId", ((MaterialCategory)cbCategory.getSelectedItem()).getId()+"");
+		if (tfBarcode.getText() != null && tfBarcode.getText().length() > 0){
+			params.put("barCode", tfBarcode.getText());
+		}
 		String url = "material/addmaterial";
 		if (material != null){
 			url = "material/updatematerial";
@@ -178,6 +186,9 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 		tfAlarmAmount.setText(material.getAlarmAmount() + "");
 		tfDisplaySeq.setText(material.getSequence()+"");
 		cbCategory.setSelectedItem(material.getMaterialCategory());
+		if (material.getBarCode() != null)
+			tfBarcode.setText(material.getBarCode());
+		else tfBarcode.setText("");
 	}
 	
 	public void initData(){
@@ -273,7 +284,7 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 				g.drawString(txt.substring(0, 4), 100, 30);
 				g.drawString(txt.substring(4), 100, 70);
 			} else {
-				g.drawString(txt, 100, 10);
+				g.drawString(txt, 100, 30);
 			}
 			
 			return PAGE_EXISTS;

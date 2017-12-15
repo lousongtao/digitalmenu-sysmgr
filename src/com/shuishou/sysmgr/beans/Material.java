@@ -17,6 +17,8 @@ public class Material implements Serializable {
 	private double alarmAmount;
 	
 	private int alarmStatus;
+	
+	private String barCode;
 
 	private MaterialCategory materialCategory;
 	
@@ -83,6 +85,15 @@ public class Material implements Serializable {
 
 	public void setMaterialCategory(MaterialCategory materialCategory) {
 		this.materialCategory = materialCategory;
+	}
+
+	
+	public String getBarCode() {
+		return barCode;
+	}
+
+	public void setBarCode(String barCode) {
+		this.barCode = barCode;
 	}
 
 	@Override
