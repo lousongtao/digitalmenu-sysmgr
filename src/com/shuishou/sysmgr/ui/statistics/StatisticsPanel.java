@@ -87,6 +87,7 @@ public class StatisticsPanel extends JPanel implements ActionListener{
 	private JTable tabReport = new JTable();
 	private JPanel pDimensionParam = new JPanel(new CardLayout());
 	private JPanel pChart = new JPanel(new GridLayout(0, 1));
+	private JLabel lbTotalInfo = new JLabel();
 	private IntComparator intComp = new IntComparator();
 	private DoubleComparator doubleComp = new DoubleComparator();
 	private StringComparator stringComp = new StringComparator();
@@ -100,8 +101,11 @@ public class StatisticsPanel extends JPanel implements ActionListener{
 		tabReport.setAutoCreateRowSorter(false);
 		JPanel pReport = new JPanel(new GridLayout());
 		JScrollPane jspTable = new JScrollPane(tabReport, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		JPanel pData = new JPanel(new BorderLayout());
+		pData.add(jspTable, BorderLayout.CENTER);
+		pData.add(lbTotalInfo, BorderLayout.SOUTH);
 		JScrollPane jspChart = new JScrollPane(pChart, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		pReport.add(jspTable);
+		pReport.add(pData);
 		pReport.add(jspChart);
 		
 		ButtonGroup bgDimension = new ButtonGroup();
@@ -251,6 +255,14 @@ public class StatisticsPanel extends JPanel implements ActionListener{
 			
 			tabReport.setAutoCreateRowSorter(false);
 			showPaywayChart(result.data);
+			double totalMoney = 0;
+			int totalAmount = 0;
+			for (int i = 0; i < result.data.size(); i++) {
+				totalMoney += result.data.get(i).paidPrice;
+				totalAmount += result.data.get(i).soldAmount;
+			}
+			lbTotalInfo.setText("record : " + tabReport.getRowCount()
+					+ ", money : $" + String.format("%.2f", totalMoney) + ", amount : " + totalAmount);
 		} else if (rbSell.isSelected()){
 			AbstractTableModel model = new StatSellModel(result.data);
 			tabReport.setModel(model);
@@ -262,6 +274,17 @@ public class StatisticsPanel extends JPanel implements ActionListener{
 			
 			tabReport.setAutoCreateRowSorter(false);
 			showSellChart(result.data);
+			double totalPrice = 0;
+			int totalAmount = 0;
+			double totalWeight = 0;
+			for (int i = 0; i < result.data.size(); i++) {
+				totalPrice += result.data.get(i).totalPrice;
+				totalAmount += result.data.get(i).soldAmount;
+				totalWeight += result.data.get(i).weight;
+			}
+			lbTotalInfo.setText("record : " + tabReport.getRowCount()
+					+ ", money : $" + String.format("%.2f", totalPrice) + ", amount : " + totalAmount
+					+ ", weight : " + totalWeight);
 		} else if (rbPeriodSell.isSelected()){
 			ArrayList<StatItem> sis = result.data;
 			if (cbHideEmptyPeriod.isSelected()){
@@ -282,6 +305,17 @@ public class StatisticsPanel extends JPanel implements ActionListener{
 			tabReport.setAutoCreateRowSorter(false);
 			tabReport.getRowSorter().toggleSortOrder(0);
 			showPeriodSellChart(result.data);
+			double totalMoney = 0;
+			int totalAmount = 0;
+			double totalWeight = 0;
+			for (int i = 0; i < result.data.size(); i++) {
+				totalMoney += result.data.get(i).paidPrice;
+				totalAmount += result.data.get(i).soldAmount;
+				totalWeight += result.data.get(i).weight;
+			}
+			lbTotalInfo.setText("record : " + tabReport.getRowCount()
+					+ ", money : $" + String.format("%.2f", totalMoney) + ", amount : " + totalAmount
+					+ ", weight : " + totalWeight);
 		}
 	}
 	

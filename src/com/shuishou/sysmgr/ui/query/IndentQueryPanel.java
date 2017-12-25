@@ -58,6 +58,7 @@ public class IndentQueryPanel extends JPanel implements ActionListener{
 	private JCheckBox cbOrderByPayStatus = new JCheckBox("Pay Status");
 	private JCheckBox cbOrderByTableName = new JCheckBox("Table Name");
 	private JButton btnQuery = new JButton("Query");
+	private JButton btnPrintIndent = new JButton("Print Order");
 	
 	private JTable tableIndent = new JTable();
 	private IndentModel modelIndent = new IndentModel();
@@ -124,9 +125,11 @@ public class IndentQueryPanel extends JPanel implements ActionListener{
 		pCondition.add(new JLabel(),new GridBagConstraints(6, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
 		pCondition.add(pPayStatus,	new GridBagConstraints(0, 1, 2, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
 		pCondition.add(pOrderBy, 	new GridBagConstraints(2, 1, 2, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
-		pCondition.add(btnQuery,	new GridBagConstraints(5, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
+		pCondition.add(btnQuery,	new GridBagConstraints(4, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
+		pCondition.add(btnPrintIndent,new GridBagConstraints(5, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
 		pCondition.add(new JLabel(),new GridBagConstraints(6, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
 		btnQuery.addActionListener(this);
+		btnPrintIndent.addActionListener(this);
 		
 		JPanel pTable = new JPanel(new GridBagLayout());
 		pTable.add(jspTableIndent,		new GridBagConstraints(0, 0, 1, 1, 3, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 0, 0), 0, 0));
@@ -204,11 +207,37 @@ public class IndentQueryPanel extends JPanel implements ActionListener{
 		tableIndent.updateUI();
 	}
 	
+	private void doPrint(){
+		int row = tableIndent.getSelectedRow();
+		if (row < 0){
+			JOptionPane.showMessageDialog(this, "Please choose a record from Order table.", "Error", JOptionPane.YES_NO_OPTION);
+			return;
+		}
+		String url = "indent/printindent";
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("userId", mainFrame.getLoginUser().getId()+"");
+		params.put("indentId", modelIndent.getObjectAt(row).getId()+"");
+		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params, "UTF-8");
+		if (response == null || response.length() == 0){
+			logger.error("get null from server while print indent. URL = " + url + ", param = "+ params);
+			JOptionPane.showMessageDialog(this, "get null from server while print indent. URL = " + url + ", param = "+ params);
+			return;
+		}
+		HttpResult<Indent> result = new Gson().fromJson(response, new TypeToken<HttpResult<Indent>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while print indent. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while print indent. URL = " + url + ", response = "+response);
+			return;
+		}	
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnQuery){
 			doQuery();
-		}
+		} else if (e.getSource() == btnPrintIndent){
+			doPrint();
+		} 
 	}
 	
 	class IndentModel extends AbstractTableModel{
