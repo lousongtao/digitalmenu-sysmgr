@@ -63,8 +63,8 @@ public class ConstantValue {
 	
 	public static final byte MENUCHANGE_TYPE_SOLDOUT = 0;
 	
-	public static final byte PRINT_TYPE_TOGETHER = 0;
-	public static final byte PRINT_TYPE_SEPARATELY = 1;
+	public static final byte CATEGORY2_PRINT_TYPE_TOGETHER = 0;
+	public static final byte CATEGORY2_PRINT_TYPE_SEPARATELY = 1;
 	public static final byte PRINTER_TYPE_COUNTER = 1;
 	public static final byte PRINTER_TYPE_KITCHEN = 2;
 	

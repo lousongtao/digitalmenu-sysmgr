@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -22,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
@@ -30,6 +33,8 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.shuishou.sysmgr.ConstantValue;
+import com.shuishou.sysmgr.Messages;
 import com.shuishou.sysmgr.beans.Category1;
 import com.shuishou.sysmgr.beans.Category2;
 import com.shuishou.sysmgr.beans.Category2Printer;
@@ -47,6 +52,8 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 	private JTextField tfSecondLanguageName= new JTextField(155);
 	private JTextField tfDisplaySeq= new JTextField(155);
 	private JComboBox<Category1> cbCategory1 = new JComboBox();
+	private JRadioButton rbPrintTogether = new JRadioButton(Messages.getString("Category2Panel.PrintTogether"), false);
+	private JRadioButton rbPrintSeparately = new JRadioButton(Messages.getString("Category2Panel.PrintSeparately"), true);
 	private JList<PrinterChoosed> listPrinter = new JList<>();
 	private DefaultListModel<PrinterChoosed> modelPrinter = new DefaultListModel<>();
 	private Category2 c2;
@@ -70,6 +77,13 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 		JLabel lbSecondLanguageName = new JLabel("Second Language Name");
 		JLabel lbDisplaySeq = new JLabel("Display Sequence");
 		JLabel lbCategory1 = new JLabel("Category1");
+		ButtonGroup bgPrintStyle = new ButtonGroup();
+		bgPrintStyle.add(rbPrintSeparately);
+		bgPrintStyle.add(rbPrintTogether);
+		JPanel pPrintStyle = new JPanel(new GridLayout(0, 1));
+		pPrintStyle.add(rbPrintSeparately);
+		pPrintStyle.add(rbPrintTogether);
+		
 		listPrinter.setBorder(BorderFactory.createTitledBorder("Printer"));
 		listPrinter.setModel(modelPrinter);
 		listPrinter.setCellRenderer(new PrinterListRenderer());
@@ -95,21 +109,13 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 		add(lbCategory1, 	new GridBagConstraints(0, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		add(cbCategory1, 	new GridBagConstraints(1, 3, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		add(listPrinter,	new GridBagConstraints(0, 4, 2, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(pPrintStyle,	new GridBagConstraints(1, 4, 2, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
 		add(new JPanel(), new GridBagConstraints(0, 5, 1, 1,0,1, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0, 0));
-//		tfFirstLanguageName.setEditable(false);
-//		tfSecondLanguageName.setEditable(false);
-//		cbCategory1.setEditable(false);
-//		cbPrinter.setEditable(false);
-//		tfDisplaySeq.setEditable(false);
+
 		tfDisplaySeq.setMinimumSize(new Dimension(180,25));
 		tfFirstLanguageName.setMinimumSize(new Dimension(180,25));
 		tfSecondLanguageName.setMinimumSize(new Dimension(180,25));
 		cbCategory1.setMinimumSize(new Dimension(180,25));
-//		Dimension dListPrinter = listPrinter.getPreferredSize();
-//		dListPrinter.width = 300;
-//		listPrinter.setMinimumSize(dListPrinter);
-//		cbCategory1.setRenderer(new Category1ListRender());
-//		cbPrinter.setRenderer(new PrinterListRender());
 		
 		tfDisplaySeq.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
@@ -153,6 +159,11 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 			params.put("secondLanguageName", tfSecondLanguageName.getText());
 		params.put("sequence", tfDisplaySeq.getText());
 		params.put("category1Id", ((Category1)cbCategory1.getSelectedItem()).getId() + "");
+		if (rbPrintSeparately.isSelected()){
+			params.put("sequence", String.valueOf(ConstantValue.CATEGORY2_PRINT_TYPE_SEPARATELY));
+		} else if (rbPrintTogether.isSelected()){
+			params.put("sequence", String.valueOf(ConstantValue.CATEGORY2_PRINT_TYPE_TOGETHER));
+		}
 		ArrayList<Integer> printerIds = new ArrayList<>();
 		for (int i = 0; i < modelPrinter.size(); i++) {
 			if (modelPrinter.getElementAt(i).isChoosed) {
@@ -222,6 +233,11 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 		tfFirstLanguageName.setText(c2.getFirstLanguageName());
 		tfSecondLanguageName.setText(c2.getSecondLanguageName());
 		tfDisplaySeq.setText(c2.getSequence()+"");
+		if (c2.getPrintStyle() == ConstantValue.CATEGORY2_PRINT_TYPE_SEPARATELY){
+			rbPrintSeparately.setSelected(true);
+		} else if (c2.getPrintStyle() == ConstantValue.CATEGORY2_PRINT_TYPE_TOGETHER){
+			rbPrintTogether.setSelected(true);
+		}
 		cbCategory1.setSelectedItem(c2.getCategory1());
 		for (int i = 0; i < modelPrinter.size(); i++) {
 			modelPrinter.getElementAt(i).isChoosed = false;

@@ -18,6 +18,8 @@ public class Category2 implements Serializable{
     private String secondLanguageName;
 
     private int sequence;
+    
+    private int printStyle;
 
     @SerializedName(value = "children", alternate = {"dishes"})
     private ArrayList<Dish> dishes;
@@ -59,8 +61,15 @@ public class Category2 implements Serializable{
         this.id = id;
     }
 
+    public int getPrintStyle() {
+		return printStyle;
+	}
 
-    public String getFirstLanguageName() {
+	public void setPrintStyle(int printStyle) {
+		this.printStyle = printStyle;
+	}
+
+	public String getFirstLanguageName() {
 		return firstLanguageName;
 	}
 
