@@ -37,10 +37,16 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 	private final Logger logger = Logger.getLogger(ConfigsDialog.class.getName());
 	private JButton btnSaveConfirmCode = new JButton("Save");
 	private JButton btnSaveOpenCashdrawerCode = new JButton("Save");
+	private JButton btnSaveCancelOrderCode = new JButton("Save");
+	private JButton btnSaveClearTableCode = new JButton("Save");
 	private JTextField tfOldConfirmCode;
 	private NumberTextField tfNewConfirmCode;
 	private JTextField tfOldOpenCashdrawerCode;
 	private NumberTextField tfNewOpenCashdrawerCode;
+	private JTextField tfOldCancelOrderCode;
+	private NumberTextField tfNewCancelOrderCode;
+	private JTextField tfOldClearTableCode;
+	private NumberTextField tfNewClearTableCode;
 	private JRadioButton rbLanguageAmount1 = new JRadioButton("1");
 	private JRadioButton rbLanguageAmount2 = new JRadioButton("2");
 	private JTextField tfFirstLanguageName = new JTextField();
@@ -80,6 +86,30 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		pOpenCashdrawerCode.add(btnSaveOpenCashdrawerCode, new GridBagConstraints(4, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
 		pOpenCashdrawerCode.setBorder(BorderFactory.createTitledBorder("Open Cashdrawer Code"));
 		
+		JLabel lbOldCancelOrderCode = new JLabel("old code");
+		JLabel lbNewCancelOrderCode = new JLabel("new code");
+		tfOldCancelOrderCode = new JTextField();
+		tfNewCancelOrderCode = new NumberTextField(false);
+		JPanel pCancelOrderCode = new JPanel(new GridBagLayout());
+		pCancelOrderCode.add(lbOldCancelOrderCode, new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
+		pCancelOrderCode.add(tfNewCancelOrderCode, new GridBagConstraints(1, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
+		pCancelOrderCode.add(lbNewCancelOrderCode, new GridBagConstraints(2, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
+		pCancelOrderCode.add(tfNewCancelOrderCode, new GridBagConstraints(3, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
+		pCancelOrderCode.add(btnSaveCancelOrderCode, new GridBagConstraints(4, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
+		pCancelOrderCode.setBorder(BorderFactory.createTitledBorder("Cancel Order Code"));
+		
+		JLabel lbOldClearTableCode = new JLabel("old code");
+		JLabel lbNewClearTableCode = new JLabel("new code");
+		tfOldClearTableCode = new JTextField();
+		tfNewClearTableCode = new NumberTextField(false);
+		JPanel pClearTableCode = new JPanel(new GridBagLayout());
+		pClearTableCode.add(lbOldClearTableCode, new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
+		pClearTableCode.add(tfNewClearTableCode, new GridBagConstraints(1, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
+		pClearTableCode.add(lbNewClearTableCode, new GridBagConstraints(2, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
+		pClearTableCode.add(tfNewClearTableCode, new GridBagConstraints(3, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
+		pClearTableCode.add(btnSaveClearTableCode, new GridBagConstraints(4, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
+		pClearTableCode.setBorder(BorderFactory.createTitledBorder("Clear Table Code"));
+		
 		ButtonGroup bgLanguageAmount = new ButtonGroup();
 		bgLanguageAmount.add(rbLanguageAmount1);
 		bgLanguageAmount.add(rbLanguageAmount2);
@@ -109,6 +139,8 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		btnSaveConfirmCode.addActionListener(this);
 		btnSaveOpenCashdrawerCode.addActionListener(this);
 		btnSaveLanguageSet.addActionListener(this);
+		btnSaveClearTableCode.addActionListener(this);
+		btnSaveCancelOrderCode.addActionListener(this);
 		
 		setSize(500, 400);
 		this.setLocation((int)(mainFrame.getWidth() / 2 - this.getWidth() /2 + mainFrame.getLocation().getX()), 
@@ -135,6 +167,10 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 			doSaveOpenCashdrawerCode();
 		} else if (e.getSource() == btnSaveLanguageSet){
 			doSaveLanguageSet();
+		} else if (e.getSource() == btnSaveCancelOrderCode){
+			doSaveCancelOrderCode();
+		} else if (e.getSource() == btnSaveClearTableCode){
+			doSaveClearTableCode();
 		}
 	}
 	
@@ -178,11 +214,61 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		this.setVisible(false);
 	}
 	
+	private void doSaveCancelOrderCode(){
+		if (tfNewConfirmCode.getText() == null || tfNewConfirmCode.getText().length() == 0){
+			JOptionPane.showMessageDialog(this, "No input new code");
+			return;
+		}
+		String url = "common/savecancelordercode";
+		HashMap<String, String> params = new HashMap<>();
+		params.put("userId", MainFrame.getLoginUser().getId()+"");
+		params.put("code", tfNewConfirmCode.getText());
+		params.put("oldCode", tfOldConfirmCode.getText());
+		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
+		if (response == null){
+			logger.error("get null from server for save cancel order code. URL = " + url + ", param = "+ params);
+			JOptionPane.showMessageDialog(this, "get null from server for save cancel order code. URL = " + url);
+			return;
+		}
+		
+		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while save cancel order code. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while save cancel order code. URL = " + url + ", response = "+response);
+			return;
+		}
+		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CANCELORDERCODE, tfNewConfirmCode.getText());
+		this.setVisible(false);
+	}
+	
+	private void doSaveClearTableCode(){
+		if (tfNewConfirmCode.getText() == null || tfNewConfirmCode.getText().length() == 0){
+			JOptionPane.showMessageDialog(this, "No input new code");
+			return;
+		}
+		String url = "common/savecleartablecode";
+		HashMap<String, String> params = new HashMap<>();
+		params.put("userId", MainFrame.getLoginUser().getId()+"");
+		params.put("code", tfNewConfirmCode.getText());
+		params.put("oldCode", tfOldConfirmCode.getText());
+		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
+		if (response == null){
+			logger.error("get null from server for save clear table code. URL = " + url + ", param = "+ params);
+			JOptionPane.showMessageDialog(this, "get null from server for save clear table code. URL = " + url);
+			return;
+		}
+		
+		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while save clear table code. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while save clear table code. URL = " + url + ", response = "+response);
+			return;
+		}
+		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CLEARTABLECODE, tfNewConfirmCode.getText());
+		this.setVisible(false);
+	}
+	
 	private void doSaveConfirmCode(){
-//		if (tfOldConfirmCode.getText() == null || tfOldConfirmCode.getText().length() == 0){
-//			JOptionPane.showMessageDialog(this, "No input old code");
-//			return;
-//		}
 		if (tfNewConfirmCode.getText() == null || tfNewConfirmCode.getText().length() == 0){
 			JOptionPane.showMessageDialog(this, "No input new code");
 			return;
