@@ -18,6 +18,7 @@ public class Category2 implements Serializable{
     private String secondLanguageName;
 
     private int sequence;
+    
 
     @SerializedName(value = "children", alternate = {"dishes"})
     private ArrayList<Dish> dishes;
@@ -59,8 +60,7 @@ public class Category2 implements Serializable{
         this.id = id;
     }
 
-
-    public String getFirstLanguageName() {
+	public String getFirstLanguageName() {
 		return firstLanguageName;
 	}
 

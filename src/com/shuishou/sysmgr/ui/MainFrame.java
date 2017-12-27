@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
@@ -201,7 +202,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnAccountMgr.getText());
 		} else if (e.getSource() == btnMenuMgr){
-			if (pMenuMgmt == null){
+			if (pMenuMgmt == null || 1<2){
 				pMenuMgmt = new MenuMgmtPanel(this, listCategory1s);
 				pContent.add(pMenuMgmt, CARDLAYOUT_MENUMGMT);
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MENUMGMT);
@@ -457,6 +458,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
+				MainFrame.logger.error(ConstantValue.DFYMDHMS.format(new Date()));
 				MainFrame.logger.error("", e);
 				e.printStackTrace();
 			}

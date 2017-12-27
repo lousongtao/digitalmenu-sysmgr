@@ -9,6 +9,8 @@ public class Category2Printer {
 	private Category2 category2;
 	
 	private Printer printer;
+	
+	private int printStyle;
 
 	public long getId() {
 		return id;
@@ -32,6 +34,14 @@ public class Category2Printer {
 
 	public void setPrinter(Printer printer) {
 		this.printer = printer;
+	}
+
+	public int getPrintStyle() {
+		return printStyle;
+	}
+
+	public void setPrintStyle(int printStyle) {
+		this.printStyle = printStyle;
 	}
 
 	@Override
