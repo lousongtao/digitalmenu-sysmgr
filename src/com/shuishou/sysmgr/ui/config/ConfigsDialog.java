@@ -67,7 +67,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		tfOldConfirmCode = new JTextField();
 		tfNewConfirmCode = new NumberTextField(false);
 		JPanel pConfirmCode = new JPanel(new GridBagLayout());
-		pConfirmCode.add(lbOldConfirmCode, new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,0,0,0), 0, 0));;
+		pConfirmCode.add(lbOldConfirmCode, new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
 		pConfirmCode.add(tfOldConfirmCode, new GridBagConstraints(1, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
 		pConfirmCode.add(lbNewConfirmCode, new GridBagConstraints(2, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
 		pConfirmCode.add(tfNewConfirmCode, new GridBagConstraints(3, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
@@ -92,7 +92,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		tfNewCancelOrderCode = new NumberTextField(false);
 		JPanel pCancelOrderCode = new JPanel(new GridBagLayout());
 		pCancelOrderCode.add(lbOldCancelOrderCode, new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
-		pCancelOrderCode.add(tfNewCancelOrderCode, new GridBagConstraints(1, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
+		pCancelOrderCode.add(tfOldCancelOrderCode, new GridBagConstraints(1, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
 		pCancelOrderCode.add(lbNewCancelOrderCode, new GridBagConstraints(2, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
 		pCancelOrderCode.add(tfNewCancelOrderCode, new GridBagConstraints(3, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
 		pCancelOrderCode.add(btnSaveCancelOrderCode, new GridBagConstraints(4, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
@@ -104,7 +104,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		tfNewClearTableCode = new NumberTextField(false);
 		JPanel pClearTableCode = new JPanel(new GridBagLayout());
 		pClearTableCode.add(lbOldClearTableCode, new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
-		pClearTableCode.add(tfNewClearTableCode, new GridBagConstraints(1, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
+		pClearTableCode.add(tfOldClearTableCode, new GridBagConstraints(1, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
 		pClearTableCode.add(lbNewClearTableCode, new GridBagConstraints(2, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
 		pClearTableCode.add(tfNewClearTableCode, new GridBagConstraints(3, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
 		pClearTableCode.add(btnSaveClearTableCode, new GridBagConstraints(4, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
@@ -128,7 +128,9 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		JPanel pBasic = new JPanel(new GridBagLayout());
 		pBasic.add(pConfirmCode, 		new GridBagConstraints(0, 0, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
 		pBasic.add(pOpenCashdrawerCode, new GridBagConstraints(0, 1, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
-		pBasic.add(pLanguageSet, 		new GridBagConstraints(0, 2, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
+		pBasic.add(pClearTableCode, 	new GridBagConstraints(0, 2, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
+		pBasic.add(pCancelOrderCode, 	new GridBagConstraints(0, 3, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
+		pBasic.add(pLanguageSet, 		new GridBagConstraints(0, 4, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
 		JTabbedPane tabPane = new JTabbedPane();
 		tabPane.add("Basic Setting", pBasic);
 		
@@ -215,14 +217,14 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 	}
 	
 	private void doSaveCancelOrderCode(){
-		if (tfNewConfirmCode.getText() == null || tfNewConfirmCode.getText().length() == 0){
+		if (tfNewCancelOrderCode.getText() == null || tfNewCancelOrderCode.getText().length() == 0){
 			JOptionPane.showMessageDialog(this, "No input new code");
 			return;
 		}
 		String url = "common/savecancelordercode";
 		HashMap<String, String> params = new HashMap<>();
 		params.put("userId", MainFrame.getLoginUser().getId()+"");
-		params.put("code", tfNewConfirmCode.getText());
+		params.put("code", tfNewCancelOrderCode.getText());
 		params.put("oldCode", tfOldConfirmCode.getText());
 		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
 		if (response == null){
@@ -237,19 +239,19 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 			JOptionPane.showMessageDialog(this, "return false while save cancel order code. URL = " + url + ", response = "+response);
 			return;
 		}
-		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CANCELORDERCODE, tfNewConfirmCode.getText());
+		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CANCELORDERCODE, tfNewCancelOrderCode.getText());
 		this.setVisible(false);
 	}
 	
 	private void doSaveClearTableCode(){
-		if (tfNewConfirmCode.getText() == null || tfNewConfirmCode.getText().length() == 0){
+		if (tfNewClearTableCode.getText() == null || tfNewClearTableCode.getText().length() == 0){
 			JOptionPane.showMessageDialog(this, "No input new code");
 			return;
 		}
 		String url = "common/savecleartablecode";
 		HashMap<String, String> params = new HashMap<>();
 		params.put("userId", MainFrame.getLoginUser().getId()+"");
-		params.put("code", tfNewConfirmCode.getText());
+		params.put("code", tfNewClearTableCode.getText());
 		params.put("oldCode", tfOldConfirmCode.getText());
 		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
 		if (response == null){
@@ -264,7 +266,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 			JOptionPane.showMessageDialog(this, "return false while save clear table code. URL = " + url + ", response = "+response);
 			return;
 		}
-		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CLEARTABLECODE, tfNewConfirmCode.getText());
+		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CLEARTABLECODE, tfNewClearTableCode.getText());
 		this.setVisible(false);
 	}
 	
