@@ -456,6 +456,8 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 				logger.error(e);
 				e.printStackTrace();
 			}
+		} else {
+			lbPicture.setIcon(null);
 		}
 	}
 	
