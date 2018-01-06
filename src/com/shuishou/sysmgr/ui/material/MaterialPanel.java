@@ -64,6 +64,7 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 	private NumberTextField tfLeftAmount= new NumberTextField(true);
 	private NumberTextField tfAlarmAmount= new NumberTextField(true);
 	private NumberTextField tfBarcode= new NumberTextField(false);
+	private NumberTextField tfPrice = new NumberTextField(true);
 	private JComboBox cbCategory = new JComboBox();
 	private JButton btnPrintCode = new JButton("Print QR Code by Name");
 	private Material material;
@@ -90,24 +91,37 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 		JLabel lbDisplaySeq = new JLabel(Messages.getString("MaterialPanel.DisplaySequence"));
 		JLabel lbCategory = new JLabel(Messages.getString("MaterialPanel.Category"));
 		JLabel lbBarcode = new JLabel(Messages.getString("MaterialPanel.Barcode"));
+		JLabel lbPrice = new JLabel(Messages.getString("MaterialPanel.Price"));
 		cbCategory.setRenderer(new CategoryListRender());
 		this.setLayout(new GridBagLayout());
-		add(lbName, 		new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(tfName, 		new GridBagConstraints(1, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(lbDisplaySeq, 	new GridBagConstraints(0, 1, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(tfDisplaySeq, 	new GridBagConstraints(1, 1, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(lbUnit, 		new GridBagConstraints(0, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(tfUnit, 		new GridBagConstraints(1, 2, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(lbLeftAmount, 	new GridBagConstraints(0, 3, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(tfLeftAmount, 	new GridBagConstraints(1, 3, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(lbAlarmAmount, 	new GridBagConstraints(0, 4, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(tfAlarmAmount, 	new GridBagConstraints(1, 4, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(lbCategory, 	new GridBagConstraints(0, 5, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(cbCategory, 	new GridBagConstraints(1, 5, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(lbBarcode, 		new GridBagConstraints(0, 6, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(tfBarcode, 		new GridBagConstraints(1, 6, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(btnPrintCode, 	new GridBagConstraints(1, 7, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
-		add(new JPanel(), 	new GridBagConstraints(0, 8, 1, 1,0,1, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0, 0));
+		int row =0 ;
+		add(lbName, 		new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(tfName, 		new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		row++;
+		add(lbPrice, 		new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(tfPrice, 		new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		row++;
+		add(lbUnit, 		new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(tfUnit, 		new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		row++;
+		add(lbDisplaySeq, 	new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(tfDisplaySeq, 	new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		row++;
+		add(lbLeftAmount, 	new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(tfLeftAmount, 	new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		row++;
+		add(lbAlarmAmount, 	new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(tfAlarmAmount, 	new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		row++;
+		add(lbCategory, 	new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(cbCategory, 	new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		row++;
+		add(lbBarcode, 		new GridBagConstraints(0, row, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		add(tfBarcode, 		new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		row++;
+		add(btnPrintCode, 	new GridBagConstraints(1, row, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10,0,0,0), 0, 0));
+		row++;
+		add(new JPanel(), 	new GridBagConstraints(0, row, 1, 1,0,1, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0, 0));
 		tfName.setMinimumSize(new Dimension(180,25));
 		tfUnit.setMinimumSize(new Dimension(180,25));
 		tfLeftAmount.setMinimumSize(new Dimension(180,25));
@@ -115,6 +129,7 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 		tfDisplaySeq.setMinimumSize(new Dimension(180,25));
 		tfBarcode.setMinimumSize(new Dimension(180, 25));
 		cbCategory.setMinimumSize(new Dimension(180, 25));
+		tfPrice.setMinimumSize(new Dimension(180, 25));
 		btnPrintCode.addActionListener(this);
 	}
 
@@ -131,6 +146,7 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 		params.put("alarmAmount", tfAlarmAmount.getText());
 		params.put("unit", tfUnit.getText());
 		params.put("categoryId", ((MaterialCategory)cbCategory.getSelectedItem()).getId()+"");
+		params.put("price", tfPrice.getText());
 		if (tfBarcode.getText() != null && tfBarcode.getText().length() > 0){
 			params.put("barCode", tfBarcode.getText());
 		}
@@ -175,6 +191,10 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 			JOptionPane.showMessageDialog(this, "Please input Display Sequence");
 			return false;
 		}
+		if (tfPrice.getText() == null || tfPrice.getText().length() == 0){
+			JOptionPane.showMessageDialog(this, "Please input Price");
+			return false;
+		}
 		return true;
 	}
 	
@@ -189,6 +209,7 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 		if (material.getBarCode() != null)
 			tfBarcode.setText(material.getBarCode());
 		else tfBarcode.setText("");
+		tfPrice.setText(material.getPrice()+"");
 	}
 	
 	public void initData(){

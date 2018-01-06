@@ -10,6 +10,8 @@ public class Material implements Serializable {
 	
 	private int sequence;
 	
+	private double price;
+	
 	private double leftAmount;
 	
 	private String unit;
@@ -45,6 +47,14 @@ public class Material implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 	public double getLeftAmount() {
