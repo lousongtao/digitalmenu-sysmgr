@@ -47,6 +47,7 @@ import com.shuishou.sysmgr.beans.HttpResult;
 import com.shuishou.sysmgr.http.HttpUtil;
 import com.shuishou.sysmgr.ui.CommonDialog;
 import com.shuishou.sysmgr.ui.MainFrame;
+import com.shuishou.sysmgr.ui.components.NumberInputDialog;
 
 public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, ActionListener{
 	private final Logger logger = Logger.getLogger(MenuMgmtPanel.class.getName());
@@ -72,8 +73,9 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 //	private JMenuItem menuitemSpecial = new JMenuItem("Special");
 //	private JMenuItem menuitemNewDish = new JMenuItem("New");
 	private JMenuItem menuitemChangePic= new JMenuItem(Messages.getString("MenuMgmtPanel.ChangePicture"));
-//	private JMenuItem menuitemChangePrice = new JMenuItem("Change Price");
-//	private JMenuItem menuitemSoldout = new JMenuItem("Soldout");
+	private JMenuItem menuitemChangePrice = new JMenuItem("Change Price");
+	private JMenuItem menuitemChangePromotion = new JMenuItem();
+	private JMenuItem menuitemSoldout = new JMenuItem("Soldout");
 	
 	private ArrayList<Category1> category1s ;
 	private MainFrame mainFrame;
@@ -122,8 +124,9 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 //		popupmenuDish.add(menuitemSpecial);
 //		popupmenuDish.add(menuitemNewDish);
 		popupmenuDish.add(menuitemChangePic);
-//		popupmenuDish.add(menuitemChangePrice);
-//		popupmenuDish.add(menuitemSoldout);
+		popupmenuDish.add(menuitemChangePrice);
+		popupmenuDish.add(menuitemSoldout);
+		popupmenuDish.add(menuitemChangePromotion);
 		popupmenuDish.add(menuitemDeleteDish);
 		menuitemAddC1.addActionListener(this);
 		menuitemRefreshTree.addActionListener(this);
@@ -135,8 +138,9 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 //		menuitemSpecial.addActionListener(this);
 //		menuitemNewDish.addActionListener(this);
 		menuitemChangePic.addActionListener(this);
-//		menuitemChangePrice.addActionListener(this);
-//		menuitemSoldout.addActionListener(this);
+		menuitemChangePrice.addActionListener(this);
+		menuitemChangePromotion.addActionListener(this);
+		menuitemSoldout.addActionListener(this);
 		menuitemDeleteC1.addActionListener(this);
 		menuitemDeleteC2.addActionListener(this);
 		menuitemDeleteDish.addActionListener(this);
@@ -157,6 +161,11 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 					} else if (node.getUserObject() instanceof Category2){
 						popupmenuC2.show(e.getComponent(), e.getX(), e.getY());
 					} else if (node.getUserObject() instanceof Dish){
+						if (((Dish)node.getUserObject()).isPromotion()){
+							menuitemChangePromotion.setText("Cancel Promotion");
+						} else {
+							menuitemChangePromotion.setText("Set Promotion");
+						}
 						popupmenuDish.show(e.getComponent(), e.getX(), e.getY());
 					}
 				}
@@ -240,14 +249,14 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
 			DishPanel p = new DishPanel(this, (Category2)node.getUserObject());
 			p.showPicturePanel(false);
-			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.AddDish"), 1000, 480);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MenuMgmtPanel.AddDish"), 1000, 720);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemModifyDish){
 			DishPanel p = new DishPanel(this);
 			p.showPicturePanel(false);
 			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
 			p.setObjectValue((Dish)node.getUserObject());
-			CommonDialog dlg = new CommonDialog(mainFrame, p, "Modify Dish", 1000, 480);
+			CommonDialog dlg = new CommonDialog(mainFrame, p, "Modify Dish", 1000, 720);
 			dlg.setVisible(true);
 		} 
 //		else if (e.getSource() == menuitemSpecial){
@@ -257,13 +266,14 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 //		} 
 		else if (e.getSource() == menuitemChangePic){
 			updateDishPicture((MenuTreeNode) menuTree.getLastSelectedPathComponent());
-		} 
-//		else if (e.getSource() == menuitemChangePrice){
-//			
-//		} else if (e.getSource() == menuitemSoldout){
-//			
-//		} 
-		else if (e.getSource() == menuitemDeleteC1){
+		} else if (e.getSource() == menuitemChangePrice){
+			
+		} else if (e.getSource() == menuitemSoldout){
+			
+		} else if (e.getSource() == menuitemChangePromotion){
+			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
+			doChangePromotion(node);
+		} else if (e.getSource() == menuitemDeleteC1){
 			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
 			onDeleteC1(node);
 		} else if (e.getSource() == menuitemDeleteC2){
@@ -273,6 +283,49 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 			MenuTreeNode node = (MenuTreeNode) menuTree.getLastSelectedPathComponent();
 			onDeleteDish(node);
 		} 
+	}
+	
+	private void doChangePromotion(MenuTreeNode node){
+		String operation = "cancel";
+		Dish dish = (Dish)node.getUserObject();
+		Map<String, String> params = new HashMap<>();
+		params.put("userId", MainFrame.getLoginUser().getId()+"");
+		params.put("dishId", dish.getId()+"");
+		String url = "menu/changedishpromotion";
+		if (!dish.isPromotion()){
+			operation = "set";
+			NumberInputDialog numdlg = new NumberInputDialog(mainFrame, "Input", Messages.getString("MenuMgmtPanel.PromotionPrice"), true);
+			numdlg.setVisible(true);
+			if (!numdlg.isConfirm)
+				return;
+			params.put("promotionPrice", numdlg.inputDouble+"");
+			url = "menu/changedishpromotion";
+		} else {
+			url = "menu/canceldishpromotion";
+			if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(this, "Do you want to cancel the promotion?", "Confirm", JOptionPane.YES_NO_OPTION)){
+				return;
+			}
+		}
+		
+		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
+		if (response == null){
+			logger.error("get null from server for "+operation+" dish promotion. URL = " + url + ", param = "+ params);
+			JOptionPane.showMessageDialog(this, "get null from server for "+operation+" dish promotion. URL = " + url);
+			return;
+		}
+		Gson gson = new Gson();
+		HttpResult<Dish> result = gson.fromJson(response, new TypeToken<HttpResult<Dish>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while "+operation+" dish promotion. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while "+operation+" dish promotion. URL = " + url + ", response = "+response);
+			return;
+		}
+		JOptionPane.showMessageDialog(mainFrame, operation + " dish promotion "+dish.getFirstLanguageName()+" successfully");
+		//修改node的显示样式, 替换mainframe中存储的对象
+		node.setUserObject(result.data);
+		menuTree.updateUI();
+		mainFrame.reloadListCategory1s();
+		this.valueChanged(null);//refresh the property panel value
 	}
 	
 	private void updateDishPicture(MenuTreeNode node){
@@ -306,6 +359,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 			JOptionPane.showMessageDialog(this, "return false while change dish picture. URL = " + url + ", response = "+response);
 			return;
 		}
+		JOptionPane.showMessageDialog(mainFrame, "Update dish picture of " + dish.getFirstLanguageName() + " successfully");
 		result.data.setCategory2(dish.getCategory2());
 		node.setUserObject(result.data);
 		this.valueChanged(null);//refresh the property panel value
@@ -561,6 +615,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 			JOptionPane.showMessageDialog(this, "return false while delete category1. URL = " + url + ", response = "+response);
 			return;
 		}
+		JOptionPane.showMessageDialog(mainFrame, "Delete category"+c1.getFirstLanguageName()+" successfully");
 		((DefaultTreeModel)menuTree.getModel()).removeNodeFromParent(node);
 		// refresh local data
 		mainFrame.reloadListCategory1s();
@@ -594,6 +649,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 			JOptionPane.showMessageDialog(this, "return false while delete category2. URL = " + url + ", response = "+response);
 			return;
 		}
+		JOptionPane.showMessageDialog(mainFrame, "Delete category " + c2.getFirstLanguageName() + " successfully");
 		((DefaultTreeModel)menuTree.getModel()).removeNodeFromParent(node);
 		// refresh local data
 		mainFrame.reloadListCategory1s();
@@ -623,6 +679,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 			JOptionPane.showMessageDialog(this, "return false while delete dish. URL = " + url + ", response = "+response);
 			return;
 		}
+		JOptionPane.showMessageDialog(mainFrame, "Delete dish " + dish.getFirstLanguageName() + " successfully");
 		((DefaultTreeModel)menuTree.getModel()).removeNodeFromParent(node);
 		// refresh local data
 		mainFrame.reloadListCategory1s();

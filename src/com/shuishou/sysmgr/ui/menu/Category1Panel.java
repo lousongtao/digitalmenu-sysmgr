@@ -27,13 +27,14 @@ import com.shuishou.sysmgr.beans.HttpResult;
 import com.shuishou.sysmgr.http.HttpUtil;
 import com.shuishou.sysmgr.ui.CommonDialogOperatorIFC;
 import com.shuishou.sysmgr.ui.MainFrame;
+import com.shuishou.sysmgr.ui.components.NumberTextField;
 
 public class Category1Panel extends JPanel implements CommonDialogOperatorIFC{
 	private final Logger logger = Logger.getLogger(Category1Panel.class.getName());
 	private MenuMgmtPanel parent;
 	private JTextField tfFirstLanguageName= new JTextField(155);
 	private JTextField tfSecondLanguageName= new JTextField(155);
-	private JTextField tfDisplaySeq= new JTextField(155);
+	private NumberTextField tfDisplaySeq= new NumberTextField(false);
 	private Category1 c1;
 	public Category1Panel(MenuMgmtPanel parent){
 		this.parent = parent;
@@ -58,15 +59,15 @@ public class Category1Panel extends JPanel implements CommonDialogOperatorIFC{
 		tfFirstLanguageName.setMinimumSize(new Dimension(180,25));
 		tfSecondLanguageName.setMinimumSize(new Dimension(180,25));
 		tfDisplaySeq.setMinimumSize(new Dimension(180,25));
-		tfDisplaySeq.addKeyListener(new KeyAdapter() {
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (!((c >= '0') && (c <= '9'))) {
-					getToolkit().beep();
-					e.consume();
-				} 
-			}
-		});
+//		tfDisplaySeq.addKeyListener(new KeyAdapter() {
+//			public void keyTyped(KeyEvent e) {
+//				char c = e.getKeyChar();
+//				if (!((c >= '0') && (c <= '9'))) {
+//					getToolkit().beep();
+//					e.consume();
+//				} 
+//			}
+//		});
 	}
 	
 	

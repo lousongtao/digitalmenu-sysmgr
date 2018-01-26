@@ -56,6 +56,9 @@ public class PrinterDialog extends JDialog implements ActionListener {
 	private JComboBox<PrinterType> cbType = new JComboBox<>();
 	private JButton btnSave = new JButton("Save");
 	private JButton btnCancel = new JButton("Cancel");
+	
+	private Printer printer;
+	
 	public PrinterDialog(MainFrame mainFrame, PrinterMgmtPanel parent,String title){
 		super(mainFrame, title, true);
 		this.mainFrame = mainFrame;
@@ -88,6 +91,13 @@ public class PrinterDialog extends JDialog implements ActionListener {
 				(int)(mainFrame.getHeight() / 2 - this.getHeight() / 2 + mainFrame.getLocation().getY()));
 	}
 	
+	public void setObject(Printer printer){
+		this.printer = printer;
+		tfName.setText(printer.getName());
+		tfPrinterName.setText(printer.getPrinterName());
+		cbType.setSelectedItem(printer.getType());
+	}
+	
 	private void doSave(){
 		if (tfName.getText() == null || tfName.getText().length() == 0){
 			JOptionPane.showMessageDialog(this, "must input name");
@@ -104,18 +114,21 @@ public class PrinterDialog extends JDialog implements ActionListener {
 		params.put("type", ((PrinterType)cbType.getSelectedItem()).id+"");
 		
 		String url = "common/addprinter";
-		
+		if (printer != null){
+			url = "common/updateprinter";
+			params.put("id", printer.getId()+"");
+		}
 		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
 		if (response == null){
-			logger.error("get null from server for add printer. URL = " + url + ", param = "+ params);
-			JOptionPane.showMessageDialog(this, "get null from server for add printer. URL = " + url);
+			logger.error("get null from server for add/update printer. URL = " + url + ", param = "+ params);
+			JOptionPane.showMessageDialog(this, "get null from server for add/update printer. URL = " + url);
 			return;
 		}
 		Gson gson = new Gson();
 		HttpResult<String> result = gson.fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
 		if (!result.success){
-			logger.error("return false while add printer. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while add printer. URL = " + url + ", response = "+response);
+			logger.error("return false while add/update printer. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while add/update printer. URL = " + url + ", response = "+response);
 			return;
 		}
 		parent.refreshData();

@@ -36,8 +36,9 @@ public class PrinterMgmtPanel extends JPanel implements ActionListener{
 	private MainFrame mainFrame;
 	private JTable tablePrinter = new JTable();
 	private PrinterTableModel modelPrinter;
-	private JButton btnAdd = new JButton(Messages.getString("PrinterMgmtPanel.Add"));
-	private JButton btnDelete = new JButton(Messages.getString("PrinterMgmtPanel.Delete"));
+	private JButton btnAdd = new JButton(Messages.getString("Add"));
+	private JButton btnModify = new JButton(Messages.getString("Modify"));
+	private JButton btnDelete = new JButton(Messages.getString("Delete"));
 	private JButton btnTestConnection = new JButton(Messages.getString("PrinterMgmtPanel.TestConnection"));
 	private ArrayList<Printer> printerList;
 	public PrinterMgmtPanel(MainFrame mainFrame, ArrayList<Printer> printerList){
@@ -63,10 +64,12 @@ public class PrinterMgmtPanel extends JPanel implements ActionListener{
 		
 		JPanel pButtons = new JPanel();
 		pButtons.add(btnAdd);
+		pButtons.add(btnModify);
 		pButtons.add(btnDelete);
 		pButtons.add(btnTestConnection);
 		
 		btnAdd.addActionListener(this);
+		btnModify.addActionListener(this);
 		btnDelete.addActionListener(this);
 		btnTestConnection.addActionListener(this);
 		this.setLayout(new BorderLayout());
@@ -84,7 +87,13 @@ public class PrinterMgmtPanel extends JPanel implements ActionListener{
 		if (e.getSource() == btnAdd){
 			PrinterDialog dlg = new PrinterDialog(mainFrame, this, "Add Printer");
 			dlg.setVisible(true);
-		} else if (e.getSource() == btnDelete){
+		} else if (e.getSource() == btnModify){
+			if (tablePrinter.getSelectedRow() < 0)
+				return;
+			PrinterDialog dlg = new PrinterDialog(mainFrame, this, "Modify Printer");
+			dlg.setObject(modelPrinter.getObjectAt(tablePrinter.getSelectedRow()));
+			dlg.setVisible(true);
+		}  else if (e.getSource() == btnDelete){
 			if (tablePrinter.getSelectedRow() < 0)
 				return;
 			if (JOptionPane.showConfirmDialog(this, 

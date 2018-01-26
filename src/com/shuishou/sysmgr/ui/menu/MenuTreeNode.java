@@ -18,7 +18,11 @@ public class MenuTreeNode extends DefaultMutableTreeNode {
 		}else if (o instanceof Category2){
 			return ((Category2)o).getFirstLanguageName();
 		}else if (o instanceof Dish){
-			return ((Dish)o).getFirstLanguageName();
+			if (((Dish)o).isPromotion()){
+				return "<html>"+((Dish)o).getFirstLanguageName()+"<font color='red'>[Promotion]</font></html>";
+			} else {
+				return ((Dish)o).getFirstLanguageName();
+			}
 		}
 		return super.toString();
 	}

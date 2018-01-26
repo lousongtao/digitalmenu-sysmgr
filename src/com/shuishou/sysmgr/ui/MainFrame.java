@@ -202,7 +202,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnAccountMgr.getText());
 		} else if (e.getSource() == btnMenuMgr){
-			if (pMenuMgmt == null || 1<2){
+			if (pMenuMgmt == null){
 				pMenuMgmt = new MenuMgmtPanel(this, listCategory1s);
 				pContent.add(pMenuMgmt, CARDLAYOUT_MENUMGMT);
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MENUMGMT);
