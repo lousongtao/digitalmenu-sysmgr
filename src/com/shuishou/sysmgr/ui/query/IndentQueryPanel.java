@@ -196,7 +196,7 @@ public class IndentQueryPanel extends JPanel implements ActionListener{
 			JOptionPane.showMessageDialog(this, "get null from server for query indent. URL = " + url);
 			return;
 		}
-		Gson gson = new GsonBuilder().setDateFormat("yyyy/MM/dd HH:mm:ss").create();
+		Gson gson = new GsonBuilder().setDateFormat(ConstantValue.DATE_PATTERN_YMDHMS).create();
 		HttpResult<ArrayList<Indent>> result = gson.fromJson(response, new TypeToken<HttpResult<ArrayList<Indent>>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while query indent. URL = " + url + ", response = "+response);

@@ -85,7 +85,7 @@ public class HttpUtil {
         try {
             httpResponse=httpClient.execute(httpGet); 
         } catch (Exception e) {
-        	logger.error(e);
+        	logger.error("", e);
         }
         int statusCode=httpResponse.getStatusLine().getStatusCode();
         HttpEntity httpEntity=httpResponse.getEntity();
@@ -106,7 +106,7 @@ public class HttpUtil {
                 }
                 
             } catch (Exception e) {
-            	logger.error(e);
+            	logger.error("", e);
             }
         }
         
@@ -153,12 +153,12 @@ public class HttpUtil {
                     }
                     
                 } catch (Exception e) {
-                    logger.error(e);
+                    logger.error("", e);
                 }
             }
             
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("", e);
         }
         return null;
     } 
@@ -191,12 +191,12 @@ public class HttpUtil {
                     }
                     
                 } catch (Exception e) {
-                    logger.error(e);
+                    logger.error("", e);
                 }
             }
             
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("", e);
         }
         return null;
     } 
@@ -234,11 +234,11 @@ public class HttpUtil {
                     }
                     
                 } catch (Exception e) {
-                    logger.error(e);
+                    logger.error("", e);
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("", e);
         }
         return null;
     }
