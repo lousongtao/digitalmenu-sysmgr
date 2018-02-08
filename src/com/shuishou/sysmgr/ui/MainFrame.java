@@ -67,6 +67,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	public static int WINDOW_LOCATIONY;
 	public static String language;
 	public static String SERVER_URL;
+	public static String functionlist;
 	private static final String CARDLAYOUT_MENUMGMT= "menumgmt"; 
 	private static final String CARDLAYOUT_ACCOUNTMGMT= "accountmgmt"; 
 	private static final String CARDLAYOUT_DESKMGMT= "deskmgmt"; 
@@ -90,7 +91,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JBlockedButton btnConfig = new JBlockedButton(Messages.getString("MainFrame.ToolBar.Config"));
 	private JBlockedButton btnQueryLog = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryLog"));
 	private JBlockedButton btnQueryIndent = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryIndent"));
-	private JBlockedButton btnQuerySwiftWork = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QuerySwiftWork"));
+	private JBlockedButton btnQueryShiftWork = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryShiftWork"));
 	private JBlockedButton btnStatistic = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryStatistic"));
 	private JPanel pContent = new JPanel(new CardLayout());
 	
@@ -135,31 +136,39 @@ public class MainFrame extends JFrame implements ActionListener{
 		JToolBar toolbar = new JToolBar();
 		toolbar.setFloatable(false);
 		toolbar.setMargin(new Insets(0,20,20,20));
-		toolbar.add(btnAccountMgr);
-		toolbar.addSeparator();
-		toolbar.add(btnConfig);
-		toolbar.addSeparator();
-		toolbar.add(btnMenuMgr);
-		toolbar.addSeparator();
-		toolbar.add(btnFlavorMgr);
-		toolbar.addSeparator();
-		toolbar.add(btnDeskMgr);
-		toolbar.addSeparator();
-		toolbar.add(btnPayWayMgr);
-		toolbar.addSeparator();
-		toolbar.add(btnDiscountTempMgr);
-		toolbar.addSeparator();
-		toolbar.add(btnPrinterMgr);
-		toolbar.addSeparator();
-		toolbar.add(btnMaterialMgr);
-		toolbar.addSeparator();
-		toolbar.add(btnQueryLog);
-		toolbar.addSeparator();
-		toolbar.add(btnQueryIndent);
-		toolbar.addSeparator();
-		toolbar.add(btnQuerySwiftWork);
-		toolbar.addSeparator();
-		toolbar.add(btnStatistic);
+		ArrayList<JButton> functionBtns = new ArrayList<>();
+		if (functionlist.indexOf(ConstantValue.FUNCTION_ACCOUNT) >=0)
+			functionBtns.add(btnAccountMgr);
+		if (functionlist.indexOf(ConstantValue.FUNCTION_CONFIG) >=0)
+			functionBtns.add(btnConfig);
+		if (functionlist.indexOf(ConstantValue.FUNCTION_MENU) >=0)
+			functionBtns.add(btnMenuMgr);
+		if (functionlist.indexOf(ConstantValue.FUNCTION_FLAVOR) >=0)
+			functionBtns.add(btnFlavorMgr);
+		if (functionlist.indexOf(ConstantValue.FUNCTION_DESK) >=0)
+			functionBtns.add(btnDeskMgr);
+		if (functionlist.indexOf(ConstantValue.FUNCTION_PAYWAY) >=0)
+			functionBtns.add(btnPayWayMgr);
+		if (functionlist.indexOf(ConstantValue.FUNCTION_DISCOUNT) >=0)
+			functionBtns.add(btnDiscountTempMgr);
+		if (functionlist.indexOf(ConstantValue.FUNCTION_PRINTER) >=0)
+			functionBtns.add(btnPrinterMgr);
+		if (functionlist.indexOf(ConstantValue.FUNCTION_MATERIAL) >=0)
+			functionBtns.add(btnMaterialMgr);
+		if (functionlist.indexOf(ConstantValue.FUNCTION_LOGQUERY) >=0)
+			functionBtns.add(btnQueryLog);
+		if (functionlist.indexOf(ConstantValue.FUNCTION_ORDERQUERY) >=0)
+			functionBtns.add(btnQueryIndent);
+		if (functionlist.indexOf(ConstantValue.FUNCTION_SHIFTWORK) >=0)
+			functionBtns.add(btnQueryShiftWork);
+		if (functionlist.indexOf(ConstantValue.FUNCTION_STATISTICS) >=0)
+			functionBtns.add(btnStatistic);
+		for (int i = 0; i < functionBtns.size(); i++) {
+			if (i > 0)
+				toolbar.addSeparator();
+			toolbar.add(functionBtns.get(i));
+		}
+		
 		btnAccountMgr.addActionListener(this);
 		btnMenuMgr.addActionListener(this);
 		btnMaterialMgr.addActionListener(this);
@@ -171,7 +180,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		btnConfig.addActionListener(this);
 		btnQueryLog.addActionListener(this);
 		btnQueryIndent.addActionListener(this);
-		btnQuerySwiftWork.addActionListener(this);
+		btnQueryShiftWork.addActionListener(this);
 		btnStatistic.addActionListener(this);
 		
 		
@@ -306,7 +315,7 @@ public class MainFrame extends JFrame implements ActionListener{
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_INDENTQUERY);
 			}
 			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnQueryIndent.getText());
-		} else if (e.getSource() == btnQuerySwiftWork){
+		} else if (e.getSource() == btnQueryShiftWork){
 			if (pQueryShiftwork == null){
 				pQueryShiftwork = new ShiftworkQueryPanel(this);
 				pContent.add(pQueryShiftwork, CARDLAYOUT_SHIFTWORKQUERY);
@@ -315,7 +324,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_SHIFTWORKQUERY);
 			}
-			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnQuerySwiftWork.getText());
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnQueryShiftWork.getText());
 		} else if (e.getSource() == btnStatistic){
 			if (pStatistics == null){
 				pStatistics = new StatisticsPanel(this);
@@ -494,6 +503,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		MainFrame.WINDOW_LOCATIONX = Integer.parseInt(prop.getProperty("mainframe.locationx"));
 		MainFrame.WINDOW_LOCATIONY = Integer.parseInt(prop.getProperty("mainframe.locationy"));
 		MainFrame.language = prop.getProperty("language");
+		MainFrame.functionlist = prop.getProperty("mainframe.functionlist");
 		MainFrame f = new MainFrame();
 		
 		f.setVisible(true);
