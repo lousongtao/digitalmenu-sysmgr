@@ -72,7 +72,7 @@ public class PrinterDialog extends JDialog implements ActionListener {
 		JLabel lbType = new JLabel("Type");
 		cbType.addItem(new PrinterType(ConstantValue.PRINTER_TYPE_COUNTER, "Counter"));
 		cbType.addItem(new PrinterType(ConstantValue.PRINTER_TYPE_KITCHEN, "Kitchen"));
-		cbType.setSelectedIndex(0);
+		cbType.setSelectedIndex(-1);
 		Container c = this.getContentPane();
 		c.setLayout(new GridBagLayout());
 		c.add(lbName, 			new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
@@ -95,7 +95,6 @@ public class PrinterDialog extends JDialog implements ActionListener {
 		this.printer = printer;
 		tfName.setText(printer.getName());
 		tfPrinterName.setText(printer.getPrinterName());
-		cbType.setSelectedItem(printer.getType());
 	}
 	
 	private void doSave(){
@@ -105,6 +104,10 @@ public class PrinterDialog extends JDialog implements ActionListener {
 		}
 		if (tfPrinterName.getText() == null || tfPrinterName.getText().length() == 0){
 			JOptionPane.showMessageDialog(this, "must input printer name");
+			return;
+		}
+		if (cbType.getSelectedIndex() < 0){
+			JOptionPane.showMessageDialog(this, "must input printer type");
 			return;
 		}
 		Map<String, String> params = new HashMap<>();
@@ -154,6 +157,9 @@ public class PrinterDialog extends JDialog implements ActionListener {
 		@Override
 		public String toString() {
 			return name;
+		}
+		private PrinterDialog getOuterType() {
+			return PrinterDialog.this;
 		}
 		
 		
