@@ -49,7 +49,7 @@ public class Category2 implements Serializable{
 
     @Override
     public String toString() {
-        return "Category2 [firstLanguageName=" + firstLanguageName + ", secondLanguageName=" + secondLanguageName + "]";
+        return firstLanguageName;
     }
 
     public int getId() {

@@ -39,16 +39,22 @@ import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.shuishou.sysmgr.ConstantValue;
 import com.shuishou.sysmgr.beans.Category1;
 import com.shuishou.sysmgr.beans.Category2;
 import com.shuishou.sysmgr.beans.Desk;
 import com.shuishou.sysmgr.beans.DiscountTemplate;
 import com.shuishou.sysmgr.beans.Dish;
+import com.shuishou.sysmgr.beans.DishConfig;
+import com.shuishou.sysmgr.beans.DishConfigGroup;
+import com.shuishou.sysmgr.beans.DishMaterialConsume;
 import com.shuishou.sysmgr.beans.Flavor;
 import com.shuishou.sysmgr.beans.HttpResult;
 import com.shuishou.sysmgr.beans.Material;
 import com.shuishou.sysmgr.beans.MaterialCategory;
+import com.shuishou.sysmgr.beans.MaterialRecord;
 import com.shuishou.sysmgr.beans.PayWay;
 import com.shuishou.sysmgr.beans.Permission;
 import com.shuishou.sysmgr.beans.Printer;
@@ -266,8 +272,101 @@ public class HttpUtil {
 				c2.setCategory1(c1);
 				for(Dish dish : c2.getDishes()){
 					dish.setCategory2(c2);
+					for(DishConfigGroup group : dish.getConfigGroups()){
+						for(DishConfig config : group.getDishConfigs()){
+							config.setGroup(group);
+						}
+					}
 				}
 			}
+		}
+		return result.data;
+	}
+	
+	public static ArrayList<DishMaterialConsume> loadDishMaterialConsume(JFrame parent){
+		String url = MainFrame.SERVER_URL + "menu/querydishmaterialconsume";
+		String response = getJSONObjectByGet(url);
+		if (response == null){
+			logger.error("get null from server for loading dish material consume. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading dish material consume. URL = " + url);
+			return null;
+		}
+		HttpResult<ArrayList<DishMaterialConsume>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<DishMaterialConsume>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading dish material consume. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading dish material consume. URL = " + url + ", response = "+response);
+			return null;
+		}
+		return result.data;
+	}
+	
+	public static ArrayList<DishMaterialConsume> loadDishMaterialConsumeByDish(JFrame parent, int dishId){
+		String url = MainFrame.SERVER_URL + "menu/querydishmaterialconsumebydish";
+		Map<String, String> params = new HashMap<>();
+		params.put("dishId", dishId+"");
+		String response = getJSONObjectByPost(url, params);
+		if (response == null){
+			logger.error("get null from server for loading dish material consume. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading dish material consume. URL = " + url);
+			return null;
+		}
+		HttpResult<ArrayList<DishMaterialConsume>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<DishMaterialConsume>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading dish material consume. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading dish material consume. URL = " + url + ", response = "+response);
+			return null;
+		}
+		return result.data;
+	}
+	
+	public static ArrayList<MaterialRecord> loadMaterialRecordByMaterial(JFrame parent, int materialId){
+		String url = MainFrame.SERVER_URL + "material/querymaterialrecordbymaterial";
+		Map<String, String> params = new HashMap<>();
+		params.put("materialId", materialId+"");
+		String response = getJSONObjectByPost(url, params);
+		if (response == null){
+			logger.error("get null from server for loading material records. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading material records. URL = " + url);
+			return null;
+		}
+		Gson gson = new GsonBuilder().setDateFormat(ConstantValue.DATE_PATTERN_YMDHMS).create();
+		HttpResult<ArrayList<MaterialRecord>> result = gson.fromJson(response, new TypeToken<HttpResult<ArrayList<MaterialRecord>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading material records. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading material records. URL = " + url + ", response = "+response);
+			return null;
+		}
+		return result.data;
+	}
+	
+	public static ArrayList<DishConfigGroup> loadDishConfigGroup(JFrame parent, String url){
+		String response = getJSONObjectByGet(url);
+		if (response == null){
+			logger.error("get null from server for loading dishConfigGroup. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading dishConfigGroup. URL = " + url);
+			return null;
+		}
+		HttpResult<ArrayList<DishConfigGroup>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<DishConfigGroup>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading dishConfigGroup. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading dishConfigGroup. URL = " + url + ", response = "+response);
+			return null;
+		}
+		return result.data;
+	}
+	
+	public static ArrayList<DishConfig> loadDishConfig(JFrame parent, String url){
+		String response = getJSONObjectByGet(url);
+		if (response == null){
+			logger.error("get null from server for loading DishConfig. URL = " + url);
+			JOptionPane.showMessageDialog(parent, "get null from server for loading DishConfig. URL = " + url);
+			return null;
+		}
+		HttpResult<ArrayList<DishConfig>> result = new Gson().fromJson(response, new TypeToken<HttpResult<ArrayList<DishConfig>>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while loading DishConfig. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(parent, "return false while loading DishConfig. URL = " + url + ", response = "+response);
+			return null;
 		}
 		return result.data;
 	}

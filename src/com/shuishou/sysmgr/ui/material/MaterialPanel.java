@@ -60,6 +60,7 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 	private MaterialMgmtPanel parent;
 	private JTextField tfName = new JTextField(155);
 	private JTextField tfUnit = new JTextField(155);
+	private JLabel lbLeftAmount = new JLabel(Messages.getString("MaterialPanel.LeftAmount"));
 	private NumberTextField tfDisplaySeq= new NumberTextField(false);
 	private NumberTextField tfLeftAmount= new NumberTextField(true);
 	private NumberTextField tfAlarmAmount= new NumberTextField(true);
@@ -86,7 +87,7 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 	private void initUI(){
 		JLabel lbName = new JLabel(Messages.getString("MaterialPanel.Name"));
 		JLabel lbUnit = new JLabel(Messages.getString("MaterialPanel.Unit"));
-		JLabel lbLeftAmount = new JLabel(Messages.getString("MaterialPanel.LeftAmount"));
+		
 		JLabel lbAlarmAmount = new JLabel(Messages.getString("MaterialPanel.AlarmAmount"));
 		JLabel lbDisplaySeq = new JLabel(Messages.getString("MaterialPanel.DisplaySequence"));
 		JLabel lbCategory = new JLabel(Messages.getString("MaterialPanel.Category"));
@@ -176,6 +177,11 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 			parent.updateNode(result.data, material);
 		}
 		return true;
+	}
+	
+	public void hideLeftAmount(){
+		lbLeftAmount.setVisible(false);
+		tfLeftAmount.setVisible(false);
 	}
 	
 	private boolean doCheckInput(){

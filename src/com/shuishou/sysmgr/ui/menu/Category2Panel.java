@@ -254,9 +254,19 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 				printerPanelList.add(pp);
 			}
 		}
-		
 	}
 
+	public void setEditable(boolean b){
+		tfFirstLanguageName.setEditable(b);
+		tfSecondLanguageName.setEditable(b);
+		tfDisplaySeq.setEditable(b);
+		if (printerPanelList != null){
+			for(PrinterPanel pp : printerPanelList){
+				pp.setEditable(b);
+			}
+		}
+	}
+	
 	class Category1ListRender extends JLabel implements ListCellRenderer{
 		
 		public Category1ListRender(){}
@@ -327,6 +337,12 @@ public class Category2Panel extends JPanel implements CommonDialogOperatorIFC{
 		
 		public PrinterChoosed getPrinterChoosed(){
 			return pc;
+		}
+		
+		public void setEditable(boolean b){
+			cbPrinterName.setEnabled(b);
+			rbPrintTogether.setEnabled(b);
+			rbPrintSeparately.setEnabled(b);
 		}
 	}
 	

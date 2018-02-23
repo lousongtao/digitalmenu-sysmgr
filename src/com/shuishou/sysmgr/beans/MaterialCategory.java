@@ -73,7 +73,7 @@ public class MaterialCategory implements Serializable {
 
 	@Override
 	public String toString() {
-		return "MaterialCategory [name=" + name + "]";
+		return name;
 	}
 
 	

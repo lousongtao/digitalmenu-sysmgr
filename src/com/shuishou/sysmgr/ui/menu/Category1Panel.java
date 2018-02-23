@@ -132,4 +132,10 @@ public class Category1Panel extends JPanel implements CommonDialogOperatorIFC{
 		tfSecondLanguageName.setText(c1.getSecondLanguageName());
 		tfDisplaySeq.setText(c1.getSequence()+"");
 	}
+	
+	public void setEditable(boolean b){
+		tfFirstLanguageName.setEditable(b);
+		tfSecondLanguageName.setEditable(b);
+		tfDisplaySeq.setEditable(b);
+	}
 }

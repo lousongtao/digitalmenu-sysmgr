@@ -19,7 +19,7 @@ public class NumberTextField extends JFormattedTextField{
 				char c = e.getKeyChar();
 				if (allowDouble){
 					if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) 
-							|| (c == KeyEvent.VK_DELETE) || (c == '.'))) {
+							|| (c == KeyEvent.VK_DELETE) || (c == '.') )) {
 						getToolkit().beep();
 						e.consume();
 					}
@@ -29,8 +29,15 @@ public class NumberTextField extends JFormattedTextField{
 							e.consume();
 						}
 					}
+					
 				} else {
 					if (!((c >= '0') && (c <= '9'))) {
+						getToolkit().beep();
+						e.consume();
+					}
+				}
+				if (c == '-'){
+					if (getText() != null && getText().length() > 0){
 						getToolkit().beep();
 						e.consume();
 					}

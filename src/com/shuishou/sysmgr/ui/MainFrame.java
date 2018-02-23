@@ -18,7 +18,10 @@ import java.util.HashMap;
 import java.util.Properties;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
@@ -36,6 +39,7 @@ import com.shuishou.sysmgr.beans.Category2;
 import com.shuishou.sysmgr.beans.Desk;
 import com.shuishou.sysmgr.beans.DiscountTemplate;
 import com.shuishou.sysmgr.beans.Dish;
+import com.shuishou.sysmgr.beans.DishMaterialConsume;
 import com.shuishou.sysmgr.beans.Flavor;
 import com.shuishou.sysmgr.beans.HttpResult;
 import com.shuishou.sysmgr.beans.Material;
@@ -51,6 +55,7 @@ import com.shuishou.sysmgr.ui.desk.DeskMgmtPanel;
 import com.shuishou.sysmgr.ui.discounttemplate.DiscountTemplateMgmtPanel;
 import com.shuishou.sysmgr.ui.flavor.FlavorMgmtPanel;
 import com.shuishou.sysmgr.ui.material.MaterialMgmtPanel;
+import com.shuishou.sysmgr.ui.menu.DishMaterialConsumeMgmtDialog;
 import com.shuishou.sysmgr.ui.menu.MenuMgmtPanel;
 import com.shuishou.sysmgr.ui.payway.PayWayMgmtPanel;
 import com.shuishou.sysmgr.ui.printer.PrinterMgmtPanel;
@@ -126,9 +131,9 @@ public class MainFrame extends JFrame implements ActionListener{
 	}
 	
 	private void initData(){
-		reloadListCategory1s();
-		reloadListMaterialCategory();
-		reloadListPrinters();
+		loadListCategory1s();
+		loadListMaterialCategory();
+		loadListPrinters();
 		loadConfigsMap();
 	}
 	
@@ -136,37 +141,38 @@ public class MainFrame extends JFrame implements ActionListener{
 		JToolBar toolbar = new JToolBar();
 		toolbar.setFloatable(false);
 		toolbar.setMargin(new Insets(0,20,20,20));
-		ArrayList<JButton> functionBtns = new ArrayList<>();
+		
+		ArrayList<JComponent> functionComponents = new ArrayList<>();
 		if (functionlist.indexOf(ConstantValue.FUNCTION_ACCOUNT) >=0)
-			functionBtns.add(btnAccountMgr);
+			functionComponents.add(btnAccountMgr);
 		if (functionlist.indexOf(ConstantValue.FUNCTION_CONFIG) >=0)
-			functionBtns.add(btnConfig);
+			functionComponents.add(btnConfig);
 		if (functionlist.indexOf(ConstantValue.FUNCTION_MENU) >=0)
-			functionBtns.add(btnMenuMgr);
+			functionComponents.add(btnMenuMgr);
 		if (functionlist.indexOf(ConstantValue.FUNCTION_FLAVOR) >=0)
-			functionBtns.add(btnFlavorMgr);
+			functionComponents.add(btnFlavorMgr);
 		if (functionlist.indexOf(ConstantValue.FUNCTION_DESK) >=0)
-			functionBtns.add(btnDeskMgr);
+			functionComponents.add(btnDeskMgr);
 		if (functionlist.indexOf(ConstantValue.FUNCTION_PAYWAY) >=0)
-			functionBtns.add(btnPayWayMgr);
+			functionComponents.add(btnPayWayMgr);
 		if (functionlist.indexOf(ConstantValue.FUNCTION_DISCOUNT) >=0)
-			functionBtns.add(btnDiscountTempMgr);
+			functionComponents.add(btnDiscountTempMgr);
 		if (functionlist.indexOf(ConstantValue.FUNCTION_PRINTER) >=0)
-			functionBtns.add(btnPrinterMgr);
+			functionComponents.add(btnPrinterMgr);
 		if (functionlist.indexOf(ConstantValue.FUNCTION_MATERIAL) >=0)
-			functionBtns.add(btnMaterialMgr);
+			functionComponents.add(btnMaterialMgr);
 		if (functionlist.indexOf(ConstantValue.FUNCTION_LOGQUERY) >=0)
-			functionBtns.add(btnQueryLog);
+			functionComponents.add(btnQueryLog);
 		if (functionlist.indexOf(ConstantValue.FUNCTION_ORDERQUERY) >=0)
-			functionBtns.add(btnQueryIndent);
+			functionComponents.add(btnQueryIndent);
 		if (functionlist.indexOf(ConstantValue.FUNCTION_SHIFTWORK) >=0)
-			functionBtns.add(btnQueryShiftWork);
+			functionComponents.add(btnQueryShiftWork);
 		if (functionlist.indexOf(ConstantValue.FUNCTION_STATISTICS) >=0)
-			functionBtns.add(btnStatistic);
-		for (int i = 0; i < functionBtns.size(); i++) {
+			functionComponents.add(btnStatistic);
+		for (int i = 0; i < functionComponents.size(); i++) {
 			if (i > 0)
 				toolbar.addSeparator();
-			toolbar.add(functionBtns.get(i));
+			toolbar.add(functionComponents.get(i));
 		}
 		
 		btnAccountMgr.addActionListener(this);
@@ -401,7 +407,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		return listMaterialCategory;
 	}
 
-	public void reloadListCategory1s() {
+	public void loadListCategory1s() {
 		listCategory1s = HttpUtil.loadMenu(this, SERVER_URL + "menu/querymenu");
 		Comparator comp = new Comparator() {
 
@@ -428,7 +434,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 	}
 	
-	public void reloadListMaterialCategory(){
+	public void loadListMaterialCategory(){
 		this.listMaterialCategory = HttpUtil.loadMaterialCategory(this, SERVER_URL + "material/querymaterialcategory");
 		Comparator comp = new Comparator() {
 
@@ -454,7 +460,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		return listPrinters;
 	}
 	
-	public void reloadListPrinters() {
+	public void loadListPrinters() {
 		listPrinters = HttpUtil.loadPrinter(this, SERVER_URL + "common/getprinters");
 	}
 	

@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.shuishou.sysmgr.ConstantValue;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,10 +41,6 @@ public class Dish implements Serializable{
 	
 	private DishChoosePopinfo choosePopInfo;
 	
-	private List<DishChooseSubitem> chooseSubItems;
-	
-	private int subitemAmount = 0;
-	
 	private boolean autoMergeWhileChoose = true;
 
 	private int purchaseType = ConstantValue.DISH_PURCHASETYPE_UNIT;
@@ -55,6 +52,7 @@ public class Dish implements Serializable{
 	private String description_1stlang;
 	private String description_2ndlang;
 	
+	private ArrayList<DishConfigGroup> configGroups = new ArrayList<>();
 	
 	public String getDescription_1stlang() {
 		return description_1stlang;
@@ -109,24 +107,14 @@ public class Dish implements Serializable{
     }
 
 	
-	public int getSubitemAmount() {
-		return subitemAmount;
+	public ArrayList<DishConfigGroup> getConfigGroups() {
+		return configGroups;
 	}
 
-	public void setSubitemAmount(int subitemAmount) {
-		this.subitemAmount = subitemAmount;
+	public void setConfigGroups(ArrayList<DishConfigGroup> configGroups) {
+		this.configGroups = configGroups;
 	}
-	
-    
-//    public Dish(int id, String firstLanguageName, String secondLanguageName, int sequence, double price, String pictureName, Category2 category2){
-//        this.id = id;
-//        this.firstLanguageName = firstLanguageName;
-//        this.secondLanguageName = secondLanguageName;
-//        this.sequence = sequence;
-//        this.price = price;
-//        this.pictureName = pictureName;
-//        this.category2 = category2;
-//    }
+
 
     public String getAbbreviation() {
         return abbreviation;
@@ -242,14 +230,6 @@ public class Dish implements Serializable{
 		this.choosePopInfo = choosePopInfo;
 	}
 
-	public List<DishChooseSubitem> getChooseSubItems() {
-		return chooseSubItems;
-	}
-
-	public void setChooseSubItems(List<DishChooseSubitem> chooseSubItems) {
-		this.chooseSubItems = chooseSubItems;
-	}
-
 	public boolean isAllowFlavor() {
 		return allowFlavor;
 	}
@@ -260,7 +240,7 @@ public class Dish implements Serializable{
 
 	@Override
     public String toString() {
-        return "Dish [firstLanguageName=" + firstLanguageName + ", secondLanguageName=" + secondLanguageName + "]";
+        return firstLanguageName;
     }
 
     @Override
