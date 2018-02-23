@@ -36,6 +36,7 @@ import com.shuishou.sysmgr.beans.MaterialCategory;
 import com.shuishou.sysmgr.http.HttpUtil;
 import com.shuishou.sysmgr.ui.CommonDialog;
 import com.shuishou.sysmgr.ui.MainFrame;
+import com.shuishou.sysmgr.ui.components.NumberInputDialog;
 
 public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, ActionListener{
 	private final Logger logger = Logger.getLogger(MaterialMgmtPanel.class.getName());
@@ -53,6 +54,9 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 	private JPopupMenu popupmenuMaterial = new JPopupMenu();
 	private JMenuItem menuitemModifyMaterial = new JMenuItem(Messages.getString("MaterialMgmtPanel.Modify"));
 	private JMenuItem menuitemDeleteMaterial = new JMenuItem(Messages.getString("MaterialMgmtPanel.Delete"));
+	private JMenuItem menuitemMaterialRecord = new JMenuItem("Records");
+	private JMenuItem menuitemPurchaseMaterial = new JMenuItem("Purchase");
+	private JMenuItem menuitemChangeAmountMaterial = new JMenuItem("Change Amount");
 	
 	private ArrayList<MaterialCategory> mcs;
 	private MainFrame mainFrame;
@@ -92,6 +96,9 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		popupmenuCategory.add(menuitemDeleteCategory);
 		popupmenuMaterial.add(menuitemModifyMaterial);
 		popupmenuMaterial.add(menuitemDeleteMaterial);
+		popupmenuMaterial.add(menuitemMaterialRecord);
+		popupmenuMaterial.add(menuitemPurchaseMaterial);
+		popupmenuMaterial.add(menuitemChangeAmountMaterial);
 		menuitemAddCategory.addActionListener(this);
 		menuitemRefreshTree.addActionListener(this);
 		menuitemAddMaterial.addActionListener(this);
@@ -99,6 +106,9 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		menuitemDeleteCategory.addActionListener(this);
 		menuitemModifyMaterial.addActionListener(this);
 		menuitemDeleteMaterial.addActionListener(this);
+		menuitemMaterialRecord.addActionListener(this);
+		menuitemPurchaseMaterial.addActionListener(this);
+		menuitemChangeAmountMaterial.addActionListener(this);
 		tree.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent e) {
 				//show node info is done via valueChanged function, not here
@@ -145,7 +155,7 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MaterialMgmtPanel.AddMaterialCategory"), 300, 300);
 			dlg.setVisible(true);
 		} else if (e.getSource() == menuitemRefreshTree){
-			mainFrame.reloadListMaterialCategory();
+			mainFrame.loadListMaterialCategory();
 			this.mcs = mainFrame.getListMaterialCategory();
 			MaterialTreeNode root = (MaterialTreeNode)tree.getModel().getRoot();
 			root.removeAllChildren();
@@ -167,6 +177,7 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 			onDeleteCategory(node);
 		} else if (e.getSource() == menuitemModifyMaterial){
 			MaterialPanel p = new MaterialPanel(this);
+			p.hideLeftAmount();
 			MaterialTreeNode node = (MaterialTreeNode)tree.getLastSelectedPathComponent();
 			p.setObjectValue((Material)node.getUserObject());
 			CommonDialog dlg = new CommonDialog(mainFrame, p, Messages.getString("MaterialMgmtPanel.ModifyMaterial"), 300, 400);
@@ -174,9 +185,78 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		} else if (e.getSource() == menuitemDeleteMaterial){
 			MaterialTreeNode node = (MaterialTreeNode)tree.getLastSelectedPathComponent();
 			onDeleteMaterial(node);
-		} 
+		} else if (e.getSource() == menuitemMaterialRecord){
+			MaterialTreeNode node = (MaterialTreeNode)tree.getLastSelectedPathComponent();
+			MaterialRecordDialog dlg = new MaterialRecordDialog(mainFrame, (Material)node.getUserObject(), 600, 400);
+			dlg.setVisible(true);
+		} else if (e.getSource() == menuitemPurchaseMaterial){
+			MaterialTreeNode node = (MaterialTreeNode)tree.getLastSelectedPathComponent();
+			onPurchaseMaterial(node);
+			
+		} else if (e.getSource() == menuitemChangeAmountMaterial){
+			MaterialTreeNode node = (MaterialTreeNode)tree.getLastSelectedPathComponent();
+			onChangeAmountMaterial(node);
+		}
 	}
 	
+	private void onPurchaseMaterial(MaterialTreeNode node){
+		Material m = (Material)node.getUserObject();
+		NumberInputDialog dlg = new NumberInputDialog(mainFrame, "Input", "Please input the purchase amount.", true);
+		dlg.setVisible(true);
+		if (!dlg.isConfirm)
+			return;
+		Map<String, String> params = new HashMap<>();
+		params.put("userId", MainFrame.getLoginUser().getId()+"");
+		params.put("id", m.getId() + "");
+		params.put("amount", dlg.inputDouble + "");
+		String url = "material/purchasematerial";
+		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
+		if (response == null){
+			logger.error("get null from server for purchase material. URL = " + url + ", param = "+ params);
+			JOptionPane.showMessageDialog(this, "get null from server for purchase material. URL = " + url);
+			return;
+		}
+		Gson gson = new Gson();
+		HttpResult<Material> result = gson.fromJson(response, new TypeToken<HttpResult<Material>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while purchase material. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while purchase material. URL = " + url + ", response = "+response);
+			return;
+		}
+		node.setUserObject(result.data);
+		tree.updateUI();
+		this.valueChanged(null);//refresh the property panel value
+	}
+	
+	private void onChangeAmountMaterial(MaterialTreeNode node){
+		Material m = (Material)node.getUserObject();
+		NumberInputDialog dlg = new NumberInputDialog(mainFrame, "Input", "Please input the new amount.", true);
+		dlg.setVisible(true);
+		if (!dlg.isConfirm)
+			return;
+		Map<String, String> params = new HashMap<>();
+		params.put("userId", MainFrame.getLoginUser().getId()+"");
+		params.put("id", m.getId() + "");
+		params.put("leftAmount", dlg.inputDouble + "");
+		String url = "material/updatematerialamount";
+		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
+		if (response == null){
+			logger.error("get null from server for change amount material. URL = " + url + ", param = "+ params);
+			JOptionPane.showMessageDialog(this, "get null from server for change amount material. URL = " + url);
+			return;
+		}
+		Gson gson = new Gson();
+		HttpResult<Material> result = gson.fromJson(response, new TypeToken<HttpResult<Material>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while change amount material. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, "return false while change amount material. URL = " + url + ", response = "+response);
+			return;
+		}
+		node.setUserObject(result.data);
+		tree.updateUI();
+		this.valueChanged(null);//refresh the property panel value
+		
+	}
 	private void onDeleteCategory(MaterialTreeNode node){
 		if (tree.getModel().getChildCount(node) > 0){
 			JOptionPane.showMessageDialog(this, "There are material node under this node, please delete them first.");
@@ -206,7 +286,7 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		}
 		((DefaultTreeModel)tree.getModel()).removeNodeFromParent(node);
 		// refresh local data
-		mainFrame.reloadListMaterialCategory();
+		mainFrame.loadListMaterialCategory();
 		pMaterial.initData();
 	}
 	
@@ -235,7 +315,7 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		}
 		((DefaultTreeModel)tree.getModel()).removeNodeFromParent(node);
 		// refresh local data
-		mainFrame.reloadListMaterialCategory();
+		mainFrame.loadListMaterialCategory();
 	}
 
 	@Override
@@ -278,7 +358,7 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		tree.updateUI();
 		
 		//refresh local data
-		mainFrame.reloadListMaterialCategory();
+		mainFrame.loadListMaterialCategory();
 		pMaterial.initData();
 		this.valueChanged(null);//refresh the property panel value
 	}
@@ -307,7 +387,7 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		tree.updateUI();
 		
 		//refresh local data
-		mainFrame.reloadListMaterialCategory();
+		mainFrame.loadListMaterialCategory();
 		this.valueChanged(null);//refresh the property panel value
 	}
 	
@@ -340,7 +420,7 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		tree.updateUI();
 		
 		// refresh local data
-		mainFrame.reloadListMaterialCategory();
+		mainFrame.loadListMaterialCategory();
 		pMaterial.initData();
 		this.valueChanged(null);//refresh the property panel value
 	}
@@ -375,7 +455,7 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		// refresh UI
 		tree.updateUI();
 		// refresh local data
-		mainFrame.reloadListMaterialCategory();
+		mainFrame.loadListMaterialCategory();
 		this.valueChanged(null);//refresh the property panel value
 	}
 	
