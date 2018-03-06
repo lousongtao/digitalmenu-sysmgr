@@ -3,8 +3,6 @@ package com.shuishou.sysmgr.ui;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
-import java.awt.Font;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -13,25 +11,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JToolBar;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.log4j.Logger;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.shuishou.sysmgr.ConstantValue;
 import com.shuishou.sysmgr.Messages;
 import com.shuishou.sysmgr.beans.Category1;
@@ -39,9 +31,7 @@ import com.shuishou.sysmgr.beans.Category2;
 import com.shuishou.sysmgr.beans.Desk;
 import com.shuishou.sysmgr.beans.DiscountTemplate;
 import com.shuishou.sysmgr.beans.Dish;
-import com.shuishou.sysmgr.beans.DishMaterialConsume;
 import com.shuishou.sysmgr.beans.Flavor;
-import com.shuishou.sysmgr.beans.HttpResult;
 import com.shuishou.sysmgr.beans.Material;
 import com.shuishou.sysmgr.beans.MaterialCategory;
 import com.shuishou.sysmgr.beans.PayWay;
@@ -55,7 +45,7 @@ import com.shuishou.sysmgr.ui.desk.DeskMgmtPanel;
 import com.shuishou.sysmgr.ui.discounttemplate.DiscountTemplateMgmtPanel;
 import com.shuishou.sysmgr.ui.flavor.FlavorMgmtPanel;
 import com.shuishou.sysmgr.ui.material.MaterialMgmtPanel;
-import com.shuishou.sysmgr.ui.menu.DishMaterialConsumeMgmtDialog;
+import com.shuishou.sysmgr.ui.member.MemberQueryPanel;
 import com.shuishou.sysmgr.ui.menu.MenuMgmtPanel;
 import com.shuishou.sysmgr.ui.payway.PayWayMgmtPanel;
 import com.shuishou.sysmgr.ui.printer.PrinterMgmtPanel;
@@ -85,19 +75,21 @@ public class MainFrame extends JFrame implements ActionListener{
 	private static final String CARDLAYOUT_SHIFTWORKQUERY= "shiftworkquery"; 
 	private static final String CARDLAYOUT_STATISTICS= "statistics"; 
 	private static final String CARDLAYOUT_MATERIAL= "material"; 
-	private JBlockedButton btnAccountMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.AccountMgr"));
-	private JBlockedButton btnMenuMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.MenuMgr"));
-	private JBlockedButton btnMaterialMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.MaterialMgr"));
-	private JBlockedButton btnDeskMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.DeskMgr"));
-	private JBlockedButton btnPayWayMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.PayWayMgr"));
-	private JBlockedButton btnDiscountTempMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.DiscountTempMgr"));
-	private JBlockedButton btnPrinterMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.PrinterMgr"));
-	private JBlockedButton btnFlavorMgr = new JBlockedButton(Messages.getString("MainFrame.ToolBar.FlavorMgr"));
-	private JBlockedButton btnConfig = new JBlockedButton(Messages.getString("MainFrame.ToolBar.Config"));
-	private JBlockedButton btnQueryLog = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryLog"));
-	private JBlockedButton btnQueryIndent = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryIndent"));
-	private JBlockedButton btnQueryShiftWork = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryShiftWork"));
-	private JBlockedButton btnStatistic = new JBlockedButton(Messages.getString("MainFrame.ToolBar.QueryStatistic"));
+	private static final String CARDLAYOUT_MEMBERMGMT= "membermgmt"; 
+	private JMenuItem menuitemAccount = new JMenuItem(Messages.getString("MainFrame.Menu.AccountMgr"));
+	private JMenuItem menuitemConfiguration = new JMenuItem(Messages.getString("MainFrame.Menu.Config"));
+	private JMenuItem menuitemDesk = new JMenuItem(Messages.getString("MainFrame.Menu.DeskMgr"));
+	private JMenuItem menuitemPayway = new JMenuItem(Messages.getString("MainFrame.Menu.PayWayMgr"));
+	private JMenuItem menuitemDiscount = new JMenuItem(Messages.getString("MainFrame.Menu.DiscountTempMgr"));
+	private JMenuItem menuitemPrinter = new JMenuItem(Messages.getString("MainFrame.Menu.PrinterMgr"));
+	private JMenuItem menuitemMenu = new JMenuItem(Messages.getString("MainFrame.Menu.MenuMgr"));
+	private JMenuItem menuitemFlavor = new JMenuItem(Messages.getString("MainFrame.Menu.FlavorMgr"));
+	private JMenuItem menuitemMaterial = new JMenuItem(Messages.getString("MainFrame.Menu.MaterialMgr"));
+	private JMenuItem menuitemQueryLog = new JMenuItem(Messages.getString("MainFrame.Menu.QueryLog"));
+	private JMenuItem menuitemQueryIndent = new JMenuItem(Messages.getString("MainFrame.Menu.QueryIndent"));
+	private JMenuItem menuitemQueryShiftwork = new JMenuItem(Messages.getString("MainFrame.Menu.QueryShiftWork"));
+	private JMenuItem menuitemStatistics = new JMenuItem(Messages.getString("MainFrame.Menu.QueryStatistic"));
+	private JMenuItem menuitemMember = new JMenuItem(Messages.getString("MainFrame.Menu.Member"));
 	private JPanel pContent = new JPanel(new CardLayout());
 	
 	private ArrayList<Category1> listCategory1s;
@@ -106,6 +98,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private static UserData loginUser;
 	private HashMap<String, String> configsMap;
 	
+	private MemberQueryPanel pMemberMgmt;
 	private MenuMgmtPanel pMenuMgmt;
 	private MaterialMgmtPanel pMaterialMgmt;
 	private AccountMgmtPanel pAccount;
@@ -118,8 +111,6 @@ public class MainFrame extends JFrame implements ActionListener{
 	private IndentQueryPanel pQueryIndent;
 	private ShiftworkQueryPanel pQueryShiftwork;
 	private StatisticsPanel pStatistics;
-	
-	private Gson gson = new Gson();
 	
 	private MainFrame(){
 		initUI();
@@ -138,61 +129,69 @@ public class MainFrame extends JFrame implements ActionListener{
 	}
 	
 	private void initUI(){
-		JToolBar toolbar = new JToolBar();
-		toolbar.setFloatable(false);
-		toolbar.setMargin(new Insets(0,20,20,20));
+		menuitemAccount.addActionListener(this);
+		menuitemConfiguration.addActionListener(this);
+		menuitemDesk.addActionListener(this);
+		menuitemPayway.addActionListener(this);
+		menuitemDiscount.addActionListener(this);
+		menuitemPrinter.addActionListener(this);
+		menuitemMenu.addActionListener(this);
+		menuitemFlavor.addActionListener(this);
+		menuitemMaterial.addActionListener(this);
+		menuitemQueryLog.addActionListener(this);
+		menuitemQueryIndent.addActionListener(this);
+		menuitemQueryShiftwork.addActionListener(this);
+		menuitemStatistics.addActionListener(this);
+		menuitemMember.addActionListener(this);
 		
-		ArrayList<JComponent> functionComponents = new ArrayList<>();
-		if (functionlist.indexOf(ConstantValue.FUNCTION_ACCOUNT) >=0)
-			functionComponents.add(btnAccountMgr);
-		if (functionlist.indexOf(ConstantValue.FUNCTION_CONFIG) >=0)
-			functionComponents.add(btnConfig);
-		if (functionlist.indexOf(ConstantValue.FUNCTION_MENU) >=0)
-			functionComponents.add(btnMenuMgr);
-		if (functionlist.indexOf(ConstantValue.FUNCTION_FLAVOR) >=0)
-			functionComponents.add(btnFlavorMgr);
-		if (functionlist.indexOf(ConstantValue.FUNCTION_DESK) >=0)
-			functionComponents.add(btnDeskMgr);
-		if (functionlist.indexOf(ConstantValue.FUNCTION_PAYWAY) >=0)
-			functionComponents.add(btnPayWayMgr);
-		if (functionlist.indexOf(ConstantValue.FUNCTION_DISCOUNT) >=0)
-			functionComponents.add(btnDiscountTempMgr);
-		if (functionlist.indexOf(ConstantValue.FUNCTION_PRINTER) >=0)
-			functionComponents.add(btnPrinterMgr);
-		if (functionlist.indexOf(ConstantValue.FUNCTION_MATERIAL) >=0)
-			functionComponents.add(btnMaterialMgr);
-		if (functionlist.indexOf(ConstantValue.FUNCTION_LOGQUERY) >=0)
-			functionComponents.add(btnQueryLog);
-		if (functionlist.indexOf(ConstantValue.FUNCTION_ORDERQUERY) >=0)
-			functionComponents.add(btnQueryIndent);
-		if (functionlist.indexOf(ConstantValue.FUNCTION_SHIFTWORK) >=0)
-			functionComponents.add(btnQueryShiftWork);
-		if (functionlist.indexOf(ConstantValue.FUNCTION_STATISTICS) >=0)
-			functionComponents.add(btnStatistic);
-		for (int i = 0; i < functionComponents.size(); i++) {
-			if (i > 0)
-				toolbar.addSeparator();
-			toolbar.add(functionComponents.get(i));
-		}
+		JMenuBar menubar = new JMenuBar();
+		JMenu menuConfig = new JMenu(Messages.getString("MainFrame.Menu.Config"));
+		menuConfig.add(menuitemAccount);
+		menuConfig.add(menuitemConfiguration);
+		menuConfig.add(menuitemDesk);
+		menuConfig.add(menuitemPayway);
+		menuConfig.add(menuitemDiscount);
+		menuConfig.add(menuitemPrinter);
+		JMenu menuMenu = new JMenu(Messages.getString("MainFrame.Menu.MenuMgr"));
+		menuMenu.add(menuitemMenu);
+		menuMenu.add(menuitemFlavor);
+		JMenu menuMaterial = new JMenu(Messages.getString("MainFrame.Menu.MaterialMgr"));
+		menuMaterial.add(menuitemMaterial);
+		JMenu menuQuery = new JMenu(Messages.getString("MainFrame.Menu.Query"));
+		menuQuery.add(menuitemQueryLog);
+		menuQuery.add(menuitemQueryIndent);
+		menuQuery.add(menuitemQueryShiftwork);
+		menuQuery.add(menuitemStatistics);
+		JMenu menuMember = new JMenu(Messages.getString("MainFrame.Menu.Member"));
+		menuMember.add(menuitemMember);
 		
-		btnAccountMgr.addActionListener(this);
-		btnMenuMgr.addActionListener(this);
-		btnMaterialMgr.addActionListener(this);
-		btnDeskMgr.addActionListener(this);
-		btnPayWayMgr.addActionListener(this);
-		btnDiscountTempMgr.addActionListener(this);
-		btnFlavorMgr.addActionListener(this);
-		btnPrinterMgr.addActionListener(this);
-		btnConfig.addActionListener(this);
-		btnQueryLog.addActionListener(this);
-		btnQueryIndent.addActionListener(this);
-		btnQueryShiftWork.addActionListener(this);
-		btnStatistic.addActionListener(this);
+		menubar.add(menuConfig);
+		menubar.add(menuMenu);
+		menubar.add(menuMaterial);
+		menubar.add(menuMember);
+		menubar.add(menuQuery);
 		
+		this.setJMenuBar(menubar);
+		
+		menuitemAccount.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_ACCOUNT) >=0);
+		menuitemConfiguration.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_CONFIG) >=0);
+		menuitemMenu.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MENU) >=0);
+		menuitemFlavor.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_FLAVOR) >=0);
+		menuitemDesk.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_DESK) >=0);
+		menuitemPayway.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_PAYWAY) >=0);
+		menuitemDiscount.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_DISCOUNT) >=0);
+		menuitemPrinter.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_PRINTER) >=0);
+		menuitemMaterial.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MATERIAL) >=0);
+		menuMaterial.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MATERIAL) >=0);
+		menuitemQueryLog.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_LOGQUERY) >=0);
+		menuitemQueryIndent.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_ORDERQUERY) >=0);
+		menuitemQueryShiftwork.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_SHIFTWORK) >=0);
+		menuitemStatistics.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_STATISTICS) >=0);
+		menuitemMember.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MEMBER) >=0);
+		menuMember.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MEMBER) >=0);
 		
 		Container c = this.getContentPane();
 		c.setLayout(new BorderLayout(0, 10));
-		c.add(toolbar, BorderLayout.NORTH);
 		c.add(pContent, BorderLayout.CENTER);
 	}
 	
@@ -203,7 +202,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnAccountMgr){
+		if (e.getSource() == menuitemAccount){
 			ArrayList<UserData> userList = loadUserList();
 			ArrayList<Permission> permissionList = loadPermissionList();
 			if (pAccount == null){
@@ -215,8 +214,8 @@ public class MainFrame extends JFrame implements ActionListener{
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_ACCOUNTMGMT);
 			}
 			
-			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnAccountMgr.getText());
-		} else if (e.getSource() == btnMenuMgr){
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemAccount.getText());
+		} else if (e.getSource() == menuitemMenu){
 			if (pMenuMgmt == null){
 				pMenuMgmt = new MenuMgmtPanel(this, listCategory1s);
 				pContent.add(pMenuMgmt, CARDLAYOUT_MENUMGMT);
@@ -225,14 +224,14 @@ public class MainFrame extends JFrame implements ActionListener{
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MENUMGMT);
 			}
-			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnMenuMgr.getText());
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemMenu.getText());
 //			reloadListCategory1s();
 //			
 //			pMenuMgmt = new MenuMgmtPanel(this, listCategory1s);
 //			pContent.removeAll();
 //			pContent.add(pMenuMgmt, CARDLAYOUT_MENUMGMT);
 //			pContent.updateUI();
-		} else if (e.getSource() == btnMaterialMgr){
+		} else if (e.getSource() == menuitemMaterial){
 			if (pMaterialMgmt == null){
 				pMaterialMgmt = new MaterialMgmtPanel(this,listMaterialCategory);
 				pContent.add(pMaterialMgmt, CARDLAYOUT_MATERIAL);
@@ -241,8 +240,8 @@ public class MainFrame extends JFrame implements ActionListener{
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MATERIAL);
 			}
-			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnMaterialMgr.getText());
-		} else if (e.getSource() == btnDeskMgr){
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemMaterial.getText());
+		} else if (e.getSource() == menuitemDesk){
 			ArrayList<Desk> deskList = loadDeskList();
 			if (pDesk == null){
 				pDesk = new DeskMgmtPanel(this, deskList);
@@ -252,8 +251,8 @@ public class MainFrame extends JFrame implements ActionListener{
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_DESKMGMT);
 			}
-			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnDeskMgr.getText());
-		} else if (e.getSource() == btnPayWayMgr){
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemDesk.getText());
+		} else if (e.getSource() == menuitemPayway){
 			ArrayList<PayWay> paywayList = loadPayWayList();
 			if (pPayWay == null){
 				pPayWay = new PayWayMgmtPanel(this, paywayList);
@@ -263,8 +262,8 @@ public class MainFrame extends JFrame implements ActionListener{
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_PAYWAYMGMT);
 			}
-			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnPayWayMgr.getText());
-		} else if (e.getSource() == btnDiscountTempMgr){
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemPayway.getText());
+		} else if (e.getSource() == menuitemDiscount){
 			ArrayList<DiscountTemplate> discountTempList = loadDiscountTemplateList();
 			if (pDiscountTemplate == null){
 				pDiscountTemplate = new DiscountTemplateMgmtPanel(this, discountTempList);
@@ -274,8 +273,8 @@ public class MainFrame extends JFrame implements ActionListener{
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_DISCOUNTTEMPLATEMGMT);
 			}
-			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnDiscountTempMgr.getText());
-		} else if (e.getSource() == btnPrinterMgr){
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemDiscount.getText());
+		} else if (e.getSource() == menuitemPrinter){
 			ArrayList<Printer> printerList = loadPrinterList();
 			if (pPrinter == null){
 				pPrinter = new PrinterMgmtPanel(this, printerList);
@@ -285,8 +284,8 @@ public class MainFrame extends JFrame implements ActionListener{
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_PRINTERMGMT);
 			}
-			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnPrinterMgr.getText());
-		} else if (e.getSource() == btnFlavorMgr){
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemPrinter.getText());
+		} else if (e.getSource() == menuitemFlavor){
 			ArrayList<Flavor> flavorList = loadFlavorList();
 			if (pFlavor == null){
 				pFlavor = new FlavorMgmtPanel(this, flavorList);
@@ -296,11 +295,11 @@ public class MainFrame extends JFrame implements ActionListener{
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_FLAVORMGMT);
 			}
-			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnFlavorMgr.getText());
-		} else if (e.getSource() == btnConfig){
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemFlavor.getText());
+		} else if (e.getSource() == menuitemConfiguration){
 			ConfigsDialog dlg = new ConfigsDialog(this);
 			dlg.setVisible(true);
-		} else if (e.getSource() == btnQueryLog){
+		} else if (e.getSource() == menuitemQueryLog){
 			if (pQueryLog == null){
 				ArrayList<String> listLogType = loadLogType();
 				pQueryLog = new LogQueryPanel(this, listLogType);
@@ -310,8 +309,8 @@ public class MainFrame extends JFrame implements ActionListener{
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_LOGQUERY);
 			}
-			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnQueryLog.getText());
-		} else if (e.getSource() == btnQueryIndent){
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemQueryLog.getText());
+		} else if (e.getSource() == menuitemQueryIndent){
 			if (pQueryIndent == null){
 				pQueryIndent = new IndentQueryPanel(this);
 				pContent.add(pQueryIndent, CARDLAYOUT_INDENTQUERY);
@@ -320,8 +319,8 @@ public class MainFrame extends JFrame implements ActionListener{
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_INDENTQUERY);
 			}
-			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnQueryIndent.getText());
-		} else if (e.getSource() == btnQueryShiftWork){
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemQueryIndent.getText());
+		} else if (e.getSource() == menuitemQueryShiftwork){
 			if (pQueryShiftwork == null){
 				pQueryShiftwork = new ShiftworkQueryPanel(this);
 				pContent.add(pQueryShiftwork, CARDLAYOUT_SHIFTWORKQUERY);
@@ -330,8 +329,8 @@ public class MainFrame extends JFrame implements ActionListener{
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_SHIFTWORKQUERY);
 			}
-			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + btnQueryShiftWork.getText());
-		} else if (e.getSource() == btnStatistic){
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemQueryShiftwork.getText());
+		} else if (e.getSource() == menuitemStatistics){
 			if (pStatistics == null){
 				pStatistics = new StatisticsPanel(this);
 				pContent.add(pStatistics, CARDLAYOUT_STATISTICS);
@@ -340,6 +339,17 @@ public class MainFrame extends JFrame implements ActionListener{
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_STATISTICS);
 			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemStatistics.getText());
+		} else if (e.getSource() == menuitemMember){
+			if (pMemberMgmt == null){
+				pMemberMgmt = new MemberQueryPanel(this);
+				pContent.add(pMemberMgmt, CARDLAYOUT_MEMBERMGMT);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MEMBERMGMT);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MEMBERMGMT);
+			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemMember.getText());
 		}
 	}
 
@@ -409,6 +419,7 @@ public class MainFrame extends JFrame implements ActionListener{
 
 	public void loadListCategory1s() {
 		listCategory1s = HttpUtil.loadMenu(this, SERVER_URL + "menu/querymenu");
+		@SuppressWarnings("rawtypes")
 		Comparator comp = new Comparator() {
 
 			@Override
@@ -436,6 +447,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	
 	public void loadListMaterialCategory(){
 		this.listMaterialCategory = HttpUtil.loadMaterialCategory(this, SERVER_URL + "material/querymaterialcategory");
+		@SuppressWarnings("rawtypes")
 		Comparator comp = new Comparator() {
 
 			@Override
@@ -478,6 +490,9 @@ public class MainFrame extends JFrame implements ActionListener{
 				e.printStackTrace();
 			}
 		});
+		StartingWaitDialog waitDlg = new StartingWaitDialog();
+		waitDlg.setVisible(true);
+		
 		//load properties
 		Properties prop = new Properties();
 		InputStream input = null;
@@ -511,7 +526,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		MainFrame.language = prop.getProperty("language");
 		MainFrame.functionlist = prop.getProperty("mainframe.functionlist");
 		MainFrame f = new MainFrame();
-		
+		waitDlg.setVisible(false);
 		f.setVisible(true);
 		f.startLogin(prop.getProperty("defaultuser.name"), prop.getProperty("defaultuser.password"));
 	}
