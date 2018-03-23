@@ -52,6 +52,7 @@ import com.shuishou.sysmgr.ui.printer.PrinterMgmtPanel;
 import com.shuishou.sysmgr.ui.query.IndentQueryPanel;
 import com.shuishou.sysmgr.ui.query.LogQueryPanel;
 import com.shuishou.sysmgr.ui.query.ShiftworkQueryPanel;
+import com.shuishou.sysmgr.ui.statistics.StatMaterialPanel;
 import com.shuishou.sysmgr.ui.statistics.StatisticsPanel;
 
 public class MainFrame extends JFrame implements ActionListener{
@@ -74,6 +75,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private static final String CARDLAYOUT_INDENTQUERY= "indentquery"; 
 	private static final String CARDLAYOUT_SHIFTWORKQUERY= "shiftworkquery"; 
 	private static final String CARDLAYOUT_STATISTICS= "statistics"; 
+	private static final String CARDLAYOUT_QUERYMATERIAL = "querymaterial";
 	private static final String CARDLAYOUT_MATERIAL= "material"; 
 	private static final String CARDLAYOUT_MEMBERMGMT= "membermgmt"; 
 	private JMenuItem menuitemAccount = new JMenuItem(Messages.getString("MainFrame.Menu.AccountMgr"));
@@ -89,6 +91,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuItem menuitemQueryIndent = new JMenuItem(Messages.getString("MainFrame.Menu.QueryIndent"));
 	private JMenuItem menuitemQueryShiftwork = new JMenuItem(Messages.getString("MainFrame.Menu.QueryShiftWork"));
 	private JMenuItem menuitemStatistics = new JMenuItem(Messages.getString("MainFrame.Menu.QueryStatistic"));
+	private JMenuItem menuitemQueryMaterial = new JMenuItem(Messages.getString("MainFrame.Menu.QueryMaterial"));
 	private JMenuItem menuitemMember = new JMenuItem(Messages.getString("MainFrame.Menu.Member"));
 	private JPanel pContent = new JPanel(new CardLayout());
 	
@@ -111,6 +114,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private IndentQueryPanel pQueryIndent;
 	private ShiftworkQueryPanel pQueryShiftwork;
 	private StatisticsPanel pStatistics;
+	private StatMaterialPanel pStatMaterial;
 	
 	private MainFrame(){
 		initUI();
@@ -143,6 +147,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuitemQueryShiftwork.addActionListener(this);
 		menuitemStatistics.addActionListener(this);
 		menuitemMember.addActionListener(this);
+		menuitemQueryMaterial.addActionListener(this);
 		
 		JMenuBar menubar = new JMenuBar();
 		JMenu menuConfig = new JMenu(Messages.getString("MainFrame.Menu.Config"));
@@ -161,6 +166,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuQuery.add(menuitemQueryLog);
 		menuQuery.add(menuitemQueryIndent);
 		menuQuery.add(menuitemQueryShiftwork);
+		menuQuery.add(menuitemQueryMaterial);
 		menuQuery.add(menuitemStatistics);
 		JMenu menuMember = new JMenu(Messages.getString("MainFrame.Menu.Member"));
 		menuMember.add(menuitemMember);
@@ -186,6 +192,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuitemQueryLog.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_LOGQUERY) >=0);
 		menuitemQueryIndent.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_ORDERQUERY) >=0);
 		menuitemQueryShiftwork.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_SHIFTWORK) >=0);
+		menuitemQueryMaterial.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MATERIAL) >= 0);
 		menuitemStatistics.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_STATISTICS) >=0);
 		menuitemMember.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MEMBER) >=0);
 		menuMember.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MEMBER) >=0);
@@ -340,6 +347,15 @@ public class MainFrame extends JFrame implements ActionListener{
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_STATISTICS);
 			}
 			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemStatistics.getText());
+		} else if (e.getSource() == menuitemQueryMaterial){
+			if (pStatMaterial == null){
+				pStatMaterial = new StatMaterialPanel(this);
+				pContent.add(pStatMaterial, CARDLAYOUT_QUERYMATERIAL);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_QUERYMATERIAL);
+				pContent.updateUI();
+			} else {
+				this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemQueryMaterial.getText());
+			}
 		} else if (e.getSource() == menuitemMember){
 			if (pMemberMgmt == null){
 				pMemberMgmt = new MemberQueryPanel(this);

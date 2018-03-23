@@ -14,6 +14,8 @@ public class ConstantValue {
 	public static final String DATE_PATTERN_YMD = "yyyy-MM-dd";
 	public static final String DATE_PATTERN_YMDHMS = "yyyy-MM-dd HH:mm:ss";
 	
+	public static final String FORMAT_DOUBLE = "%.2f";
+	
 	public static final Font FONT_30BOLD = new Font(null, Font.BOLD, 30);
 	public static final Font FONT_30PLAIN = new Font(null, Font.PLAIN, 30);	
 	public static final Font FONT_20BOLD = new Font(null, Font.BOLD, 20);
