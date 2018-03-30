@@ -1,5 +1,7 @@
 package com.shuishou.sysmgr.beans;
 
+import java.util.Date;
+
 public class IndentDetail {
 
 	private int id;
@@ -20,6 +22,8 @@ public class IndentDetail {
 	
 	private double weight;
 
+	private Date time;
+	
 	public Indent getIndent() {
 		return indent;
 	}
@@ -70,6 +74,14 @@ public class IndentDetail {
 	}
 
 	
+	public Date getTime() {
+		return time;
+	}
+
+	public void setTime(Date time) {
+		this.time = time;
+	}
+
 	public String getDishFirstLanguageName() {
 		return dishFirstLanguageName;
 	}
