@@ -354,8 +354,9 @@ public class MainFrame extends JFrame implements ActionListener{
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_QUERYMATERIAL);
 				pContent.updateUI();
 			} else {
-				this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemQueryMaterial.getText());
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_QUERYMATERIAL);
 			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemQueryMaterial.getText());
 		} else if (e.getSource() == menuitemMember){
 			if (pMemberMgmt == null){
 				pMemberMgmt = new MemberQueryPanel(this);
