@@ -91,6 +91,7 @@ public class IndentQueryPanel extends JPanel implements ActionListener{
 		tableIndent.getColumnModel().getColumn(5).setPreferredWidth(80);
 		tableIndent.getColumnModel().getColumn(6).setPreferredWidth(130);
 		tableIndent.getColumnModel().getColumn(7).setPreferredWidth(130);
+		tableIndent.getColumnModel().getColumn(8).setPreferredWidth(80);
 		JScrollPane jspTableIndent = new JScrollPane(tableIndent, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		tableIndent.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
@@ -242,7 +243,7 @@ public class IndentQueryPanel extends JPanel implements ActionListener{
 	
 	class IndentModel extends AbstractTableModel{
 
-		private String[] header = new String[]{"Table","Status", "Sequence", "Price", "Paid Price", "Pay Way", "Start Time", "End Time"};
+		private String[] header = new String[]{"Table","Status", "Sequence", "Price", "Paid Price", "Pay Way", "Start Time", "End Time", "Discount Temp"};
 		
 		public IndentModel(){
 
@@ -280,6 +281,8 @@ public class IndentQueryPanel extends JPanel implements ActionListener{
 				if (indent.getEndTime() == null)
 					return "";
 				else return ConstantValue.DFYMDHMS.format(indent.getEndTime());
+			case 8:
+				return indent.getDiscountTemplate() != null ? indent.getDiscountTemplate() : "";
 			}
 			return "";
 		}

@@ -138,4 +138,8 @@ public class ConstantValue {
 	public static final int MEMBERDEPOSIT_REFUND = 2;//消费余额类型-退款
 	public static final int MEMBERDEPOSIT_RECHARGE = 3;//消费余额类型-充值
 	public static final int MEMBERDEPOSIT_ADJUST = 4;//消费余额类型-调整
+	
+	public static final int DISCOUNTTYPE_RATE= 1;     //折扣类型-按比例折扣
+	public static final int DISCOUNTTYPE_QUANTITY = 2;//折扣类型-直接减数量
+	
 }

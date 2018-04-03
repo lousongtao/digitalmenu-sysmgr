@@ -27,6 +27,8 @@ public class Indent {
 	
 	private String payWay;//���ʽ
 	
+	private String discountTemplate;
+	
 	private byte status = ConstantValue.INDENT_STATUS_OPEN;
 
 	//�������, ÿ�մ�1��ʼ,
@@ -78,6 +80,14 @@ public class Indent {
 
 	public void setPaidPrice(double paidPrice) {
 		this.paidPrice = paidPrice;
+	}
+
+	public String getDiscountTemplate() {
+		return discountTemplate;
+	}
+
+	public void setDiscountTemplate(String discountTemplate) {
+		this.discountTemplate = discountTemplate;
 	}
 
 	public List<IndentDetail> getItems() {
