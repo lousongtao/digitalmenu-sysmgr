@@ -54,6 +54,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 	private JRadioButton rbLanguageAmount2 = new JRadioButton("2");
 	private JTextField tfFirstLanguageName = new JTextField();
 	private JTextField tfSecondLanguageName = new JTextField();
+	private JCheckBox cbPrint2ndLanguage = new JCheckBox("Print second language name on ticket");
 	
 	private JButton btnSaveLanguageSet = new JButton("Save");
 	private JCheckBox cbMemberScore = new JCheckBox("Score");
@@ -137,6 +138,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		pLanguageSet.add(new JLabel("Second Language"), new GridBagConstraints(0, 2, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
 		pLanguageSet.add(tfSecondLanguageName, 			new GridBagConstraints(1, 2, 2, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5,10,0,0), 0, 0));;
 		pLanguageSet.add(btnSaveLanguageSet, 			new GridBagConstraints(3, 0, 2, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,10,0,0), 0, 0));;
+		pLanguageSet.add(cbPrint2ndLanguage, 			new GridBagConstraints(1, 3, 2, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,10,0,0), 0, 0));;
 		
 		JLabel lbScoreInfo = new JLabel("How many score by consuming 1$");
 		tfScorePerDollar.setPreferredSize(new Dimension(60, 25));
@@ -196,6 +198,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		}
 		tfFirstLanguageName.setText(mainFrame.getConfigsMap().get(ConstantValue.CONFIGS_FIRSTLANGUAGENAME));
 		tfSecondLanguageName.setText(mainFrame.getConfigsMap().get(ConstantValue.CONFIGS_SECONDLANGUAGENAME));
+		cbPrint2ndLanguage.setSelected(Boolean.parseBoolean(mainFrame.getConfigsMap().get(ConstantValue.CONFIGS_PRINT2NDLANGUAGENAME)));
 		if (mainFrame.getConfigsMap().get(ConstantValue.CONFIGS_MEMBERMGR_BYSCORE) != null)
 			cbMemberScore.setSelected(Boolean.valueOf(mainFrame.getConfigsMap().get(ConstantValue.CONFIGS_MEMBERMGR_BYSCORE)));
 		if (mainFrame.getConfigsMap().get(ConstantValue.CONFIGS_MEMBERMGR_BYDEPOSIT) != null)
@@ -238,6 +241,10 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 				return;
 			}
 		}
+		if (cbPrint2ndLanguage.isSelected() && rbLanguageAmount1.isSelected()){
+			JOptionPane.showMessageDialog(this, "Cannot print second language name on ticket.");
+			return;
+		}
 		String url = "common/savelanguageset";
 		HashMap<String, String> params = new HashMap<>();
 		params.put("userId", MainFrame.getLoginUser().getId()+"");
@@ -248,6 +255,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 			params.put("amount", "1");
 		}
 		params.put("firstName", tfFirstLanguageName.getText());
+		params.put("print2ndLanguage", String.valueOf(cbPrint2ndLanguage.isSelected()));
 		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
 		if (response == null){
 			logger.error("get null from server for save language. URL = " + url + ", param = "+ params);
@@ -264,6 +272,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_LANGUAGEAMOUNT, params.get("amount"));
 		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_FIRSTLANGUAGENAME, tfFirstLanguageName.getText());
 		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_SECONDLANGUAGENAME, tfSecondLanguageName.getText());
+		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_PRINT2NDLANGUAGENAME, String.valueOf(cbPrint2ndLanguage.isSelected()));
 		this.setVisible(false);
 	}
 	
