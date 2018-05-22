@@ -93,7 +93,7 @@ public class MemberScoreRecordDialog extends JDialog{
 			case 1:
 				return r.getPlace();
 			case 2:
-				return r.getAmount();
+				return String.format(ConstantValue.FORMAT_DOUBLE, r.getAmount());
 			case 3:
 				if (r.getType() == ConstantValue.MEMBERSCORE_CONSUM)
 					return "Consume";
@@ -102,7 +102,7 @@ public class MemberScoreRecordDialog extends JDialog{
 				else if (r.getType() == ConstantValue.MEMBERSCORE_ADJUST)
 					return "Adjust";
 			case 4: 
-				return r.getNewValue();
+				return String.format(ConstantValue.FORMAT_DOUBLE, r.getNewValue());
 			}
 			return "";
 		}
