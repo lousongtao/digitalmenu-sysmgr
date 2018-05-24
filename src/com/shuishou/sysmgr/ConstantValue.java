@@ -127,6 +127,8 @@ public class ConstantValue {
 	
 	public static final int STATISTICS_PERIODSELL_PERDAY = 1;
 	public static final int STATISTICS_PERIODSELL_PERHOUR = 2;
+	public static final int STATISTICS_PERIODSELL_PERWEEK = 3;
+	public static final int STATISTICS_PERIODSELL_PERMONTH = 4;
 	
 	public static final int MATERIALRECORD_TYPE_PURCHASE = 1;//采购入库
 	public static final int MATERIALRECORD_TYPE_CHANGEAMOUNT = 2;//操作员手动调整库存
