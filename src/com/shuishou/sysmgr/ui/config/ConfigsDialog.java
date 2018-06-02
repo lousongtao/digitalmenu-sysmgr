@@ -266,7 +266,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while save language. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while save language. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_LANGUAGEAMOUNT, params.get("amount"));
@@ -296,7 +296,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while save cancel order code. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while save cancel order code. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CANCELORDERCODE, tfNewCancelOrderCode.getText());
@@ -323,7 +323,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while save clear table code. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while save clear table code. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CLEARTABLECODE, tfNewClearTableCode.getText());
@@ -350,7 +350,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while save confirm code. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while save confirm code. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CONFIRMCODE, tfNewConfirmCode.getText());
@@ -381,7 +381,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while save open cashdrawer code. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while save open cashdrawer code. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_OPENCASHDRAWERCODE, tfNewOpenCashdrawerCode.getText());
@@ -407,7 +407,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while save branch name. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while save branch name. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_BRANCHNAME, tfBranchName.getText());
@@ -440,7 +440,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while save member management way. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while save member management way. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		mainFrame.loadConfigsMap();

@@ -95,7 +95,7 @@ public class DishConfigPanel extends JPanel implements CommonDialogOperatorIFC{
 		HttpResult<DishConfig> result = gson.fromJson(response, new TypeToken<HttpResult<DishConfig>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while add/update dish config. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while add/update dish config. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return false;
 		}
 		result.data.setGroup(configGroup);//补全信息, 父对象没有从server端带过来

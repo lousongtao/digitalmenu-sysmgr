@@ -115,7 +115,7 @@ public class PrinterMgmtPanel extends JPanel implements ActionListener{
 			HttpResult<String> result = gson.fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
 			if (!result.success){
 				logger.error("return false while remove printer. URL = " + url + ", response = "+response);
-				JOptionPane.showMessageDialog(this, "return false while remove printer. URL = " + url + ", response = "+response);
+				JOptionPane.showMessageDialog(this, result.result);
 				return;
 			}
 			refreshData();
@@ -133,7 +133,7 @@ public class PrinterMgmtPanel extends JPanel implements ActionListener{
 			HttpResult<String> result = gson.fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
 			if (!result.success){
 				logger.error("return false while test connection. URL = " + url + ", response = "+response);
-				JOptionPane.showMessageDialog(this, "return false while test connection. URL = " + url + ", response = "+response);
+				JOptionPane.showMessageDialog(this, result.result);
 				return;
 			}
 		}

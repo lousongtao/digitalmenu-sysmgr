@@ -191,7 +191,7 @@ public class StatMaterialPanel extends JPanel implements ActionListener{
 		HttpResult<ArrayList<MaterialRecordInfo>> result = gson.fromJson(response, new TypeToken<HttpResult<ArrayList<MaterialRecordInfo>>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while material consume statistics. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while material consume statistics. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		Collections.sort(result.data, new Comparator<MaterialRecordInfo>(){

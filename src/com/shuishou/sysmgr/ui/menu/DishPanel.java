@@ -310,7 +310,7 @@ public class DishPanel extends JPanel implements CommonDialogOperatorIFC, Action
 		HttpResult<Dish> result = gson.fromJson(response, new TypeToken<HttpResult<Dish>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while add/update dish. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while add/update dish. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return false;
 		}
 		//the category2 info is null after get from server

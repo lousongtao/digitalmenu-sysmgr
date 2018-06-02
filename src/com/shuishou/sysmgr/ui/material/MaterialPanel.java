@@ -166,7 +166,7 @@ public class MaterialPanel extends JPanel implements CommonDialogOperatorIFC, Ac
 		HttpResult<Material> result = gson.fromJson(response, new TypeToken<HttpResult<Material>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while add/update material. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while add/update material. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return false;
 		}
 		result.data.setMaterialCategory((MaterialCategory)cbCategory.getSelectedItem());

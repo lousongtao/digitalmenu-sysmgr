@@ -419,7 +419,11 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 	}
 	
 	private void doModifyConfigGroup(MenuTreeNode node) {
-
+		DishConfigGroup group = (DishConfigGroup)node.getUserObject();
+		DishConfigGroupPanel p = new DishConfigGroupPanel(this);
+		p.setObjectValue(group);
+		CommonDialog dlg = new CommonDialog(mainFrame, p, "Modify Dish Config Group", 300, 300);
+		dlg.setVisible(true);
 	}
 
 	private void doDeleteDishConfig(MenuTreeNode node) {
@@ -443,7 +447,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		HttpResult<String> result = gson.fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while delete DishConfig. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while delete DishConfig. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(mainFrame, "Delete "+config.getFirstLanguageName()+" successfully");
@@ -523,7 +527,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		HttpResult<Dish> result = gson.fromJson(response, new TypeToken<HttpResult<Dish>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while remove dishconfiggroup. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while remove dishconfiggroup. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(mainFrame, "Remove config group successfully");
@@ -565,7 +569,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		HttpResult<Dish> result = gson.fromJson(response, new TypeToken<HttpResult<Dish>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while "+operation+" dish promotion. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while "+operation+" dish promotion. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(mainFrame, operation + " dish promotion "+dish.getFirstLanguageName()+" successfully");
@@ -602,7 +606,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		HttpResult<Dish> result = gson.fromJson(response, new TypeToken<HttpResult<Dish>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while "+operation+" dish soldout. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while "+operation+" dish soldout. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(mainFrame, operation + " dish soldout "+dish.getFirstLanguageName()+" successfully");
@@ -638,7 +642,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		HttpResult<DishConfig> result = gson.fromJson(response, new TypeToken<HttpResult<DishConfig>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while "+operation+" dish config soldout. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while "+operation+" dish config soldout. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(mainFrame, operation + " dishconfig soldout successfully");
@@ -680,7 +684,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		HttpResult<Dish> result = gson.fromJson(response, new TypeToken<HttpResult<Dish>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while change dish picture. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while change dish picture. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(mainFrame, "Update dish picture of " + dish.getFirstLanguageName() + " successfully");
@@ -1087,7 +1091,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		HttpResult<HashMap<String, String>> result = gson.fromJson(response, new TypeToken<HttpResult<HashMap<String, String>>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while delete category1. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while delete category1. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(mainFrame, "Delete category"+c1.getFirstLanguageName()+" successfully");
@@ -1121,7 +1125,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		HttpResult<HashMap<String, String>> result = gson.fromJson(response, new TypeToken<HttpResult<HashMap<String, String>>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while delete category2. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while delete category2. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(mainFrame, "Delete category " + c2.getFirstLanguageName() + " successfully");
@@ -1155,7 +1159,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		HttpResult<HashMap<String, String>> result = gson.fromJson(response, new TypeToken<HttpResult<HashMap<String, String>>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while delete dish. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while delete dish. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(mainFrame, "Delete dish " + dish.getFirstLanguageName() + " successfully");

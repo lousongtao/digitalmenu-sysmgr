@@ -43,6 +43,12 @@ public class DishConfigGroupPanel extends JPanel implements CommonDialogOperator
 		
 	}
 	
+	public DishConfigGroupPanel(MenuMgmtPanel menuMgmtPanel){
+		this.menuMgmtPanel = menuMgmtPanel;
+		initUI();
+		
+	}
+	
 	private void initUI(){
 		JLabel lbUniqueName = new JLabel("Unique Name");
 		JLabel lbFirstLanguageName = new JLabel("First Language Name");
@@ -97,15 +103,17 @@ public class DishConfigGroupPanel extends JPanel implements CommonDialogOperator
 		HttpResult<DishConfigGroup> result = gson.fromJson(response, new TypeToken<HttpResult<DishConfigGroup>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while add/update dish config group. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while add/update dish config group. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return false;
 		}
 		if (dcGroup != null){
-			parent.updateConfigGroupInList(result.data);
+			if (parent != null)
+				parent.updateConfigGroupInList(result.data);
 			//修改的ConfigGroup要刷新整棵树
 			menuMgmtPanel.updateNode(result.data, dcGroup);
 		} else {
-			parent.addConfigGroupToList(result.data);
+			if (parent != null)
+				parent.addConfigGroupToList(result.data);
 			
 		}
 		return true;

@@ -129,7 +129,7 @@ public class DishConfigGroupDialog extends JDialog implements ActionListener{
 		HttpResult<Dish> result = gson.fromJson(response, new TypeToken<HttpResult<Dish>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while add config group into dish. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while add config group into dish. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		this.setVisible(false);
@@ -176,7 +176,7 @@ public class DishConfigGroupDialog extends JDialog implements ActionListener{
 		HttpResult<Dish> result = gson.fromJson(response, new TypeToken<HttpResult<Dish>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while delete config group. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while delete config group. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(this, "Delete config group successfully");

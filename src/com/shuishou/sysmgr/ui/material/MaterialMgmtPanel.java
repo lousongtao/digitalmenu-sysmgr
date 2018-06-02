@@ -220,7 +220,7 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		HttpResult<Material> result = gson.fromJson(response, new TypeToken<HttpResult<Material>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while purchase material. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while purchase material. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		node.setUserObject(result.data);
@@ -249,7 +249,7 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		HttpResult<Material> result = gson.fromJson(response, new TypeToken<HttpResult<Material>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while change amount material. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while change amount material. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		node.setUserObject(result.data);
@@ -281,7 +281,7 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		HttpResult<HashMap<String, String>> result = gson.fromJson(response, new TypeToken<HttpResult<HashMap<String, String>>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while delete materialcategory. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while delete materialcategory. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		((DefaultTreeModel)tree.getModel()).removeNodeFromParent(node);
@@ -310,7 +310,7 @@ public class MaterialMgmtPanel extends JPanel implements TreeSelectionListener, 
 		HttpResult<HashMap<String, String>> result = gson.fromJson(response, new TypeToken<HttpResult<HashMap<String, String>>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while delete material. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while delete material. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		((DefaultTreeModel)tree.getModel()).removeNodeFromParent(node);

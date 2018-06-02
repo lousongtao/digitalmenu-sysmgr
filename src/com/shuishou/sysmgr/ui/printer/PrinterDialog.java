@@ -131,7 +131,7 @@ public class PrinterDialog extends JDialog implements ActionListener {
 		HttpResult<String> result = gson.fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while add/update printer. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while add/update printer. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		parent.refreshData();

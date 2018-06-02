@@ -201,7 +201,7 @@ public class IndentQueryPanel extends JPanel implements ActionListener{
 		HttpResult<ArrayList<Indent>> result = gson.fromJson(response, new TypeToken<HttpResult<ArrayList<Indent>>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while query indent. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while query indent. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		listIndent = result.data;
@@ -227,7 +227,7 @@ public class IndentQueryPanel extends JPanel implements ActionListener{
 		HttpResult<Indent> result = new Gson().fromJson(response, new TypeToken<HttpResult<Indent>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while print indent. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while print indent. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}	
 	}
@@ -297,6 +297,10 @@ public class IndentQueryPanel extends JPanel implements ActionListener{
 				return "Canceled";
 			case ConstantValue.INDENT_STATUS_OPEN:
 				return "Open";
+			case ConstantValue.INDENT_STATUS_FORCEEND:
+				return "Force Clean";
+			case ConstantValue.INDENT_STATUS_REFUND:
+				return "Refund";
 			}
 			return "";
 		}

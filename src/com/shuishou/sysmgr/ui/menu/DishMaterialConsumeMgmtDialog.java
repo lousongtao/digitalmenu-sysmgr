@@ -235,7 +235,7 @@ public class DishMaterialConsumeMgmtDialog extends JDialog implements ActionList
 		HttpResult<Dish> result = gson.fromJson(response, new TypeToken<HttpResult<Dish>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while delete DishMaterialConsume. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while delete DishMaterialConsume. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(this, "Delete item successfully");
@@ -305,7 +305,7 @@ public class DishMaterialConsumeMgmtDialog extends JDialog implements ActionList
 		HttpResult<DishMaterialConsume> result = gson.fromJson(response, new TypeToken<HttpResult<DishMaterialConsume>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while add Dish Material Consume. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while add Dish Material Consume. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(this, "Update item successfully");
@@ -348,7 +348,7 @@ public class DishMaterialConsumeMgmtDialog extends JDialog implements ActionList
 		HttpResult<DishMaterialConsume> result = gson.fromJson(response, new TypeToken<HttpResult<DishMaterialConsume>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while add Dish Material Consume. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while add Dish Material Consume. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(this, "Add item successfully");

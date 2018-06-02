@@ -117,7 +117,7 @@ public class FlavorDialog extends JDialog implements ActionListener {
 		HttpResult<Flavor> result = gson.fromJson(response, new TypeToken<HttpResult<Flavor>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while add/update flavor. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while add/update flavor. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		parent.refreshData();

@@ -170,7 +170,7 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		HttpResult<ArrayList<Member>> result = gson.fromJson(response, new TypeToken<HttpResult<ArrayList<Member>>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while query member. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while query member. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		members = result.data;
@@ -220,7 +220,7 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		HttpResult<Member> result = gson.fromJson(response, new TypeToken<HttpResult<Member>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while update member score. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while update member score. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		m.setScore(result.data.getScore());
@@ -253,7 +253,7 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		HttpResult<Member> result = gson.fromJson(response, new TypeToken<HttpResult<Member>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while update member balance. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while update member balance. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		m.setBalanceMoney(result.data.getBalanceMoney());
@@ -286,7 +286,7 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		HttpResult<Member> result = gson.fromJson(response, new TypeToken<HttpResult<Member>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while member recharge. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while member recharge. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		m.setBalanceMoney(result.data.getBalanceMoney());
@@ -367,7 +367,7 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		HttpResult<String> result = gson.fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while change member password to 111111. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while change member password to 111111. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(this, "Update password successfully to 111111.");

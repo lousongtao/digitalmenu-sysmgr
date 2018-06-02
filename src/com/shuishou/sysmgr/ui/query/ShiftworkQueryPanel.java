@@ -127,7 +127,7 @@ public class ShiftworkQueryPanel extends JPanel implements ActionListener{
 		HttpResult<ArrayList<ShiftWork>> result = gson.fromJson(response, new TypeToken<HttpResult<ArrayList<ShiftWork>>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while query shiftwork. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while query shiftwork. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		listShiftwork = result.data;
@@ -152,7 +152,7 @@ public class ShiftworkQueryPanel extends JPanel implements ActionListener{
 		HttpResult<ArrayList<ShiftWork>> result = gson.fromJson(response, new TypeToken<HttpResult<ArrayList<ShiftWork>>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while query shiftwork. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while query shiftwork. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
 		JOptionPane.showMessageDialog(mainFrame, "Print command is already sent to printer");

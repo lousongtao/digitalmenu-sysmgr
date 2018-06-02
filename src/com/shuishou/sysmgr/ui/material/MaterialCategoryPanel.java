@@ -75,7 +75,7 @@ public class MaterialCategoryPanel extends JPanel implements CommonDialogOperato
 		HttpResult<MaterialCategory> result = gson.fromJson(response, new TypeToken<HttpResult<MaterialCategory>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while add/update materialcategory. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, "return false while add/update materialcategory. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
 			return false;
 		}
 		//update parent menu tree
