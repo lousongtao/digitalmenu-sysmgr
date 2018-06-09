@@ -574,6 +574,7 @@ public class MenuMgmtPanel extends JPanel implements TreeSelectionListener, Acti
 		}
 		JOptionPane.showMessageDialog(mainFrame, operation + " dish promotion "+dish.getFirstLanguageName()+" successfully");
 		//修改node的显示样式, 替换mainframe中存储的对象
+		result.data.setCategory2(dish.getCategory2());
 		node.setUserObject(result.data);
 		menuTree.updateUI();
 		mainFrame.loadListCategory1s();
