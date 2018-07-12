@@ -285,7 +285,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		HashMap<String, String> params = new HashMap<>();
 		params.put("userId", MainFrame.getLoginUser().getId()+"");
 		params.put("code", tfNewCancelOrderCode.getText());
-		params.put("oldCode", tfOldConfirmCode.getText());
+		params.put("oldCode", tfOldCancelOrderCode.getText());
 		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
 		if (response == null){
 			logger.error("get null from server for save cancel order code. URL = " + url + ", param = "+ params);
@@ -312,7 +312,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		HashMap<String, String> params = new HashMap<>();
 		params.put("userId", MainFrame.getLoginUser().getId()+"");
 		params.put("code", tfNewClearTableCode.getText());
-		params.put("oldCode", tfOldConfirmCode.getText());
+		params.put("oldCode", tfOldClearTableCode.getText());
 		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
 		if (response == null){
 			logger.error("get null from server for save clear table code. URL = " + url + ", param = "+ params);
