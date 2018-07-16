@@ -9,7 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -28,6 +30,10 @@ import org.apache.log4j.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.shuishou.sysmgr.beans.Dish;
+import com.shuishou.sysmgr.beans.IndentDetail;
+import com.shuishou.sysmgr.printertool.PrintJob;
+import com.shuishou.sysmgr.printertool.PrintQueue;
 import com.shuishou.sysmgr.ConstantValue;
 import com.shuishou.sysmgr.Messages;
 import com.shuishou.sysmgr.beans.HttpResult;
@@ -238,11 +244,13 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 			return;
 		}
 		double newbalance = dlg.inputDouble;
+		double changevalue = newbalance - m.getBalanceMoney();
 		String url = "member/updatememberbalance";
 		Map<String, String> params = new HashMap<>();
 		params.put("userId", MainFrame.getLoginUser().getId() + "");
 		params.put("id",String.valueOf(m.getId()));
 		params.put("newBalance", String.valueOf(newbalance));
+		
 		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
 		if (response == null){
 			logger.error("get null from server for update member balance. URL = " + url + ", param = "+ params);
@@ -258,6 +266,7 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		}
 		m.setBalanceMoney(result.data.getBalanceMoney());
 		table.updateUI();//here is low efficient, buy using model.fireDataChange will occur an exception if existing a rowSorter.
+		doPrintRechargeTicket(m.getMemberCard(), m.getName(), changevalue, m.getBalanceMoney());
 	}
 	
 	private void doRecharge(){
@@ -291,6 +300,22 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		}
 		m.setBalanceMoney(result.data.getBalanceMoney());
 		table.updateUI();//here is low efficient, buy using model.fireDataChange will occur an exception if existing a rowSorter.
+		doPrintRechargeTicket(m.getMemberCard(), m.getName(), recharge, m.getBalanceMoney());
+	}
+	
+	private void doPrintRechargeTicket(String memberCard, String memberName, double rechargeAmount, double balance){
+		Map<String,String> keys = new HashMap<String, String>();
+		keys.put("printType", "Recharge");
+		keys.put("dateTime", ConstantValue.DFYMDHMS.format(new Date()));
+		keys.put("memberCard", memberCard);
+		keys.put("memberName", memberName);
+		keys.put("rechargeAmount", String.format(ConstantValue.FORMAT_DOUBLE, rechargeAmount));
+		keys.put("balance", String.format(ConstantValue.FORMAT_DOUBLE,balance));
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("keys", keys);
+		PrintJob job = new PrintJob("/recharge_template.json", params, mainFrame.printerName);
+		PrintQueue.add(job);
 	}
 	
 	public void insertRow(Member m){

@@ -24,6 +24,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.log4j.Logger;
 
+import com.shuishou.sysmgr.printertool.PrintThread;
 import com.shuishou.sysmgr.ConstantValue;
 import com.shuishou.sysmgr.Messages;
 import com.shuishou.sysmgr.beans.Category1;
@@ -64,6 +65,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	public static String language;
 	public static String SERVER_URL;
 	public static String functionlist;
+	public static String printerName;
 	private static final String CARDLAYOUT_MENUMGMT= "menumgmt"; 
 	private static final String CARDLAYOUT_ACCOUNTMGMT= "accountmgmt"; 
 	private static final String CARDLAYOUT_DESKMGMT= "deskmgmt"; 
@@ -123,6 +125,8 @@ public class MainFrame extends JFrame implements ActionListener{
 		setTitle(Messages.getString("MainFrame.FrameTitle")); //$NON-NLS-1$
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initData();
+		//start printer thread
+        new PrintThread().startThread();
 	}
 	
 	private void initData(){
@@ -542,6 +546,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		MainFrame.WINDOW_LOCATIONY = Integer.parseInt(prop.getProperty("mainframe.locationy"));
 		MainFrame.language = prop.getProperty("language");
 		MainFrame.functionlist = prop.getProperty("mainframe.functionlist");
+		MainFrame.printerName = prop.getProperty("printerName");
 		MainFrame f = new MainFrame();
 		waitDlg.setVisible(false);
 		f.setVisible(true);

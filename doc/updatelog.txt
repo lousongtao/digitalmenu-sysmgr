@@ -1,2 +1,20 @@
 20180525
-1.statistics orders by WEEK & MONTH
+	1.statistics orders by WEEK & MONTH
+
+20180609
+	set category2 to dish after promotion change
+	
+20180621
+	cannot type - in number textfield
+	
+20180712
+	correct bug, cannot update password for CancelOrderCode & ClearTableCode
+	
+20180717
+	1. add print function
+	2. print recharge ticket for member.
+	Reminder for upgrade :
+	I: copy 3 jar files and update start file to add the import for them. They are barcode4j-2.0.jar, fastjson-1.1.46.jar, jfinal-2.1-bin-with-src.jar;
+	II: config.properties file needs to add a property : printerName
+	III: copy the print template file and change depending on customer's information
+	
