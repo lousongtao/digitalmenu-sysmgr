@@ -118,6 +118,9 @@ public class ConstantValue {
 	public static final String CONFIGS_MEMBERMGR_BYSCORE= "MEMBERMGR_BYSCORE";
 	public static final String CONFIGS_MEMBERMGR_BYDEPOSIT = "MEMBERMGR_BYDEPOSIT";
 	public static final String CONFIGS_MEMBERMGR_SCOREPERDOLLAR = "MEMBERMGR_SCOREPERDOLLAR";
+	public static final String CONFIGS_PRINTTICKET = "PRINTTICKET";
+	public static final String CONFIGS_PRINTTICKET_AFTERMAKEORDER = "PRINTTICKET_AFTERMAKEORDER";
+	public static final String CONFIGS_PRINTTICKET_AFTERPAY = "PRINTTICKET_AFTERPAY";
 	
 	public static final int STATISTICS_DIMENSTION_PAYWAY = 1;
 	public static final int STATISTICS_DIMENSTION_SELL = 2;
@@ -146,5 +149,6 @@ public class ConstantValue {
 	
 	public static final int DISCOUNTTYPE_RATE= 1;     //折扣类型-按比例折扣
 	public static final int DISCOUNTTYPE_QUANTITY = 2;//折扣类型-直接减数量
+	
 	
 }

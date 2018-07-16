@@ -12,7 +12,8 @@
 	
 20180717
 	1. add print function
-	2. print recharge ticket for member.
+	2. add config param for when print ticket to kitchen.
+	3. print recharge ticket for member.
 	Reminder for upgrade :
 	I: copy 3 jar files and update start file to add the import for them. They are barcode4j-2.0.jar, fastjson-1.1.46.jar, jfinal-2.1-bin-with-src.jar;
 	II: config.properties file needs to add a property : printerName

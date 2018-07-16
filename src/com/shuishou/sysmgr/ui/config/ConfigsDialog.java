@@ -66,6 +66,10 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 	private JTextField tfBranchName = new JTextField();
 	private JButton btnSaveBranchName = new JButton("Save");
 	
+	private JRadioButton rbPrintTicketAfterOrder = new JRadioButton("After order created", true);
+	private JRadioButton rbPrintTicketAfterPaid = new JRadioButton("After order paid");
+	private JButton btnSavePrintTicket = new JButton("Save");
+	
 	private MainFrame mainFrame;
 	public ConfigsDialog(MainFrame mainFrame){
 		super(mainFrame, Messages.getString("ConfigsDialog.Config"), true);
@@ -160,16 +164,34 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		pBranchName.add(tfBranchName);
 		pBranchName.add(btnSaveBranchName);
 		
-		JPanel pBasic = new JPanel(new GridBagLayout());
-		pBasic.add(pConfirmCode, 		new GridBagConstraints(0, 0, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
-		pBasic.add(pOpenCashdrawerCode, new GridBagConstraints(0, 1, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
-		pBasic.add(pClearTableCode, 	new GridBagConstraints(0, 2, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
-		pBasic.add(pCancelOrderCode, 	new GridBagConstraints(0, 3, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
-		pBasic.add(pLanguageSet, 		new GridBagConstraints(0, 4, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
-		pBasic.add(pMember, 			new GridBagConstraints(0, 5, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
-		pBasic.add(pBranchName, 		new GridBagConstraints(0, 6, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
+		JPanel pPrintTicket = new JPanel(new GridBagLayout());
+		pPrintTicket.setBorder(BorderFactory.createTitledBorder("Print Ticket Time"));
+		ButtonGroup bgPrintTicket = new ButtonGroup();
+		bgPrintTicket.add(rbPrintTicketAfterOrder);
+		bgPrintTicket.add(rbPrintTicketAfterPaid);
+		pPrintTicket.add(rbPrintTicketAfterOrder);
+		pPrintTicket.add(rbPrintTicketAfterPaid);
+		pPrintTicket.add(btnSavePrintTicket);
+		
+		
+		JPanel tabPassword = new JPanel(new GridBagLayout());
+		JPanel tabLanguage = new JPanel(new GridBagLayout());
+		JPanel tabMember = new JPanel(new GridBagLayout());
+		JPanel tabOther = new JPanel(new GridBagLayout());
+		tabPassword.add(pConfirmCode, 		new GridBagConstraints(0, 0, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
+		tabPassword.add(pOpenCashdrawerCode, new GridBagConstraints(0, 1, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
+		tabPassword.add(pClearTableCode, 	new GridBagConstraints(0, 2, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
+		tabPassword.add(pCancelOrderCode, 	new GridBagConstraints(0, 3, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
+		tabLanguage.add(pLanguageSet, 		new GridBagConstraints(0, 1, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
+		tabMember.add(pMember, 				new GridBagConstraints(0, 1, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
+		tabMember.add(pBranchName, 			new GridBagConstraints(0, 2, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
+		tabOther.add(pPrintTicket, 			new GridBagConstraints(0, 1, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
+		
 		JTabbedPane tabPane = new JTabbedPane();
-		tabPane.add("Basic Setting", pBasic);
+		tabPane.add("Passwords", tabPassword);
+		tabPane.add("Language", tabLanguage);
+		tabPane.add("Member", tabMember);
+		tabPane.add("Other", tabOther);
 		
 		Container c = this.getContentPane();
 		c.setLayout(new BorderLayout());
@@ -182,8 +204,9 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		btnSaveCancelOrderCode.addActionListener(this);
 		btnSaveMember.addActionListener(this);
 		btnSaveBranchName.addActionListener(this);
+		btnSavePrintTicket.addActionListener(this);
 		
-		setSize(500, 700);
+		setSize(500, 500);
 		this.setLocation((int)(mainFrame.getWidth() / 2 - this.getWidth() /2 + mainFrame.getLocation().getX()), 
 				(int)(mainFrame.getHeight() / 2 - this.getHeight() / 2 + mainFrame.getLocation().getY()));
 	}
@@ -209,6 +232,11 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 			tfBranchName.setText(mainFrame.getConfigsMap().get(ConstantValue.CONFIGS_BRANCHNAME));
 		if (mainFrame.getConfigsMap().get(ConstantValue.CONFIGS_MEMBERMGR_NEEDPASSWORD) != null)
 			cbNeedPassword.setSelected(Boolean.valueOf(mainFrame.getConfigsMap().get(ConstantValue.CONFIGS_MEMBERMGR_NEEDPASSWORD)));
+		if (ConstantValue.CONFIGS_PRINTTICKET_AFTERPAY.equals(mainFrame.getConfigsMap().get(ConstantValue.CONFIGS_PRINTTICKET))){
+			rbPrintTicketAfterPaid.setSelected(true);
+		} else {
+			rbPrintTicketAfterOrder.setSelected(true);
+		}
 	}
 	
 	@Override
@@ -227,7 +255,34 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 			doSaveMemberMgmt();
 		} else if (e.getSource() == btnSaveBranchName){
 			doSaveBranchName();
+		} else if (e.getSource() == btnSavePrintTicket){
+			doSavePrintTicket();
 		}
+	}
+	
+	private void doSavePrintTicket(){
+		String url = "common/saveprintticket";
+		HashMap<String, String> params = new HashMap<>();
+		params.put("userId", MainFrame.getLoginUser().getId()+"");
+		if (rbPrintTicketAfterOrder.isSelected())
+			params.put(ConstantValue.CONFIGS_PRINTTICKET, ConstantValue.CONFIGS_PRINTTICKET_AFTERMAKEORDER);
+		else if (rbPrintTicketAfterPaid.isSelected())
+			params.put(ConstantValue.CONFIGS_PRINTTICKET, ConstantValue.CONFIGS_PRINTTICKET_AFTERPAY);
+		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
+		if (response == null){
+			logger.error("get null from server for save print ticket. URL = " + url + ", param = "+ params);
+			JOptionPane.showMessageDialog(this, "get null from server for save print ticket. URL = " + url);
+			return;
+		}
+		
+		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while save print ticket. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
+			return;
+		}
+		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_PRINTTICKET, params.get(ConstantValue.CONFIGS_PRINTTICKET));
+		this.setVisible(false);
 	}
 	
 	private void doSaveLanguageSet(){
