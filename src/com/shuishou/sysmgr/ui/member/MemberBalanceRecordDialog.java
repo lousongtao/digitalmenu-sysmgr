@@ -64,7 +64,7 @@ public class MemberBalanceRecordDialog extends JDialog{
 	
 	class RecordTableModel extends DefaultTableModel{
 		private ArrayList<MemberBalance> items = new ArrayList<>();
-		private String[] header = new String[]{"Time","Place","Amount","Type", "Balance"};
+		private String[] header = new String[]{"Time","Place","Amount","Type", "Balance", "Payway"};
 
 		public RecordTableModel(){
 		}
@@ -105,6 +105,8 @@ public class MemberBalanceRecordDialog extends JDialog{
 					return "Adjust";
 			case 4: 
 				return String.format(ConstantValue.FORMAT_DOUBLE, r.getNewValue());
+			case 5: 
+				return r.getPayway();
 			}
 			return "";
 		}

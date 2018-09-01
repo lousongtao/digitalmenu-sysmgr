@@ -73,6 +73,22 @@
 		"type": 0
 	},
 	{
+		"text": "支付方式：{$payway}",
+		"size": 9,
+		"bold": false,
+		"align": 0,
+		"line": true,
+		"type": 0
+	},
+	{
+		"text": "地点：{$branchName}",
+		"size": 9,
+		"bold": false,
+		"align": 0,
+		"line": true,
+		"type": 0
+	},
+	{
 		"text": "日期：{$dateTime}",
 		"size": 9,
 		"bold": false,

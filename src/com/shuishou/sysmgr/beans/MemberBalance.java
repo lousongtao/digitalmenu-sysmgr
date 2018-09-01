@@ -19,12 +19,54 @@ public class MemberBalance {
 	private int type;
 	
 	private Member member;
+	
+	private int memberId; //冗余字段
+	
+	private String memberCard; //冗余字段
+	
+	private String memberName; //冗余字段
 
 	/**
 	 * 修改后客户最新的余额
 	 */
 	private double newValue;
 	
+	private String payway;
+	
+	
+	
+	public int getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(int memberId) {
+		this.memberId = memberId;
+	}
+
+	public String getMemberCard() {
+		return memberCard;
+	}
+
+	public void setMemberCard(String memberCard) {
+		this.memberCard = memberCard;
+	}
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+
+	public String getPayway() {
+		return payway;
+	}
+
+	public void setPayway(String payway) {
+		this.payway = payway;
+	}
+
 	public int getId() {
 		return id;
 	}

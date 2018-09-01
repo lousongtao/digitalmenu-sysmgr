@@ -121,6 +121,7 @@ public class ConstantValue {
 	public static final String CONFIGS_PRINTTICKET = "PRINTTICKET";
 	public static final String CONFIGS_PRINTTICKET_AFTERMAKEORDER = "PRINTTICKET_AFTERMAKEORDER";
 	public static final String CONFIGS_PRINTTICKET_AFTERPAY = "PRINTTICKET_AFTERPAY";
+	public static final String CONFIGS_UPDATE_MEMBERBALANCECODE = "UPDATE_MEMBERBALANCECODE";
 	
 	public static final int STATISTICS_DIMENSTION_PAYWAY = 1;
 	public static final int STATISTICS_DIMENSTION_SELL = 2;

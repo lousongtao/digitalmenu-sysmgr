@@ -62,6 +62,9 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 	private JCheckBox cbNeedPassword = new JCheckBox("Need Password while Consuming");
 	private JButton btnSaveMember = new JButton("Save");
 	private NumberTextField tfScorePerDollar = new NumberTextField(true);
+	private JTextField tfOldMemberBalanceCode;
+	private NumberTextField tfNewMemberBalanceCode;
+	private JButton btnSaveMemberBalanceCode = new JButton("Save");
 	
 	private JTextField tfBranchName = new JTextField();
 	private JButton btnSaveBranchName = new JButton("Save");
@@ -164,6 +167,18 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		pBranchName.add(tfBranchName);
 		pBranchName.add(btnSaveBranchName);
 		
+		JLabel lbOldMemberBalanceCode = new JLabel("old code");
+		JLabel lbNewMemberBalanceCode = new JLabel("new code");
+		tfOldMemberBalanceCode = new JTextField();
+		tfNewMemberBalanceCode = new NumberTextField(false);
+		JPanel pMemberBalanceCode = new JPanel(new GridBagLayout());
+		pMemberBalanceCode.add(lbOldMemberBalanceCode, new GridBagConstraints(0, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
+		pMemberBalanceCode.add(tfOldMemberBalanceCode, new GridBagConstraints(1, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
+		pMemberBalanceCode.add(lbNewMemberBalanceCode, new GridBagConstraints(2, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
+		pMemberBalanceCode.add(tfNewMemberBalanceCode, new GridBagConstraints(3, 0, 1, 1,1,0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,0), 0, 0));;
+		pMemberBalanceCode.add(btnSaveMemberBalanceCode, new GridBagConstraints(4, 0, 1, 1,0,0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,10,0,0), 0, 0));;
+		pMemberBalanceCode.setBorder(BorderFactory.createTitledBorder("Member Balance Code"));
+		
 		JPanel pPrintTicket = new JPanel(new GridBagLayout());
 		pPrintTicket.setBorder(BorderFactory.createTitledBorder("Print Ticket Time"));
 		ButtonGroup bgPrintTicket = new ButtonGroup();
@@ -185,6 +200,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		tabLanguage.add(pLanguageSet, 		new GridBagConstraints(0, 1, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
 		tabMember.add(pMember, 				new GridBagConstraints(0, 1, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
 		tabMember.add(pBranchName, 			new GridBagConstraints(0, 2, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
+		tabMember.add(pMemberBalanceCode, 	new GridBagConstraints(0, 3, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
 		tabOther.add(pPrintTicket, 			new GridBagConstraints(0, 1, 1, 1,1,1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10,0,0,0), 0, 0));;
 		
 		JTabbedPane tabPane = new JTabbedPane();
@@ -205,6 +221,7 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		btnSaveMember.addActionListener(this);
 		btnSaveBranchName.addActionListener(this);
 		btnSavePrintTicket.addActionListener(this);
+		btnSaveMemberBalanceCode.addActionListener(this);
 		
 		setSize(500, 500);
 		this.setLocation((int)(mainFrame.getWidth() / 2 - this.getWidth() /2 + mainFrame.getLocation().getX()), 
@@ -242,22 +259,72 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnSaveConfirmCode){
-			doSaveConfirmCode();
+			if (tfNewConfirmCode.getText() == null || tfNewConfirmCode.getText().length() == 0){
+				JOptionPane.showMessageDialog(this, "No input new code");
+				return;
+			}
+			doSaveCode(tfOldConfirmCode.getText(), tfNewConfirmCode.getText(), ConstantValue.CONFIGS_CONFIRMCODE);
 		} else if (e.getSource() == btnSaveOpenCashdrawerCode){
-			doSaveOpenCashdrawerCode();
+			if (tfNewOpenCashdrawerCode.getText() == null || tfNewOpenCashdrawerCode.getText().length() == 0){
+				JOptionPane.showMessageDialog(this, "No input new code");
+				return;
+			}
+			doSaveCode(tfOldOpenCashdrawerCode.getText(), tfNewOpenCashdrawerCode.getText(), ConstantValue.CONFIGS_OPENCASHDRAWERCODE);
 		} else if (e.getSource() == btnSaveLanguageSet){
 			doSaveLanguageSet();
 		} else if (e.getSource() == btnSaveCancelOrderCode){
-			doSaveCancelOrderCode();
+			if (tfNewCancelOrderCode.getText() == null || tfNewCancelOrderCode.getText().length() == 0){
+				JOptionPane.showMessageDialog(this, "No input new code");
+				return;
+			}
+			doSaveCode(tfOldCancelOrderCode.getText(), tfNewCancelOrderCode.getText(), ConstantValue.CONFIGS_CANCELORDERCODE);
 		} else if (e.getSource() == btnSaveClearTableCode){
-			doSaveClearTableCode();
+			if (tfNewClearTableCode.getText() == null || tfNewClearTableCode.getText().length() == 0){
+				JOptionPane.showMessageDialog(this, "No input new code");
+				return;
+			}
+			doSaveCode(tfOldClearTableCode.getText(), tfNewClearTableCode.getText(), ConstantValue.CONFIGS_CLEARTABLECODE);
 		} else if (e.getSource() == btnSaveMember){
 			doSaveMemberMgmt();
 		} else if (e.getSource() == btnSaveBranchName){
 			doSaveBranchName();
 		} else if (e.getSource() == btnSavePrintTicket){
 			doSavePrintTicket();
+		} else if (e.getSource() == btnSaveMemberBalanceCode){
+			if (tfNewMemberBalanceCode.getText() == null || tfNewMemberBalanceCode.getText().length() == 0){
+				JOptionPane.showMessageDialog(this, "No input new code");
+				return;
+			}
+			doSaveCode(tfOldMemberBalanceCode.getText(), tfNewMemberBalanceCode.getText(), ConstantValue.CONFIGS_UPDATE_MEMBERBALANCECODE);
 		}
+	}
+	
+	/**
+	 * 保存密码的统一函数
+	 */
+	private void doSaveCode(String oldPassword, String newPassword, String key){
+		String url = "common/savecode";
+		HashMap<String, String> params = new HashMap<>();
+		params.put("userId", MainFrame.getLoginUser().getId()+"");
+		params.put("code", newPassword);
+		params.put("oldCode", oldPassword);
+		params.put("key", key);
+		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
+		if (response == null){
+			logger.error("get null from server for save code for " + key + ". URL = " + url + ", param = "+ params);
+			JOptionPane.showMessageDialog(this, "get null from server for save code for " + key + ". URL = " + url);
+			return;
+		}
+		
+		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while save code for " + key + ". URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
+			return;
+		}
+		mainFrame.getConfigsMap().put(key, newPassword);
+		JOptionPane.showMessageDialog(this, "Change password successfully!");
+		this.setVisible(false);
 	}
 	
 	private void doSavePrintTicket(){
@@ -331,117 +398,113 @@ public class ConfigsDialog extends JDialog implements ActionListener{
 		this.setVisible(false);
 	}
 	
-	private void doSaveCancelOrderCode(){
-		if (tfNewCancelOrderCode.getText() == null || tfNewCancelOrderCode.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "No input new code");
-			return;
-		}
-		String url = "common/savecancelordercode";
-		HashMap<String, String> params = new HashMap<>();
-		params.put("userId", MainFrame.getLoginUser().getId()+"");
-		params.put("code", tfNewCancelOrderCode.getText());
-		params.put("oldCode", tfOldCancelOrderCode.getText());
-		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
-		if (response == null){
-			logger.error("get null from server for save cancel order code. URL = " + url + ", param = "+ params);
-			JOptionPane.showMessageDialog(this, "get null from server for save cancel order code. URL = " + url);
-			return;
-		}
-		
-		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
-		if (!result.success){
-			logger.error("return false while save cancel order code. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, result.result);
-			return;
-		}
-		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CANCELORDERCODE, tfNewCancelOrderCode.getText());
-		this.setVisible(false);
-	}
-	
-	private void doSaveClearTableCode(){
-		if (tfNewClearTableCode.getText() == null || tfNewClearTableCode.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "No input new code");
-			return;
-		}
-		String url = "common/savecleartablecode";
-		HashMap<String, String> params = new HashMap<>();
-		params.put("userId", MainFrame.getLoginUser().getId()+"");
-		params.put("code", tfNewClearTableCode.getText());
-		params.put("oldCode", tfOldClearTableCode.getText());
-		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
-		if (response == null){
-			logger.error("get null from server for save clear table code. URL = " + url + ", param = "+ params);
-			JOptionPane.showMessageDialog(this, "get null from server for save clear table code. URL = " + url);
-			return;
-		}
-		
-		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
-		if (!result.success){
-			logger.error("return false while save clear table code. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, result.result);
-			return;
-		}
-		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CLEARTABLECODE, tfNewClearTableCode.getText());
-		this.setVisible(false);
-	}
-	
-	private void doSaveConfirmCode(){
-		if (tfNewConfirmCode.getText() == null || tfNewConfirmCode.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "No input new code");
-			return;
-		}
-		String url = "common/saveconfirmcode";
-		HashMap<String, String> params = new HashMap<>();
-		params.put("userId", MainFrame.getLoginUser().getId()+"");
-		params.put("code", tfNewConfirmCode.getText());
-		params.put("oldCode", tfOldConfirmCode.getText());
-		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
-		if (response == null){
-			logger.error("get null from server for save confirm code. URL = " + url + ", param = "+ params);
-			JOptionPane.showMessageDialog(this, "get null from server for save confirm code. URL = " + url);
-			return;
-		}
-		
-		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
-		if (!result.success){
-			logger.error("return false while save confirm code. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, result.result);
-			return;
-		}
-		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CONFIRMCODE, tfNewConfirmCode.getText());
-		this.setVisible(false);
-	}
-	
-	private void doSaveOpenCashdrawerCode(){
-//		if (tfOldOpenCashdrawerCode.getText() == null || tfOldOpenCashdrawerCode.getText().length() == 0){
-//			JOptionPane.showMessageDialog(this, "No input old code");
+//	private void doSaveCancelOrderCode(){
+//		if (tfNewCancelOrderCode.getText() == null || tfNewCancelOrderCode.getText().length() == 0){
+//			JOptionPane.showMessageDialog(this, "No input new code");
 //			return;
 //		}
-		if (tfNewOpenCashdrawerCode.getText() == null || tfNewOpenCashdrawerCode.getText().length() == 0){
-			JOptionPane.showMessageDialog(this, "No input new code");
-			return;
-		}
-		String url = "common/saveopencashdrawercode";
-		HashMap<String, String> params = new HashMap<>();
-		params.put("userId", MainFrame.getLoginUser().getId()+"");
-		params.put("code", tfNewOpenCashdrawerCode.getText());
-		params.put("oldCode", tfOldOpenCashdrawerCode.getText());
-		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
-		if (response == null){
-			logger.error("get null from server for save open cashdrawer code. URL = " + url + ", param = "+ params);
-			JOptionPane.showMessageDialog(this, "get null from server for save open cashdrawer code. URL = " + url);
-			return;
-		}
-		
-		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
-		if (!result.success){
-			logger.error("return false while save open cashdrawer code. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, result.result);
-			return;
-		}
-		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_OPENCASHDRAWERCODE, tfNewOpenCashdrawerCode.getText());
-		this.setVisible(false);
-	}
+//		String url = "common/savecancelordercode";
+//		HashMap<String, String> params = new HashMap<>();
+//		params.put("userId", MainFrame.getLoginUser().getId()+"");
+//		params.put("code", tfNewCancelOrderCode.getText());
+//		params.put("oldCode", tfOldCancelOrderCode.getText());
+//		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
+//		if (response == null){
+//			logger.error("get null from server for save cancel order code. URL = " + url + ", param = "+ params);
+//			JOptionPane.showMessageDialog(this, "get null from server for save cancel order code. URL = " + url);
+//			return;
+//		}
+//		
+//		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
+//		if (!result.success){
+//			logger.error("return false while save cancel order code. URL = " + url + ", response = "+response);
+//			JOptionPane.showMessageDialog(this, result.result);
+//			return;
+//		}
+//		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CANCELORDERCODE, tfNewCancelOrderCode.getText());
+//		this.setVisible(false);
+//	}
+//	
+//	private void doSaveClearTableCode(){
+//		if (tfNewClearTableCode.getText() == null || tfNewClearTableCode.getText().length() == 0){
+//			JOptionPane.showMessageDialog(this, "No input new code");
+//			return;
+//		}
+//		String url = "common/savecleartablecode";
+//		HashMap<String, String> params = new HashMap<>();
+//		params.put("userId", MainFrame.getLoginUser().getId()+"");
+//		params.put("code", tfNewClearTableCode.getText());
+//		params.put("oldCode", tfOldClearTableCode.getText());
+//		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
+//		if (response == null){
+//			logger.error("get null from server for save clear table code. URL = " + url + ", param = "+ params);
+//			JOptionPane.showMessageDialog(this, "get null from server for save clear table code. URL = " + url);
+//			return;
+//		}
+//		
+//		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
+//		if (!result.success){
+//			logger.error("return false while save clear table code. URL = " + url + ", response = "+response);
+//			JOptionPane.showMessageDialog(this, result.result);
+//			return;
+//		}
+//		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CLEARTABLECODE, tfNewClearTableCode.getText());
+//		this.setVisible(false);
+//	}
+//	
+//	private void doSaveConfirmCode(){
+//		if (tfNewConfirmCode.getText() == null || tfNewConfirmCode.getText().length() == 0){
+//			JOptionPane.showMessageDialog(this, "No input new code");
+//			return;
+//		}
+//		String url = "common/saveconfirmcode";
+//		HashMap<String, String> params = new HashMap<>();
+//		params.put("userId", MainFrame.getLoginUser().getId()+"");
+//		params.put("code", tfNewConfirmCode.getText());
+//		params.put("oldCode", tfOldConfirmCode.getText());
+//		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
+//		if (response == null){
+//			logger.error("get null from server for save confirm code. URL = " + url + ", param = "+ params);
+//			JOptionPane.showMessageDialog(this, "get null from server for save confirm code. URL = " + url);
+//			return;
+//		}
+//		
+//		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
+//		if (!result.success){
+//			logger.error("return false while save confirm code. URL = " + url + ", response = "+response);
+//			JOptionPane.showMessageDialog(this, result.result);
+//			return;
+//		}
+//		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_CONFIRMCODE, tfNewConfirmCode.getText());
+//		this.setVisible(false);
+//	}
+//	
+//	private void doSaveOpenCashdrawerCode(){
+//		if (tfNewOpenCashdrawerCode.getText() == null || tfNewOpenCashdrawerCode.getText().length() == 0){
+//			JOptionPane.showMessageDialog(this, "No input new code");
+//			return;
+//		}
+//		String url = "common/saveopencashdrawercode";
+//		HashMap<String, String> params = new HashMap<>();
+//		params.put("userId", MainFrame.getLoginUser().getId()+"");
+//		params.put("code", tfNewOpenCashdrawerCode.getText());
+//		params.put("oldCode", tfOldOpenCashdrawerCode.getText());
+//		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
+//		if (response == null){
+//			logger.error("get null from server for save open cashdrawer code. URL = " + url + ", param = "+ params);
+//			JOptionPane.showMessageDialog(this, "get null from server for save open cashdrawer code. URL = " + url);
+//			return;
+//		}
+//		
+//		HttpResult<String> result = new Gson().fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
+//		if (!result.success){
+//			logger.error("return false while save open cashdrawer code. URL = " + url + ", response = "+response);
+//			JOptionPane.showMessageDialog(this, result.result);
+//			return;
+//		}
+//		mainFrame.getConfigsMap().put(ConstantValue.CONFIGS_OPENCASHDRAWERCODE, tfNewOpenCashdrawerCode.getText());
+//		this.setVisible(false);
+//	}
 	
 	private void doSaveBranchName(){
 		if (tfBranchName.getText() == null || tfBranchName.getText().length() == 0){

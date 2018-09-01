@@ -238,35 +238,8 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 			return;
 		int modelRow = table.convertRowIndexToModel(table.getSelectedRow());
 		Member m = model.getObjectAt(modelRow);
-		NumberInputDialog dlg = new NumberInputDialog(mainFrame, "Update Balance", "Member " + m.getName() + " current balance is "+m.getBalanceMoney()+ ", \nPlease input new balance.", true);
+		UpdateBalanceDialog dlg = new UpdateBalanceDialog(mainFrame, this, m);
 		dlg.setVisible(true);
-		if (!dlg.isConfirm){
-			return;
-		}
-		double newbalance = dlg.inputDouble;
-		double changevalue = newbalance - m.getBalanceMoney();
-		String url = "member/updatememberbalance";
-		Map<String, String> params = new HashMap<>();
-		params.put("userId", MainFrame.getLoginUser().getId() + "");
-		params.put("id",String.valueOf(m.getId()));
-		params.put("newBalance", String.valueOf(newbalance));
-		
-		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
-		if (response == null){
-			logger.error("get null from server for update member balance. URL = " + url + ", param = "+ params);
-			JOptionPane.showMessageDialog(this, "get null from server for update member balance. URL = " + url);
-			return;
-		}
-		Gson gson = new GsonBuilder().setDateFormat(ConstantValue.DATE_PATTERN_YMDHMS).create();
-		HttpResult<Member> result = gson.fromJson(response, new TypeToken<HttpResult<Member>>(){}.getType());
-		if (!result.success){
-			logger.error("return false while update member balance. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, result.result);
-			return;
-		}
-		m.setBalanceMoney(result.data.getBalanceMoney());
-		table.updateUI();//here is low efficient, buy using model.fireDataChange will occur an exception if existing a rowSorter.
-		doPrintRechargeTicket(m.getMemberCard(), m.getName(), changevalue, m.getBalanceMoney());
 	}
 	
 	private void doRecharge(){
@@ -274,36 +247,11 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 			return;
 		int modelRow = table.convertRowIndexToModel(table.getSelectedRow());
 		Member m = model.getObjectAt(modelRow);
-		NumberInputDialog dlg = new NumberInputDialog(mainFrame, "Recharge", "Member " + m.getName() + " current balance is "+m.getBalanceMoney()+ ", \nPlease input recharge amount.", true);
+		MemberRechargeDialog dlg = new MemberRechargeDialog(mainFrame, this, m);
 		dlg.setVisible(true);
-		if (!dlg.isConfirm){
-			return;
-		}
-		double recharge = dlg.inputDouble;
-		String url = "member/memberrecharge";
-		Map<String, String> params = new HashMap<>();
-		params.put("userId", MainFrame.getLoginUser().getId() + "");
-		params.put("id",String.valueOf(m.getId()));
-		params.put("rechargeValue", String.valueOf(recharge));
-		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
-		if (response == null){
-			logger.error("get null from server for member recharge. URL = " + url + ", param = "+ params);
-			JOptionPane.showMessageDialog(this, "get null from server for member recharge. URL = " + url);
-			return;
-		}
-		Gson gson = new GsonBuilder().setDateFormat(ConstantValue.DATE_PATTERN_YMDHMS).create();
-		HttpResult<Member> result = gson.fromJson(response, new TypeToken<HttpResult<Member>>(){}.getType());
-		if (!result.success){
-			logger.error("return false while member recharge. URL = " + url + ", response = "+response);
-			JOptionPane.showMessageDialog(this, result.result);
-			return;
-		}
-		m.setBalanceMoney(result.data.getBalanceMoney());
-		table.updateUI();//here is low efficient, buy using model.fireDataChange will occur an exception if existing a rowSorter.
-		doPrintRechargeTicket(m.getMemberCard(), m.getName(), recharge, m.getBalanceMoney());
 	}
 	
-	private void doPrintRechargeTicket(String memberCard, String memberName, double rechargeAmount, double balance){
+	public void doPrintRechargeTicket(String memberCard, String memberName, double rechargeAmount, double balance, String payway){
 		Map<String,String> keys = new HashMap<String, String>();
 		keys.put("printType", "Recharge");
 		keys.put("dateTime", ConstantValue.DFYMDHMS.format(new Date()));
@@ -311,11 +259,14 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		keys.put("memberName", memberName);
 		keys.put("rechargeAmount", String.format(ConstantValue.FORMAT_DOUBLE, rechargeAmount));
 		keys.put("balance", String.format(ConstantValue.FORMAT_DOUBLE,balance));
+		keys.put("branchName", mainFrame.getConfigsMap().get(ConstantValue.CONFIGS_BRANCHNAME));
+		keys.put("payway", payway);
 		
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("keys", keys);
 		PrintJob job = new PrintJob("/recharge_template.json", params, mainFrame.printerName);
 		PrintQueue.add(job);
+		PrintQueue.add(job);//print twice, one for customer
 	}
 	
 	public void insertRow(Member m){
@@ -407,6 +358,10 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		dlg.setVisible(true);
 	}
 	
+	public JTable getTable() {
+		return table;
+	}
+
 	public MainFrame getMainFrame() {
 		return mainFrame;
 	}
