@@ -32,7 +32,9 @@ import javax.swing.ListSelectionModel;
 import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.shuishou.sysmgr.ConstantValue;
 import com.shuishou.sysmgr.Messages;
 import com.shuishou.sysmgr.beans.Category1;
 import com.shuishou.sysmgr.beans.HttpResult;
@@ -116,8 +118,8 @@ public class ChangePasswordDialog extends JDialog implements ActionListener {
 			JOptionPane.showMessageDialog(this, "get null from server for change member password. URL = " + url);
 			return;
 		}
-		Gson gson = new Gson();
-		HttpResult<String> result = gson.fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
+		Gson gson = new GsonBuilder().setDateFormat(ConstantValue.DATE_PATTERN_YMDHMS).create();
+		HttpResult<Member> result = gson.fromJson(response, new TypeToken<HttpResult<Member>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while change member password. URL = " + url + ", response = "+response);
 			JOptionPane.showMessageDialog(this, result.result);

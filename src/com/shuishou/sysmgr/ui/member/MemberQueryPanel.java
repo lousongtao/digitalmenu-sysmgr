@@ -64,6 +64,7 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 	private JButton btnQuery = new JButton("Query");
 	private JButton btnAdd = new JButton("Add");
 	private JButton btnUpdate = new JButton("Update");
+	private JButton btnDelete = new JButton("Delete");
 	private JButton btnUpdatePassword = new JButton("Update Password");
 	private JButton btnResetPassword111111 = new JButton("Reset Password 111111");
 	private JButton btnUpdateScore = new JButton("Update Score");
@@ -122,19 +123,21 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		
 		btnQuery.addActionListener(this);
 		
-		JPanel pButtons = new JPanel();
-		pButtons.add(btnAdd);
-		pButtons.add(btnUpdate);
-		pButtons.add(btnUpdateScore);
-		pButtons.add(btnScoreHistory);
-		pButtons.add(btnUpdateBalance);
-		pButtons.add(btnBalanceHistory);
-		pButtons.add(btnRecharge);
-		pButtons.add(btnUpdatePassword);
-		pButtons.add(btnResetPassword111111);
+		JPanel pButtons = new JPanel(new GridBagLayout());
+		pButtons.add(btnAdd, 					new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
+		pButtons.add(btnUpdate, 				new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
+		pButtons.add(btnDelete, 				new GridBagConstraints(2, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
+		pButtons.add(btnUpdateScore, 			new GridBagConstraints(3, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
+		pButtons.add(btnScoreHistory, 			new GridBagConstraints(4, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
+		pButtons.add(btnUpdateBalance, 			new GridBagConstraints(0, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
+		pButtons.add(btnBalanceHistory, 		new GridBagConstraints(1, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
+		pButtons.add(btnRecharge, 				new GridBagConstraints(2, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
+		pButtons.add(btnUpdatePassword, 		new GridBagConstraints(3, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
+		pButtons.add(btnResetPassword111111, 	new GridBagConstraints(4, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
 		
 		btnAdd.addActionListener(this);
 		btnUpdate.addActionListener(this);
+		btnDelete.addActionListener(this);
 		btnUpdateScore.addActionListener(this);
 		btnUpdateBalance.addActionListener(this);
 		btnRecharge.addActionListener(this);
@@ -198,6 +201,36 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		p.setObjectValue(model.getObjectAt(modelRow));
 		CommonDialog dlg = new CommonDialog(mainFrame, p, "Update Member", 300, 300);
 		dlg.setVisible(true);
+	}
+	
+	private void doDeleteMember(){
+		if (table.getSelectedRow() < 0)
+			return;
+		int modelRow = table.convertRowIndexToModel(table.getSelectedRow());
+		Member m = model.getObjectAt(modelRow);
+		if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(this, "Will you delete the customer ["+m.getName()+"]?", "Confirm", JOptionPane.YES_NO_OPTION)){
+			return;
+		}
+		String url = "member/deletemember";
+		Map<String, String> params = new HashMap<>();
+		params.put("userId", MainFrame.getLoginUser().getId() + "");
+		params.put("id",String.valueOf(m.getId()));
+		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
+		if (response == null){
+			logger.error("get null from server for delete member. URL = " + url + ", param = "+ params);
+			JOptionPane.showMessageDialog(this, "get null from server for delete member. URL = " + url);
+			return;
+		}
+		Gson gson = new Gson();
+		HttpResult<String> result = gson.fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
+		if (!result.success){
+			logger.error("return false while delete member. URL = " + url + ", response = "+response);
+			JOptionPane.showMessageDialog(this, result.result);
+			return;
+		}
+		JOptionPane.showMessageDialog(this, "Delete member successfully.");
+		members.remove(m);
+		model.fireTableDataChanged();
 	}
 	
 	private void doUpdateScore(){
@@ -292,6 +325,8 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 			doAddMember();
 		} else if (e.getSource() == btnUpdate){
 			doUpdateMember();
+		} else if (e.getSource() == btnDelete){
+			doDeleteMember();
 		} else if (e.getSource() == btnUpdateScore){
 			doUpdateScore();
 		} else if (e.getSource() == btnUpdateBalance){

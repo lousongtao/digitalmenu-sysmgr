@@ -25,3 +25,6 @@
 	3. adjust the interface for update password in config dialog. Make all change password using one interface.
 	4. add payway for member balance table;
 	5. add function for Member Recharge Query; 
+
+20180903
+	1. add permission property: description, sequence

@@ -1,5 +1,6 @@
 package com.shuishou.sysmgr.ui.account;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
@@ -22,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
@@ -48,8 +50,10 @@ public class AccountDialog extends JDialog implements ActionListener {
 	private UserData userData;
 	
 	private JLabel lbPassword = new JLabel("Password");
+	private JLabel lbRePassword = new JLabel("Re Password");
 	private JTextField tfName = new JTextField();
 	private JTextField tfPassword = new JTextField();
+	private JTextField tfRePassword = new JTextField();
 	private JList<PermissionChoosed> listPermission = new JList<>();
 //	private CheckBoxList listPermission = new CheckBoxList();
 	private DefaultListModel<PermissionChoosed> modelPermission = new DefaultListModel<>();
@@ -82,19 +86,28 @@ public class AccountDialog extends JDialog implements ActionListener {
 				}
 			}
 		});
+		JScrollPane jsp = new JScrollPane(listPermission, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		JPanel pName = new JPanel(new GridBagLayout());
+		pName.add(lbName, 			new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, 			new Insets(10, 10, 10, 0), 0, 0));
+		pName.add(tfName, 			new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 	new Insets(10, 10, 10, 0), 0, 0));
+		pName.add(lbPassword, 		new GridBagConstraints(2, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, 			new Insets(10, 10, 10, 0), 0, 0));
+		pName.add(tfPassword, 		new GridBagConstraints(3, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 	new Insets(10, 10, 10, 0), 0, 0));
+		pName.add(lbRePassword, 	new GridBagConstraints(4, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, 			new Insets(10, 10, 10, 0), 0, 0));
+		pName.add(tfRePassword, 	new GridBagConstraints(5, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 	new Insets(10, 10, 10, 0), 0, 0));
+		
+		JPanel pButton = new JPanel();
+		pButton.add(btnSave);
+		pButton.add(btnCancel);
+		
 		Container c = this.getContentPane();
-		c.setLayout(new GridBagLayout());
-		c.add(lbName, 			new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
-		c.add(tfName, 			new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
-		c.add(lbPassword, 		new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
-		c.add(tfPassword, 		new GridBagConstraints(1, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
-		c.add(listPermission, 	new GridBagConstraints(0, 2, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 0, 0), 0, 0));
-		c.add(btnSave, 			new GridBagConstraints(0, 3, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
-		c.add(btnCancel, 		new GridBagConstraints(1, 3, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
+		c.setLayout(new BorderLayout());
+		c.add(pName, 			BorderLayout.NORTH);
+		c.add(jsp, 				BorderLayout.CENTER);
+		c.add(pButton, 			BorderLayout.SOUTH);
 		btnSave.addActionListener(this);
 		btnCancel.addActionListener(this);
 		
-		this.setSize(400,600);
+		this.setSize(800,600);
 		this.setLocation((int)(mainFrame.getWidth() / 2 - this.getWidth() /2 + mainFrame.getLocation().getX()), 
 				(int)(mainFrame.getHeight() / 2 - this.getHeight() / 2 + mainFrame.getLocation().getY()));
 	}
@@ -122,11 +135,15 @@ public class AccountDialog extends JDialog implements ActionListener {
 	public void hidePassword(){
 		lbPassword.setVisible(false);
 		tfPassword.setVisible(false);
+		lbRePassword.setVisible(false);
+		tfRePassword.setVisible(false);
 	}
 	
 	public void setViewStatus(){
 		lbPassword.setVisible(false);
 		tfPassword.setVisible(false);
+		lbRePassword.setVisible(false);
+		tfRePassword.setVisible(false);
 		tfName.setEditable(false);
 		listPermission.setEnabled(false);
 		btnSave.setVisible(false);
@@ -151,6 +168,14 @@ public class AccountDialog extends JDialog implements ActionListener {
 			url = "account/modify";
 			params.put("id", userData.getId()+"");
 		} else {
+			if (tfPassword.getText() == null || tfPassword.getText().length() == 0){
+				JOptionPane.showMessageDialog(this, "must input Password");
+				return;
+			}
+			if (!tfPassword.getText().equals(tfRePassword.getText())){
+				JOptionPane.showMessageDialog(this, "The input Password is different!");
+				return;
+			}
 			url = "account/add";
 			params.put("password", tfPassword.getText());
 		}
@@ -177,7 +202,8 @@ public class AccountDialog extends JDialog implements ActionListener {
 				ids += modelPermission.getElementAt(i).p.getId()+"/";
 			}
 		}
-		ids = ids.substring(0, ids.length() - 1);
+		if (ids.length() > 0)
+			ids = ids.substring(0, ids.length() - 1);//remove the last slash
 		return ids;
 	}
 	
@@ -202,9 +228,18 @@ public class AccountDialog extends JDialog implements ActionListener {
 	            setForeground(list.getForeground());
 	        }
 			PermissionChoosed pc = (PermissionChoosed)value;
-			this.setText(pc.p.getName());
+			this.setText(generateText(pc.p));
 			this.setSelected(pc.isChoosed);
 			return this;
+		}
+		
+		private String generateText(Permission p){
+			String s = p.getName();
+			while(s.length() < 30){
+				s += " ";
+			}
+			s += p.getDescription();
+			return s;
 		}
 	}
 	

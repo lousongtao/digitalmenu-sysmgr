@@ -148,7 +148,7 @@ public class MemberRechargeDialog extends JDialog implements ActionListener {
 		member.setBalanceMoney(result.data.getBalanceMoney());
 		parent.getTable().updateUI();//here is low efficient, buy using model.fireDataChange will occur an exception if existing a rowSorter.
 		parent.doPrintRechargeTicket(member.getMemberCard(), member.getName(), recharge, member.getBalanceMoney(), rb.getText());
-		JOptionPane.showMessageDialog(this, "Update member's balance successfully!");
+		JOptionPane.showMessageDialog(this, "Member recharge successfully!");
 		setVisible(false);
 	}
 	

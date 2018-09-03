@@ -443,6 +443,12 @@ public class MainFrame extends JFrame implements ActionListener{
 	}
 	private ArrayList<Permission> loadPermissionList(){
 		ArrayList<Permission> permissionList = HttpUtil.loadPermission(this, SERVER_URL + "account/querypermission");
+		Collections.sort(permissionList, new Comparator<Permission>(){
+
+			@Override
+			public int compare(Permission o1, Permission o2) {
+				return o1.getSequence() - o2.getSequence();
+			}});
 		return permissionList;
 	}
 	

@@ -4,6 +4,28 @@ public class Permission {
 	private int id;
 	
 	private String name;
+	
+	private int sequence;
+	
+	private String description;
+	
+	
+
+	public int getSequence() {
+		return sequence;
+	}
+
+	public void setSequence(int sequence) {
+		this.sequence = sequence;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	public int getId() {
 		return id;

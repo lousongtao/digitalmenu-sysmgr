@@ -169,6 +169,8 @@ public class AccountMgmtPanel extends JPanel implements ActionListener{
 				for (int i = 0; i < user.getPermissions().size(); i++) {
 					ps += user.getPermissions().get(i).getPermission().getName() + "/";
 				}
+				if (ps.length() > 0)
+					ps = ps.substring(0, ps.length() - 1);
 				return ps;
 			}
 			return "";
