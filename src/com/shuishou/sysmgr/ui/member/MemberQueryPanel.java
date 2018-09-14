@@ -2,8 +2,10 @@ package com.shuishou.sysmgr.ui.member;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,6 +67,7 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 	private JButton btnAdd = new JButton("Add");
 	private JButton btnUpdate = new JButton("Update");
 	private JButton btnDelete = new JButton("Delete");
+	private JButton btnPrintTicket = new JButton("Print Ticket");
 	private JButton btnUpdatePassword = new JButton("Update Password");
 	private JButton btnResetPassword111111 = new JButton("Reset Password 111111");
 	private JButton btnUpdateScore = new JButton("Update Score");
@@ -122,22 +125,27 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		pCondition.add(btnQuery, 	new GridBagConstraints(4, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 0, 0), 0, 0));
 		
 		btnQuery.addActionListener(this);
-		
-		JPanel pButtons = new JPanel(new GridBagLayout());
-		pButtons.add(btnAdd, 					new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
-		pButtons.add(btnUpdate, 				new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
-		pButtons.add(btnDelete, 				new GridBagConstraints(2, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
-		pButtons.add(btnUpdateScore, 			new GridBagConstraints(3, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
-		pButtons.add(btnScoreHistory, 			new GridBagConstraints(4, 0, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
-		pButtons.add(btnUpdateBalance, 			new GridBagConstraints(0, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
-		pButtons.add(btnBalanceHistory, 		new GridBagConstraints(1, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
-		pButtons.add(btnRecharge, 				new GridBagConstraints(2, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
-		pButtons.add(btnUpdatePassword, 		new GridBagConstraints(3, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
-		pButtons.add(btnResetPassword111111, 	new GridBagConstraints(4, 1, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 0, 0), 0, 0));
+		JPanel pButton1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		pButton1.add(btnAdd);
+		pButton1.add(btnUpdate);
+		pButton1.add(btnDelete);
+		pButton1.add(btnPrintTicket);
+		pButton1.add(btnUpdateScore);
+		pButton1.add(btnScoreHistory);
+		JPanel pButton2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		pButton2.add(btnUpdateBalance);
+		pButton2.add(btnBalanceHistory);
+		pButton2.add(btnRecharge);
+		pButton2.add(btnUpdatePassword);
+		pButton2.add(btnResetPassword111111);
+		JPanel pButtons = new JPanel(new GridLayout(2, 1));
+		pButtons.add(pButton1);
+		pButtons.add(pButton2);
 		
 		btnAdd.addActionListener(this);
 		btnUpdate.addActionListener(this);
 		btnDelete.addActionListener(this);
+		btnPrintTicket.addActionListener(this);
 		btnUpdateScore.addActionListener(this);
 		btnUpdateBalance.addActionListener(this);
 		btnRecharge.addActionListener(this);
@@ -284,9 +292,9 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		dlg.setVisible(true);
 	}
 	
-	public void doPrintRechargeTicket(String memberCard, String memberName, double rechargeAmount, double balance, String payway){
+	public void doPrintRechargeTicket(String printType, String memberCard, String memberName, double rechargeAmount, double balance, String payway, int printTimes){
 		Map<String,String> keys = new HashMap<String, String>();
-		keys.put("printType", "Recharge");
+		keys.put("printType", printType);
 		keys.put("dateTime", ConstantValue.DFYMDHMS.format(new Date()));
 		keys.put("memberCard", memberCard);
 		keys.put("memberName", memberName);
@@ -298,8 +306,9 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("keys", keys);
 		PrintJob job = new PrintJob("/recharge_template.json", params, mainFrame.printerName);
-		PrintQueue.add(job);
-		PrintQueue.add(job);//print twice, one for customer
+		for (int i = 0; i < printTimes; i++) {
+			PrintQueue.add(job);
+		}
 	}
 	
 	public void insertRow(Member m){
@@ -327,6 +336,12 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 			doUpdateMember();
 		} else if (e.getSource() == btnDelete){
 			doDeleteMember();
+		} else if (e.getSource() == btnPrintTicket){
+			if (table.getSelectedRow() < 0)
+				return;
+			int modelRow = table.convertRowIndexToModel(table.getSelectedRow());
+			Member m = model.getObjectAt(modelRow);
+			doPrintRechargeTicket("Customer Balance", m.getMemberCard(), m.getName(), 0, m.getBalanceMoney(), "", 1);
 		} else if (e.getSource() == btnUpdateScore){
 			doUpdateScore();
 		} else if (e.getSource() == btnUpdateBalance){

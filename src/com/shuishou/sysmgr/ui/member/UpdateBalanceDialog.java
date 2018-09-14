@@ -104,7 +104,7 @@ public class UpdateBalanceDialog extends JDialog implements ActionListener {
 		}
 		member.setBalanceMoney(result.data.getBalanceMoney());
 		parent.getTable().updateUI();//here is low efficient, buy using model.fireDataChange will occur an exception if existing a rowSorter.
-		parent.doPrintRechargeTicket(member.getMemberCard(), member.getName(), member.getBalanceMoney() - oldBalance, member.getBalanceMoney(), "");
+		parent.doPrintRechargeTicket("Member Balance Change", member.getMemberCard(), member.getName(), member.getBalanceMoney() - oldBalance, member.getBalanceMoney(), "", 2);
 		setVisible(false);
 	}
 	

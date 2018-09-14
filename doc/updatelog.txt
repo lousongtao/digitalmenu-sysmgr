@@ -28,3 +28,6 @@
 
 20180903
 	1. add permission property: description, sequence
+	
+20180915
+	1. print member balance ticket
