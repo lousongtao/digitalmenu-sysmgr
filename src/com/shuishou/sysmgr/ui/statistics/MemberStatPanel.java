@@ -1,4 +1,4 @@
-package com.shuishou.sysmgr.ui.member;
+package com.shuishou.sysmgr.ui.statistics;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -8,10 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -31,16 +34,17 @@ import com.shuishou.sysmgr.ConstantValue;
 import com.shuishou.sysmgr.Messages;
 import com.shuishou.sysmgr.beans.HttpResult;
 import com.shuishou.sysmgr.beans.MemberBalance;
+import com.shuishou.sysmgr.beans.MemberStatInfo;
 import com.shuishou.sysmgr.http.HttpUtil;
 import com.shuishou.sysmgr.ui.MainFrame;
 import com.shuishou.sysmgr.ui.components.JDatePicker;
 
-public class MemberRechargeQueryPanel extends JPanel implements ActionListener{
+public class MemberStatPanel extends JPanel implements ActionListener{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final Logger logger = Logger.getLogger(MemberRechargeQueryPanel.class.getName());
+	private final Logger logger = Logger.getLogger(MemberStatPanel.class.getName());
 	private MainFrame mainFrame;
 	private JDatePicker dpStartDate = new JDatePicker();
 	private JDatePicker dpEndDate = new JDatePicker();
@@ -51,13 +55,12 @@ public class MemberRechargeQueryPanel extends JPanel implements ActionListener{
 	private JButton btnLastWeek = new JButton(Messages.getString("StatisticsPanel.Lastweek"));
 	private JButton btnThisMonth = new JButton(Messages.getString("StatisticsPanel.Thismonth"));
 	private JButton btnLastMonth = new JButton(Messages.getString("StatisticsPanel.Lastmonth"));
-	private JLabel lbTotal = new JLabel();
 	private JTable table = new JTable();
 	private RechargeModel model = new RechargeModel();
 	
-	private ArrayList<MemberBalance> listRecharge = new ArrayList<>();
+	private ArrayList<MemberStatInfo> listStat = new ArrayList<>();
 	
-	public MemberRechargeQueryPanel(MainFrame mainFrame){
+	public MemberStatPanel(MainFrame mainFrame){
 		this.mainFrame = mainFrame;
 		initUI();
 	}
@@ -73,6 +76,7 @@ public class MemberRechargeQueryPanel extends JPanel implements ActionListener{
 		table.getColumnModel().getColumn(0).setPreferredWidth(50);
 		table.getColumnModel().getColumn(1).setPreferredWidth(100);
 		table.getColumnModel().getColumn(2).setPreferredWidth(100);
+		table.setAutoCreateRowSorter(true);
 		JScrollPane jspTable = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
 		JPanel pQueryTimeButton = new JPanel(new GridBagLayout());
@@ -107,11 +111,10 @@ public class MemberRechargeQueryPanel extends JPanel implements ActionListener{
 		setLayout(new BorderLayout());
 		add(jspTable, BorderLayout.CENTER);
 		add(pQuery, BorderLayout.NORTH);
-		add(lbTotal, BorderLayout.SOUTH);
 	}
 	
 	private void doQuery(){
-		String url = "member/querymemberrecharge";
+		String url = "member/memberstat";
 		Map<String, String> params = new HashMap<>();
 		params.put("userId", MainFrame.getLoginUser().getId() + "");
 		if (dpStartDate.getModel() != null && dpStartDate.getModel().getValue() != null){
@@ -128,53 +131,25 @@ public class MemberRechargeQueryPanel extends JPanel implements ActionListener{
 			c.set(Calendar.SECOND, 59);
 			params.put("endTime", ConstantValue.DFYMDHMS.format(c.getTime()));
 		}
+		String type = ConstantValue.MEMBERBALANCE_QUERYTYPE_RECHARGE + ConstantValue.MEMBERBALANCE_QUERYTYPE_ADJUST + ConstantValue.MEMBERBALANCE_QUERYTYPE_CONSUME;
+		params.put("type", type);
 		String response = HttpUtil.getJSONObjectByPost(MainFrame.SERVER_URL + url, params);
 		if (response == null){
-			logger.error("get null from server for query shiftwork. URL = " + url + ", param = "+ params);
-			JOptionPane.showMessageDialog(this, "get null from server for query shiftwork. URL = " + url);
+			logger.error("get null from server for stastics member. URL = " + url + ", param = "+ params);
+			JOptionPane.showMessageDialog(this, "get null from server for stastics member. URL = " + url);
 			return;
 		}
 		Gson gson = new GsonBuilder().setDateFormat(ConstantValue.DATE_PATTERN_YMDHMS).create();
-		HttpResult<ArrayList<MemberBalance>> result = gson.fromJson(response, new TypeToken<HttpResult<ArrayList<MemberBalance>>>(){}.getType());
+		HttpResult<ArrayList<MemberStatInfo>> result = gson.fromJson(response, new TypeToken<HttpResult<ArrayList<MemberStatInfo>>>(){}.getType());
 		if (!result.success){
-			logger.error("return false while query shiftwork. URL = " + url + ", response = "+response);
+			logger.error("return false while stastics member. URL = " + url + ", response = "+response);
 			JOptionPane.showMessageDialog(this, result.result);
 			return;
 		}
-		listRecharge = result.data;
+		listStat = result.data;
 		table.updateUI();
-		doStatistics();
 	}
 	
-	private void doStatistics(){
-		double total = 0;
-		HashMap<String, Double> hmPaywayValue = new HashMap<>();//金额
-		HashMap<String, Integer> hmPaywayAmount = new HashMap<>();//数量
-		for (int i = 0; i < listRecharge.size(); i++) {
-			total += listRecharge.get(i).getAmount();
-			String payway = listRecharge.get(i).getPayway();
-			if (hmPaywayValue.get(payway) == null){
-				hmPaywayValue.put(payway, listRecharge.get(i).getAmount());
-			} else {
-				hmPaywayValue.put(payway, listRecharge.get(i).getAmount() + hmPaywayValue.get(payway));
-			}
-			if (hmPaywayAmount.get(payway) == null){
-				hmPaywayAmount.put(payway, 1);
-			} else {
-				hmPaywayAmount.put(payway, hmPaywayAmount.get(payway) + 1);
-			}
-		}
-		String stat = "";
-		for (Iterator<String> iterator = hmPaywayValue.keySet().iterator(); iterator.hasNext();) {
-			String payway = iterator.next();
-			stat += payway + ": $" + String.format(ConstantValue.FORMAT_DOUBLE, hmPaywayValue.get(payway))
-			     + "/" + hmPaywayAmount.get(payway) + "  ";
-			
-		}
-			
-		lbTotal.setText("Total Money : $" + String.format(ConstantValue.FORMAT_DOUBLE, total)
-		  + ", Items : " + listRecharge.size() + ", " + stat);
-	}
 	
 	
 	@Override
@@ -265,12 +240,12 @@ public class MemberRechargeQueryPanel extends JPanel implements ActionListener{
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		private String[] header = new String[]{"Member Card", "Member Name", "Branch", "Time", "Amount", "Balance", "Pay Way"};
+		private String[] header = new String[]{"Member Card", "Member Name", "Balance", "Create Time", "Total Recharge", "Total Adjust", "Total Consume"};
 		
 		@Override
 		public int getRowCount() {
-			if (listRecharge == null) return 0;
-			return listRecharge.size();
+			if (listStat == null) return 0;
+			return listStat.size();
 		}
 
 		@Override
@@ -280,22 +255,23 @@ public class MemberRechargeQueryPanel extends JPanel implements ActionListener{
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			MemberBalance mb = listRecharge.get(rowIndex);
+			MemberStatInfo ms = listStat.get(rowIndex);
 			switch(columnIndex){
 			case 0:
-				return mb.getMemberCard();
+				return ms.getMemberCard();
 			case 1:
-				return mb.getMemberName();
+				return ms.getMemberName();
 			case 2: 
-				return mb.getPlace();
-			case 3:
-				return ConstantValue.DFYMDHMS.format(mb.getDate());
+				return String.format(ConstantValue.FORMAT_DOUBLE, ms.getBalance());
+			
+			case 3: 
+				return ConstantValue.DFYMD.format(ms.getMemberCreateTime());
 			case 4:
-				return mb.getAmount();
+				return String.format(ConstantValue.FORMAT_DOUBLE, ms.getRecharge());
 			case 5:
-				return mb.getNewValue();
+				return String.format(ConstantValue.FORMAT_DOUBLE, ms.getAdjust());
 			case 6:
-				return mb.getPayway();
+				return String.format(ConstantValue.FORMAT_DOUBLE, ms.getConsume());
 			}
 			return "";
 		}
@@ -305,10 +281,9 @@ public class MemberRechargeQueryPanel extends JPanel implements ActionListener{
 			return header[col];
 		}
 		
-		public MemberBalance getObjectAt(int row){
-			return listRecharge.get(row);
+		public MemberStatInfo getObjectAt(int row){
+			return listStat.get(row);
 		}
 	}
 
-	
 }

@@ -46,14 +46,15 @@ import com.shuishou.sysmgr.ui.desk.DeskMgmtPanel;
 import com.shuishou.sysmgr.ui.discounttemplate.DiscountTemplateMgmtPanel;
 import com.shuishou.sysmgr.ui.flavor.FlavorMgmtPanel;
 import com.shuishou.sysmgr.ui.material.MaterialMgmtPanel;
+import com.shuishou.sysmgr.ui.member.MemberBalanceQueryPanel;
 import com.shuishou.sysmgr.ui.member.MemberQueryPanel;
-import com.shuishou.sysmgr.ui.member.MemberRechargeQueryPanel;
 import com.shuishou.sysmgr.ui.menu.MenuMgmtPanel;
 import com.shuishou.sysmgr.ui.payway.PayWayMgmtPanel;
 import com.shuishou.sysmgr.ui.printer.PrinterMgmtPanel;
 import com.shuishou.sysmgr.ui.query.IndentQueryPanel;
 import com.shuishou.sysmgr.ui.query.LogQueryPanel;
 import com.shuishou.sysmgr.ui.query.ShiftworkQueryPanel;
+import com.shuishou.sysmgr.ui.statistics.MemberStatPanel;
 import com.shuishou.sysmgr.ui.statistics.StatMaterialPanel;
 import com.shuishou.sysmgr.ui.statistics.StatisticsPanel;
 
@@ -82,6 +83,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private static final String CARDLAYOUT_MATERIAL= "material"; 
 	private static final String CARDLAYOUT_MEMBERMGMT= "membermgmt"; 
 	private static final String CARDLAYOUT_QUERYMEMBERRECHARGE= "querymemberrecharge";
+	private static final String CARDLAYOUT_MEMBERSTAT= "memberstat";
 	private JMenuItem menuitemAccount = new JMenuItem(Messages.getString("MainFrame.Menu.AccountMgr"));
 	private JMenuItem menuitemConfiguration = new JMenuItem(Messages.getString("MainFrame.Menu.Config"));
 	private JMenuItem menuitemDesk = new JMenuItem(Messages.getString("MainFrame.Menu.DeskMgr"));
@@ -97,7 +99,8 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuItem menuitemStatistics = new JMenuItem(Messages.getString("MainFrame.Menu.QueryStatistic"));
 	private JMenuItem menuitemQueryMaterial = new JMenuItem(Messages.getString("MainFrame.Menu.QueryMaterial"));
 	private JMenuItem menuitemMember = new JMenuItem(Messages.getString("MainFrame.Menu.Member"));
-	private JMenuItem menuitemQueryMemberRecharge = new JMenuItem(Messages.getString("MainFrame.Menu.QueryMemberRecharge"));
+	private JMenuItem menuitemQueryMemberBalance = new JMenuItem(Messages.getString("MainFrame.Menu.QueryMemberBalance"));
+	private JMenuItem menuitemStatMember = new JMenuItem(Messages.getString("MainFrame.Menu.StatMember"));
 	private JPanel pContent = new JPanel(new CardLayout());
 	
 	private ArrayList<Category1> listCategory1s;
@@ -107,7 +110,8 @@ public class MainFrame extends JFrame implements ActionListener{
 	private HashMap<String, String> configsMap;
 	
 	private MemberQueryPanel pMemberMgmt;
-	private MemberRechargeQueryPanel pQueryMemberRecharge;
+	private MemberBalanceQueryPanel pQueryMemberBalance;
+	private MemberStatPanel pMemberStat;
 	private MenuMgmtPanel pMenuMgmt;
 	private MaterialMgmtPanel pMaterialMgmt;
 	private AccountMgmtPanel pAccount;
@@ -155,7 +159,8 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuitemQueryShiftwork.addActionListener(this);
 		menuitemStatistics.addActionListener(this);
 		menuitemMember.addActionListener(this);
-		menuitemQueryMemberRecharge.addActionListener(this);
+		menuitemQueryMemberBalance.addActionListener(this);
+		menuitemStatMember.addActionListener(this);
 		menuitemQueryMaterial.addActionListener(this);
 		
 		JMenuBar menubar = new JMenuBar();
@@ -176,10 +181,13 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuQuery.add(menuitemQueryIndent);
 		menuQuery.add(menuitemQueryShiftwork);
 		menuQuery.add(menuitemQueryMaterial);
+		menuQuery.add(menuitemStatMember);
 		menuQuery.add(menuitemStatistics);
+		
 		JMenu menuMember = new JMenu(Messages.getString("MainFrame.Menu.Member"));
 		menuMember.add(menuitemMember);
-		menuMember.add(menuitemQueryMemberRecharge);
+		menuMember.add(menuitemQueryMemberBalance);
+		
 		
 		menubar.add(menuConfig);
 		menubar.add(menuMenu);
@@ -205,7 +213,8 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuitemQueryMaterial.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MATERIAL) >= 0);
 		menuitemStatistics.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_STATISTICS) >=0);
 		menuitemMember.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MEMBER) >=0);
-		menuitemQueryMemberRecharge.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MEMBER) >= 0);
+		menuitemQueryMemberBalance.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MEMBER) >= 0);
+		menuitemStatMember.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MEMBER) >= 0);
 		menuMember.setVisible(functionlist.indexOf(ConstantValue.FUNCTION_MEMBER) >=0);
 		
 		Container c = this.getContentPane();
@@ -378,16 +387,26 @@ public class MainFrame extends JFrame implements ActionListener{
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MEMBERMGMT);
 			}
 			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemMember.getText());
-		} else if (e.getSource() == menuitemQueryMemberRecharge){
-			if (pQueryMemberRecharge == null){
-				pQueryMemberRecharge = new MemberRechargeQueryPanel(this);
-				pContent.add(pQueryMemberRecharge, CARDLAYOUT_QUERYMEMBERRECHARGE);
+		} else if (e.getSource() == menuitemQueryMemberBalance){
+			if (pQueryMemberBalance == null){
+				pQueryMemberBalance = new MemberBalanceQueryPanel(this);
+				pContent.add(pQueryMemberBalance, CARDLAYOUT_QUERYMEMBERRECHARGE);
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_QUERYMEMBERRECHARGE);
 				pContent.updateUI();
 			} else {
 				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_QUERYMEMBERRECHARGE);
 			}
-			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemQueryMemberRecharge.getText());
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemQueryMemberBalance.getText());
+		} else if (e.getSource() == menuitemStatMember){
+			if (pMemberStat == null){
+				pMemberStat = new MemberStatPanel(this);
+				pContent.add(pMemberStat, CARDLAYOUT_MEMBERSTAT);
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MEMBERSTAT);
+				pContent.updateUI();
+			} else {
+				((CardLayout)pContent.getLayout()).show(pContent, CARDLAYOUT_MEMBERSTAT);
+			}
+			this.setTitle(Messages.getString("MainFrame.FrameTitle") + " - " + menuitemStatMember.getText());
 		}
 	}
 

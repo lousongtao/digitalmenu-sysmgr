@@ -148,6 +148,10 @@ public class ConstantValue {
 	public static final int MEMBERDEPOSIT_RECHARGE = 3;//消费余额类型-充值
 	public static final int MEMBERDEPOSIT_ADJUST = 4;//消费余额类型-调整
 	
+	public static final String MEMBERBALANCE_QUERYTYPE_CONSUME = "CONSUME";
+	public static final String MEMBERBALANCE_QUERYTYPE_RECHARGE = "RECHARGE";
+	public static final String MEMBERBALANCE_QUERYTYPE_ADJUST = "ADJUST";
+	
 	public static final int DISCOUNTTYPE_RATE= 1;     //折扣类型-按比例折扣
 	public static final int DISCOUNTTYPE_QUANTITY = 2;//折扣类型-直接减数量
 	

@@ -390,7 +390,7 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 			return;
 		}
 		Gson gson = new Gson();
-		HttpResult<String> result = gson.fromJson(response, new TypeToken<HttpResult<String>>(){}.getType());
+		HttpResult<Member> result = gson.fromJson(response, new TypeToken<HttpResult<Member>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while change member password to 111111. URL = " + url + ", response = "+response);
 			JOptionPane.showMessageDialog(this, result.result);
