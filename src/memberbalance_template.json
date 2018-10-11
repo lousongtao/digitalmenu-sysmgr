@@ -44,35 +44,35 @@
 	
 	"goods": [{
 		"name": "Card",
-		"width": 6,
+		"width": 8,
 		"size":9,
 		"bold": false,
 		"variable": "memberCard"
 	},
 	{
 		"name": "Name",
-		"width": 8,
+		"width": 12,
 		"size":9,
 		"bold": false,
 		"variable": "memberName"
 	},
 	{
 		"name": "Type",
-		"width": 2,
+		"width": 5,
 		"size":9,
 		"bold": false,
 		"variable": "type"
 	},
 	{
 		"name": "Qtt",
-		"width": 5,
+		"width": 8,
 		"size":9,
 		"bold": false,
 		"variable": "quantity"
 	},
 	{
 		"name": "Bal",
-		"width": 5,
+		"width": 8,
 		"size":9,
 		"bold": false,
 		"variable": "balance"
@@ -125,6 +125,6 @@
 		"align": 0,
 		"line": true,
 		"type": 0
-	},
+	}
 	]
 }

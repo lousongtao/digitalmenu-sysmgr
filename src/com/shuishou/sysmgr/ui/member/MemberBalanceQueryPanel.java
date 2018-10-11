@@ -224,7 +224,7 @@ public class MemberBalanceQueryPanel extends JPanel implements ActionListener{
 		String payway = "";
 		for (Iterator<String> iterator = hmPaywayValue.keySet().iterator(); iterator.hasNext();) {
 			String pw = iterator.next();
-			payway += pw + ": $" + String.format(ConstantValue.FORMAT_DOUBLE, hmPaywayValue.get(pw))
+			payway += pw + ": " + String.format(ConstantValue.FORMAT_DOUBLE, hmPaywayValue.get(pw))
 			     + "/" + hmPaywayAmount.get(pw) + "  ";
 			
 		}
