@@ -389,7 +389,7 @@ public class MemberQueryPanel extends JPanel implements ActionListener{
 			JOptionPane.showMessageDialog(this, "get null from server for change member password to 111111. URL = " + url);
 			return;
 		}
-		Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat(ConstantValue.DATE_PATTERN_YMD).create();
 		HttpResult<Member> result = gson.fromJson(response, new TypeToken<HttpResult<Member>>(){}.getType());
 		if (!result.success){
 			logger.error("return false while change member password to 111111. URL = " + url + ", response = "+response);

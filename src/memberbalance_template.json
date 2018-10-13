@@ -64,14 +64,14 @@
 		"variable": "type"
 	},
 	{
-		"name": "Qtt",
+		"name": "Amount",
 		"width": 8,
 		"size":9,
 		"bold": false,
 		"variable": "quantity"
 	},
 	{
-		"name": "Bal",
+		"name": "Balance",
 		"width": 8,
 		"size":9,
 		"bold": false,
