@@ -1,3 +1,5 @@
+20181111
+    1. set print page height as 530. The old value is 800, there are some lines cannot print out.
 
 20181011
     1. correct bug, dollar letter must be transfer while used in pattern match
